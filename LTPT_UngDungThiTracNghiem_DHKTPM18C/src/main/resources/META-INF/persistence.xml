@@ -8,6 +8,9 @@
         <class>entities.Lop</class>
         <class>entities.HocSinh</class>
         <class>entities.CauHoi</class>
+        <class>entities.PhienLamBai</class>
+        <class>entities.CauTraLoi</class>
+        <class>entities.GiaoVien</class>
         <properties>
             <property name="jakarta.persistence.jdbc.driver"
                       value="org.mariadb.jdbc.Driver" />

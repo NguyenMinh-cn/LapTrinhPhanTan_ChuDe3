@@ -34,4 +34,11 @@ public class BaiThi {
             inverseJoinColumns = @JoinColumn(name = "maCauHoi")
     )
     private Set<CauHoi> danhSachCauHoi;
+
+    @OneToMany(mappedBy="baiThi")
+    private Set<PhienLamBai> danhSachPhienLamBaiCuaBaiThi;
+
+    @ManyToOne
+    @JoinColumn(name = "maGiaoVien")
+    private GiaoVien giaoVien;
 }

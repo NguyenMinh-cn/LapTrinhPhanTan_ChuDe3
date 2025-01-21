@@ -1,26 +1,24 @@
 package entities;
-
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
 import java.util.Set;
+
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "HocSinh")
-public class HocSinh {
+@Table(name = "GiangVien")
+
+public class GiaoVien {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "MaHocSinh")
+    @Column(name = "MaGiangVien")
     @EqualsAndHashCode.Include
-    private int maHocSinh;
+    private int maGiangVien;
 
     @Column(columnDefinition = "varchar(60)", nullable = false)
     private String hoTen;
-
-    @ManyToOne
-    @JoinColumn(name = "MaLop")
-    private Lop lop;
 
     @Column(columnDefinition = "varchar(60)", nullable = false)
     private String email;
@@ -28,6 +26,7 @@ public class HocSinh {
     @Column(columnDefinition = "varchar(10)", nullable = false)
     private String soDienThoai;
 
-    @OneToMany(mappedBy="hocSinh")//tên thuộc tính, không phải tên bảng
-    private Set<PhienLamBai> danhSachPhienLamBai;
+    // Quan hệ OneToMany với BaiThi
+    @OneToMany(mappedBy = "giaoVien") // Tham chiếu thuộc tính giaoVien trong BaiThi
+    private Set<BaiThi> danhSachBaiThi;
 }
