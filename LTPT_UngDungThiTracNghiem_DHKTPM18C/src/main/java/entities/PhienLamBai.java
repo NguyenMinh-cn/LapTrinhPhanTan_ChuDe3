@@ -13,11 +13,11 @@ public class PhienLamBai {
     @Column(name = "MaPhien")
     private String maPhien;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "maHocSinh") // Tham chiếu tới khóa chính của bảng HocSinh
     private HocSinh hocSinh;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "maBaiThi") // Tham chiếu tới khóa chính của bảng BaiThi
     private BaiThi baiThi;
 
@@ -27,6 +27,7 @@ public class PhienLamBai {
     @Column(nullable = false)
     private LocalDateTime thoiGianKetThuc;
 
-    @OneToMany(mappedBy="phienLamBai")//tên thuộc tính, không phải tên bảng
+    @OneToMany(mappedBy="phienLamBai", cascade = CascadeType.ALL)//tên thuộc tính, không phải tên bảng
     private Set<CauTraLoi> danhSachCauTraLoi;
+
 }

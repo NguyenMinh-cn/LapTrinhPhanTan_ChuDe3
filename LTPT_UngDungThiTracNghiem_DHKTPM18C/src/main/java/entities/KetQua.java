@@ -7,16 +7,15 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "KET_QUA")
+@Table(name = "KetQua")
 public class KetQua {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "MaKetQua")
+    @Column(name = "MaPhienLamBai")
     @EqualsAndHashCode.Include
-    private int maKetQua;
+    private String maPhienLamBai; // Sử dụng MaPhien làm khóa chính để đảm bảo mối qh 1-1
 
-    @OneToOne
-    @JoinColumn(name = "MaPhienLamBai", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "MaPhien", nullable = false, insertable = false, updatable = false)
     private PhienLamBai phienLamBai;
 
     @Column(nullable = false)

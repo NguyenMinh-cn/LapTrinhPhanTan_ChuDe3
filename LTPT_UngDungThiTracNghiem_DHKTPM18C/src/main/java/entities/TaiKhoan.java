@@ -10,17 +10,15 @@ import lombok.EqualsAndHashCode;
 @Table(name = "TaiKhoan")
 public class TaiKhoan {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "MaTaiKhoan")
+    @Column(name = "TenDangNhap", unique = true, nullable = false) // Email là khóa chính và là tên đăng nhập
     @EqualsAndHashCode.Include
-    private int maTaiKhoan;
-
-    @Column(columnDefinition = "varchar(50)", nullable = false, unique = true)
-    private String tenDangNhap;
+    private String tenDangNhap;// Sử dụng email làm tên đăng nhập
 
     @Column(columnDefinition = "varchar(20)", nullable = false)
     private String loaiTaiKhoan;
 
     @Column(columnDefinition = "varchar(100)", nullable = false)
     private String matKhau;
+
+
 }

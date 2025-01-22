@@ -18,7 +18,7 @@ public class HocSinh {
     @Column(columnDefinition = "varchar(60)", nullable = false)
     private String hoTen;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "MaLop")
     private Lop lop;
 
@@ -28,6 +28,10 @@ public class HocSinh {
     @Column(columnDefinition = "varchar(10)", nullable = false)
     private String soDienThoai;
 
-    @OneToMany(mappedBy="hocSinh")//tên thuộc tính, không phải tên bảng
+    @OneToMany(mappedBy="hocSinh", cascade = CascadeType.ALL)//tên thuộc tính, không phải tên bảng
     private Set<PhienLamBai> danhSachPhienLamBai;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "email", referencedColumnName = "tenDangNhap", insertable = false, updatable = false)
+    private TaiKhoan taiKhoan;
 }

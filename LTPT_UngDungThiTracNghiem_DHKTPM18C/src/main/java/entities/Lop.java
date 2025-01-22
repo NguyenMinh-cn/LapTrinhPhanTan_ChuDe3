@@ -3,7 +3,7 @@ package entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
+import java.util.Set;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -16,4 +16,11 @@ public class Lop {
     private int maLop;
     @Column(columnDefinition = "varchar(10)", unique = true, nullable = false)
     private String tenLop;
+
+    @OneToMany(mappedBy = "lop", cascade = CascadeType.ALL)
+    private Set<HocSinh> danhSachHocSinh;
+
+    @OneToMany(mappedBy = "lop", cascade = CascadeType.ALL)
+    private Set<BaiThi> danhSachBaiThi;
+
 }

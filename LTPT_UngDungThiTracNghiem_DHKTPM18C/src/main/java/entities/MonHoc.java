@@ -3,7 +3,7 @@ package entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
+import java.util.Set;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -17,4 +17,8 @@ public class MonHoc {
 
     @Column(columnDefinition = "varchar(100)", nullable = false)
     private String tenMon;
+
+    @OneToMany(mappedBy = "monHoc", cascade = CascadeType.ALL)
+    private Set<BaiThi> danhSachBaiThiTheoMon;
+
 }

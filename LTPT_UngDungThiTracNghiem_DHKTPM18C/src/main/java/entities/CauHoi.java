@@ -27,6 +27,9 @@ public class CauHoi {
     @Column(columnDefinition = "varchar(1000)", nullable = false)
     private String dapAnDung;
     // Quan hệ Many-to-Many với BaiThi
-    @ManyToMany(mappedBy = "danhSachCauHoi")
+    @ManyToMany(mappedBy = "danhSachCauHoi", cascade = CascadeType.ALL)
     private Set<BaiThi> danhSachBaiThi;
+
+    @OneToMany(mappedBy = "cauHoi", cascade = CascadeType.ALL)
+    private Set<CauTraLoi> danhSachCauTraLoi;
 }

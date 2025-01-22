@@ -15,6 +15,11 @@ public class BaiThi {
     @Column(nullable = false)
     private String tenBaiThi;
 
+    @ManyToOne
+    @JoinColumn(name = "maMon")
+    private MonHoc monHoc;
+
+
     @Column(nullable = false)
     private LocalDateTime thoiGianBatDau;
 
@@ -24,10 +29,14 @@ public class BaiThi {
     @Column(nullable = false)
     private int thoiLuong;
 
+    @ManyToOne
+    @JoinColumn(name = "maLop")
+    private Lop lop;
+
     private String matKhau;
 
     // Quan hệ Many-to-Many với CauHoi
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "BaiThi_CauHoi",
             joinColumns = @JoinColumn(name = "maBaiThi"),

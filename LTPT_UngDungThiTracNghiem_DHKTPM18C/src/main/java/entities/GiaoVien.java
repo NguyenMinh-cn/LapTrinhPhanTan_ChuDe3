@@ -30,11 +30,16 @@ public class GiaoVien {
     @OneToMany(mappedBy = "giaoVien") // Tham chiếu thuộc tính giaoVien trong BaiThi
     private Set<BaiThi> danhSachBaiThi;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "GiangVien_MonHoc",
+            name = "GiaoVien_MonHoc",
             joinColumns = @JoinColumn(name = "MaGiaoVien"),
             inverseJoinColumns = @JoinColumn(name = "MaMonHoc")
     )
-    private List<MonHoc> monHocGiangPhuTrach;
+    private List<MonHoc> monHocGiaoVienPhuTrach;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "email", referencedColumnName = "tenDangNhap", insertable = false, updatable = false)
+    private TaiKhoan taiKhoan;
+
 }

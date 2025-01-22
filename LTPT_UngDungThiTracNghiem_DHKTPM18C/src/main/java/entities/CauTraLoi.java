@@ -17,6 +17,9 @@ public class CauTraLoi {
     @EqualsAndHashCode.Include
     private int maCauTraLoi;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "maCauHoi", insertable = false, updatable = false)
+    private CauHoi cauHoi;
 
     @Column(columnDefinition = "varchar(1000)", nullable = false)
     private String dapAnA;
@@ -33,8 +36,9 @@ public class CauTraLoi {
     @Column(columnDefinition = "varchar(1000)", nullable = false)
     private String dapAnDaChon;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "maPhien") // Tham chiếu tới khóa chính của bảng PhienLamBai
     private PhienLamBai phienLamBai;
+
 
 }
