@@ -32,4 +32,15 @@ public class CauHoi {
 
     @OneToMany(mappedBy = "cauHoi", cascade = CascadeType.ALL)
     private Set<CauTraLoi> danhSachCauTraLoi;
+
+    public CauHoi() {}
+    public CauHoi(String noiDung, String dapAnA, String dapAnB, String dapAnC, String dapAnD, String dapAnDung) {
+        this.noiDung = noiDung;
+        this.dapAnA = dapAnA;
+        this.dapAnB = dapAnB;
+        this.dapAnC = dapAnC;
+        this.dapAnD = dapAnD;
+        this.dapAnDung = dapAnDung;
+    }
+
 }
