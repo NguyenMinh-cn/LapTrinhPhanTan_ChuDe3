@@ -11,7 +11,6 @@ import java.util.Set;
 public class CauHoi {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "MaCauHoi")
     @EqualsAndHashCode.Include
     private int maCauHoi;
     @Column(columnDefinition = "varchar(1000)", nullable = false)

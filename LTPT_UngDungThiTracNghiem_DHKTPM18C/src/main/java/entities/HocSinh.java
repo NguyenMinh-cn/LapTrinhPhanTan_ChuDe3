@@ -10,21 +10,21 @@ import java.util.Set;
 @Table(name = "HocSinh")
 public class HocSinh {
     @Id
-    @Column(name = "MaHocSinh")
     @EqualsAndHashCode.Include
+    @Column(columnDefinition = "varchar(15)", nullable = false)
     private String maHocSinh;
 
     @Column(columnDefinition = "varchar(60)", nullable = false)
     private String hoTen;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "MaLop")
+    @JoinColumn(name = "maLop")
     private Lop lop;
 
     @Column(columnDefinition = "varchar(60)", nullable = false)
     private String email;
 
-    @Column(columnDefinition = "varchar(10)", nullable = false)
+    @Column(columnDefinition = "varchar(15)",nullable = false)
     private String soDienThoai;
 
     @OneToMany(mappedBy="hocSinh", cascade = CascadeType.ALL)//tên thuộc tính, không phải tên bảng

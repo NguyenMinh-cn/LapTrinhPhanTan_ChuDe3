@@ -18,7 +18,7 @@ public class CauTraLoi {
     private int maCauTraLoi;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "maCauHoi", insertable = false, updatable = false)
+    @JoinColumn(name = "maCauHoi")  // Không cần insertable = false, updatable = false
     private CauHoi cauHoi;
 
     @Column(columnDefinition = "varchar(1000)", nullable = false)

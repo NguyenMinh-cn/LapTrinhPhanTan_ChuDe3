@@ -33,6 +33,7 @@ public class BaiThi {
     @JoinColumn(name = "maLop")
     private Lop lop;
 
+    @Column(nullable = true)
     private String matKhau;
 
     // Quan hệ Many-to-Many với CauHoi

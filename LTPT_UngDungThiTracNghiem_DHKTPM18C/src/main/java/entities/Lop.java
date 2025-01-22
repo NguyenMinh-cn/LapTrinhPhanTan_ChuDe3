@@ -11,10 +11,10 @@ import java.util.Set;
 public class Lop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "MaLop")
     @EqualsAndHashCode.Include
     private int maLop;
-    @Column(columnDefinition = "varchar(10)", unique = true, nullable = false)
+
+    @Column(nullable = false)
     private String tenLop;
 
     @OneToMany(mappedBy = "lop", cascade = CascadeType.ALL)

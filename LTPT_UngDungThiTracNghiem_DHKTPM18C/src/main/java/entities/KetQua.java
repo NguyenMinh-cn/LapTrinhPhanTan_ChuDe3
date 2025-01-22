@@ -15,7 +15,7 @@ public class KetQua {
     private String maPhienLamBai; // Sử dụng MaPhien làm khóa chính để đảm bảo mối qh 1-1
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "MaPhien", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "MaPhien", nullable = false)
     private PhienLamBai phienLamBai;
 
     @Column(nullable = false)
