@@ -13,20 +13,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InsertGiaoVien {
-    public static void main(String[] args) {
-        EntityManagerFactory emf = null;
-        EntityManager em = null;
-        try {
-            System.setOut(new java.io.PrintStream(System.out, true, "UTF-8"));
-            emf = Persistence.createEntityManagerFactory("mariadb");
-            em = emf.createEntityManager();
-            Faker faker = new Faker();
 
+    // Phương thức chèn giáo viên vào cơ sở dữ liệu
+    public void themDSGiaoVien() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("mariadb");
+        EntityManager em = emf.createEntityManager();
+        Faker faker = new Faker();
+
+        try {
             List<MonHoc> monHocList = em.createQuery("SELECT m FROM MonHoc m", MonHoc.class).getResultList();
-            System.out.println("Danh sách môn học:");
-            for (MonHoc monHoc : monHocList) {
-                System.out.println("Mã môn: " + monHoc.getMaMon() + ", Tên môn: " + monHoc.getTenMon());
-            }
+//            System.out.println("Danh sách môn học:");
+//            for (MonHoc monHoc : monHocList) {
+//                System.out.println("Mã môn: " + monHoc.getMaMon() + ", Tên môn: " + monHoc.getTenMon());
+//            }
 
             em.getTransaction().begin();
             for (int i = 0; i < 10; i++) {
@@ -51,7 +50,7 @@ public class InsertGiaoVien {
             }
 
             em.getTransaction().commit();
-            System.out.println("Dữ liệu đã được ghi thành công!");
+            System.out.println("Dữ liệu giáo viên đã được ghi thành công!");
 
         } catch (Exception e) {
             if (em.getTransaction().isActive()) {

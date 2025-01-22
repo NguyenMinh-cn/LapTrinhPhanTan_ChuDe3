@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 public class InsertBaiThi {
-    public static void main(String[] args) {
+    public void themDSBaiThi() {
         EntityManagerFactory emf = null;
         EntityManager em = null;
         try {

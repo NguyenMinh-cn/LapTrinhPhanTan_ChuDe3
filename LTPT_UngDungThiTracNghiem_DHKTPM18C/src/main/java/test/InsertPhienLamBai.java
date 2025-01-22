@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class InsertPhienLamBai {
-    public static void main(String[] args) {
+    public void themDSPhienLamBai() {
         EntityManagerFactory emf = null;
         EntityManager em = null;
         try {

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Random;
 
 public class InsertCauTraLoi {
-    public static void main(String[] args) {
+    public void themDSCauTraLoi()  {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("mariadb");
         EntityManager em = emf.createEntityManager();
 

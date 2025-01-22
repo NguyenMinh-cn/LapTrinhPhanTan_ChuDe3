@@ -6,7 +6,8 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 public class InsertMonHoc {
-    public static void main(String[] args) {
+
+    public void themDSMonHoc() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("mariadb");
         EntityManager em = emf.createEntityManager();
 
@@ -34,6 +35,6 @@ public class InsertMonHoc {
             em.close();
             emf.close();
         }
-
     }
+
 }

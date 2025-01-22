@@ -10,7 +10,7 @@ import java.time.Duration;
 import java.util.List;
 
 public class InsertKetQua {
-    public static void main(String[] args) {
+    public void themDSKetQua() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("mariadb");
         EntityManager em = emf.createEntityManager();
 

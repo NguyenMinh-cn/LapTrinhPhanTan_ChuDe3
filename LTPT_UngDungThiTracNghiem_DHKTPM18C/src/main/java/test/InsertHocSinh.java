@@ -10,21 +10,18 @@ import net.datafaker.Faker;
 import java.util.List;
 
 public class InsertHocSinh {
-    public static void main(String[] args) {
-        EntityManagerFactory emf = null;
-        EntityManager em = null;
-        try {
-            System.setOut(new java.io.PrintStream(System.out, true, "UTF-8"));
-            emf = Persistence.createEntityManagerFactory("mariadb");
-            em = emf.createEntityManager();
-            Faker faker = new Faker();
+    public void themDSHocSinh() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("mariadb");
+        EntityManager em = emf.createEntityManager();
+        Faker faker = new Faker();
 
+        try {
             List<Lop> lopList = em.createQuery("SELECT l FROM Lop l", Lop.class).getResultList();
-            System.out.println("Danh sách lớp:");
+//            System.out.println("Danh sách lớp:");
 
             for (Lop lop : lopList) {
-                System.out.println("Mã lớp: " + lop.getMaLop() + ", Tên lớp: " + lop.getTenLop());
-                for (int i = 0; i < 20; i++) {
+//                System.out.println("Mã lớp: " + lop.getMaLop() + ", Tên lớp: " + lop.getTenLop());
+                for (int i = 0; i < 20; i++) { // Chèn 20 học sinh cho mỗi lớp
                     HocSinh hocSinh = new HocSinh();
                     hocSinh.setMaHocSinh(faker.idNumber().valid());
                     hocSinh.setHoTen(faker.name().fullName());
@@ -39,6 +36,7 @@ public class InsertHocSinh {
                     taiKhoan.setLoaiTaiKhoan("hocsinh");
                     hocSinh.setTaiKhoan(taiKhoan);
 
+                    // Chèn học sinh vào cơ sở dữ liệu
                     em.getTransaction().begin();
                     em.persist(hocSinh);
                     em.getTransaction().commit();
@@ -55,5 +53,11 @@ public class InsertHocSinh {
                 emf.close();
             }
         }
+    }
+
+    // Phương thức main để gọi phương thức insertHocSinhs()
+    public static void main(String[] args) {
+        InsertHocSinh insertHocSinh = new InsertHocSinh();
+        insertHocSinh.insertHocSinhs();  // Gọi phương thức chèn học sinh
     }
 }

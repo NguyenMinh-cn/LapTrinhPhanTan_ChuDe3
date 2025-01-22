@@ -6,7 +6,7 @@ import jakarta.persistence.Persistence;
 import entities.CauHoi;
 
 public class InsertCauHoi {
-    public static void main(String[] args) {
+    public void themDSCauHoi() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("mariadb");
         EntityManager em = emf.createEntityManager();
 
