@@ -10,10 +10,9 @@ import java.util.Set;
 @Table(name = "HocSinh")
 public class HocSinh {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MaHocSinh")
     @EqualsAndHashCode.Include
-    private int maHocSinh;
+    private String maHocSinh;
 
     @Column(columnDefinition = "varchar(60)", nullable = false)
     private String hoTen;
