@@ -55,9 +55,4 @@ public class InsertHocSinh {
         }
     }
 
-    // Phương thức main để gọi phương thức insertHocSinhs()
-    public static void main(String[] args) {
-        InsertHocSinh insertHocSinh = new InsertHocSinh();
-        insertHocSinh.insertHocSinhs();  // Gọi phương thức chèn học sinh
-    }
 }
