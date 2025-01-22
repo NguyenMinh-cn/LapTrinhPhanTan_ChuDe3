@@ -2,20 +2,20 @@ package entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
+import java.util.List;
 import java.util.Set;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "GiangVien")
+@Table(name = "GiaoVien")
 
 public class GiaoVien {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "MaGiangVien")
+    @Column(name = "MaGiaoVien")
     @EqualsAndHashCode.Include
-    private int maGiangVien;
+    private int maGiaoVien;
 
     @Column(columnDefinition = "varchar(60)", nullable = false)
     private String hoTen;
@@ -29,4 +29,12 @@ public class GiaoVien {
     // Quan hệ OneToMany với BaiThi
     @OneToMany(mappedBy = "giaoVien") // Tham chiếu thuộc tính giaoVien trong BaiThi
     private Set<BaiThi> danhSachBaiThi;
+
+    @ManyToMany
+    @JoinTable(
+            name = "GiangVien_MonHoc",
+            joinColumns = @JoinColumn(name = "MaGiaoVien"),
+            inverseJoinColumns = @JoinColumn(name = "MaMonHoc")
+    )
+    private List<MonHoc> monHocGiangPhuTrach;
 }
