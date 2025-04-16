@@ -3,12 +3,16 @@ package entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+import java.io.Serializable;
 
 @Data
+@ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "TaiKhoan")
-public class TaiKhoan {
+public class TaiKhoan implements Serializable {
     @Id
     @Column(name = "TenDangNhap", unique = true, nullable = false) // Email là khóa chính và là tên đăng nhập
     @EqualsAndHashCode.Include

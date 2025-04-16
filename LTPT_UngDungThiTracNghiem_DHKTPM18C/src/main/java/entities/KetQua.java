@@ -3,12 +3,16 @@ package entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+import java.io.Serializable;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
+@ToString
 @Table(name = "KetQua")
-public class KetQua {
+public class KetQua implements Serializable {
     @Id
     @Column(name = "MaPhienLamBai")
     @EqualsAndHashCode.Include

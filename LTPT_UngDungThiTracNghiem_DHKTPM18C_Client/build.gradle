@@ -28,7 +28,9 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.36'
     implementation group: 'net.datafaker', name: 'datafaker', version: '2.4.2'
     implementation 'org.mariadb.jdbc:mariadb-java-client:3.5.1'
-    implementation files("${System.properties['idea.home']}/plugins/ui-designer/lib/forms_rt.jar")
+    implementation("com.intellij:forms_rt:7.0.3")
+
+    implementation(files("libs/LTPT_UngDungThiTracNghiem_DHKTPM18C-1.0-SNAPSHOT.jar"))
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")

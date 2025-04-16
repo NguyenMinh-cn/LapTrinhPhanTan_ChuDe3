@@ -1,14 +1,17 @@
 package entities;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
+@ToString
 @Entity
 @Table(name = "PhienLamBai")
-public class PhienLamBai {
+public class PhienLamBai implements Serializable {
     @Id
     @Column(name = "MaPhien")
     private String maPhien;

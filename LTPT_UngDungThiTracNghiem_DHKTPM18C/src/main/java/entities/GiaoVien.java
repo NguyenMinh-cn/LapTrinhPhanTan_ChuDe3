@@ -2,6 +2,9 @@ package entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -9,8 +12,8 @@ import java.util.Set;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "GiaoVien")
-
-public class GiaoVien {
+@ToString
+public class GiaoVien implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MaGiaoVien")

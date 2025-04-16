@@ -1,13 +1,17 @@
 package entities;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
+
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 @Data
 @Entity
 @Table(name = "BaiThi")
-public class BaiThi {
+@ToString
+public class BaiThi implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int maBaiThi;
