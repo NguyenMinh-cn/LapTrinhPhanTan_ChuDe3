@@ -1,9 +1,11 @@
 package gui;
 
+import com.intellij.uiDesigner.core.GridLayoutManager;
+
 import javax.swing.*;
 import java.awt.*;
 
-public class Main {
+public class GiaoDienChinh extends JPanel {
     private JPanel panel1;
 
     {
@@ -22,10 +24,8 @@ public class Main {
      */
     private void $$$setupUI$$$() {
         panel1 = new JPanel();
-        panel1.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
-        final JLabel label1 = new JLabel();
-        label1.setText("Giao diện chính");
-        panel1.add(label1, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel1.setLayout(new BorderLayout(0, 0));
+        panel1.add(new GiaoDienMenuHocSinh().$$$getRootComponent$$$(), BorderLayout.CENTER);
     }
 
     /**
@@ -34,12 +34,14 @@ public class Main {
     public JComponent $$$getRootComponent$$$() {
         return panel1;
     }
+
     public static void main(String[] args) {
         // Khởi tạo giao diện
         JFrame frame = new JFrame("Giao diện chính");
-        frame.setContentPane(new Main().$$$getRootComponent$$$());
+        frame.setContentPane(new GiaoDienChinh().$$$getRootComponent$$$());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();  // Đảm bảo giao diện vừa đủ
-        frame.setVisible(true);  // Hiển thị cửa sổ
+        frame.pack();
+        frame.setSize(500, 300);
+        frame.setVisible(true);
     }
 }
