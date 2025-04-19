@@ -1,18 +1,240 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="gui.GiaoDienCaiDatTaiKhoan">
-  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="BorderLayout" hgap="0" vgap="0">
     <constraints>
-      <xy x="20" y="20" width="500" height="400"/>
+      <xy x="20" y="20" width="698" height="400"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
-      <component id="369c0" class="javax.swing.JLabel">
-        <constraints/>
+      <grid id="93579" binding="panelChucNang" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="West"/>
         <properties>
-          <text value="Giao diện cài đặt tài khoản"/>
+          <maximumSize width="200" height="200"/>
+          <preferredSize width="200" height="103"/>
         </properties>
-      </component>
+        <border type="none"/>
+        <children>
+          <component id="369c0" class="javax.swing.JLabel">
+            <constraints border-constraint="North"/>
+            <properties>
+              <alignmentX value="0.5"/>
+              <horizontalAlignment value="0"/>
+              <preferredSize width="117" height="50"/>
+              <text value="Cài đặt tài khoản"/>
+            </properties>
+          </component>
+          <grid id="d7a51" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+            <constraints border-constraint="Center"/>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="911be" class="javax.swing.JButton" binding="btnTTTK">
+                <constraints/>
+                <properties>
+                  <preferredSize width="180" height="43"/>
+                  <text value="Thông tin tài khoản"/>
+                </properties>
+              </component>
+              <component id="36ba4" class="javax.swing.JButton" binding="btnDMK">
+                <constraints/>
+                <properties>
+                  <maximumSize width="180" height="43"/>
+                  <preferredSize width="180" height="43"/>
+                  <text value="Đổi mật khẩu"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+        </children>
+      </grid>
+      <grid id="88046" binding="panelNoiDungCaiDat" layout-manager="CardLayout" hgap="0" vgap="0">
+        <constraints border-constraint="Center"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <grid id="f1c35" binding="panelTTTK" layout-manager="GridLayoutManager" row-count="8" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="2" vgap="2">
+            <margin top="10" left="10" bottom="10" right="10"/>
+            <constraints>
+              <card name="Card1"/>
+            </constraints>
+            <properties>
+              <background color="-12387639"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="b2042" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="30" height="10"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-368076"/>
+                  <text value="Họ tên"/>
+                </properties>
+              </component>
+              <vspacer id="796c1">
+                <constraints>
+                  <grid row="2" column="2" row-span="3" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
+              <component id="ffd2d" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Email"/>
+                </properties>
+              </component>
+              <component id="15b47" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Số điện thoại"/>
+                </properties>
+              </component>
+              <component id="136de" class="javax.swing.JTextField" binding="txtSDT">
+                <constraints>
+                  <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <disabledTextColor color="-16777216"/>
+                  <editable value="false"/>
+                  <enabled value="false"/>
+                  <selectionColor color="-16777216"/>
+                  <text value="0123456789"/>
+                </properties>
+              </component>
+              <component id="61111" class="javax.swing.JTextField" binding="txtEmail">
+                <constraints>
+                  <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <disabledTextColor color="-16777216"/>
+                  <editable value="false"/>
+                  <enabled value="false"/>
+                  <selectionColor color="-16777216"/>
+                  <text value="a@gmail.com"/>
+                </properties>
+              </component>
+              <component id="5fc5f" class="javax.swing.JTextField" binding="txtHoTen">
+                <constraints>
+                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <disabledTextColor color="-16777216"/>
+                  <editable value="false"/>
+                  <enabled value="false"/>
+                  <selectionColor color="-16777216"/>
+                  <text value="Nguyễn Văn A"/>
+                </properties>
+              </component>
+              <component id="2d73c" class="javax.swing.JButton" binding="lưuButton" default-binding="true">
+                <constraints>
+                  <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Lưu"/>
+                </properties>
+              </component>
+              <component id="93912" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
+                    <preferred-size width="30" height="10"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <background color="-368076"/>
+                  <text value="Vai trò"/>
+                </properties>
+              </component>
+              <component id="75e07" class="javax.swing.JTextField" binding="txtVaiTro">
+                <constraints>
+                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <disabledTextColor color="-16777216"/>
+                  <editable value="false"/>
+                  <enabled value="false"/>
+                  <selectionColor color="-16777216"/>
+                  <text value="Giáo viên"/>
+                </properties>
+              </component>
+              <component id="7e6e6" class="javax.swing.JLabel" binding="lbLop">
+                <constraints>
+                  <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Lớp"/>
+                </properties>
+              </component>
+              <component id="dad25" class="javax.swing.JTextField" binding="txtLop">
+                <constraints>
+                  <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <disabledTextColor color="-16777216"/>
+                  <editable value="false"/>
+                  <enabled value="false"/>
+                  <selectionColor color="-16777216"/>
+                  <text value="10A2"/>
+                </properties>
+              </component>
+              <component id="46bdf" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Ngày sinh"/>
+                </properties>
+              </component>
+              <component id="ccedf" class="javax.swing.JTextField">
+                <constraints>
+                  <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties>
+                  <disabledTextColor color="-16777216"/>
+                  <editable value="false"/>
+                  <enabled value="false"/>
+                  <selectionColor color="-16777216"/>
+                  <text value="1/1/2000"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <grid id="7fbec" binding="panelDMK" layout-manager="BorderLayout" hgap="0" vgap="0">
+            <constraints>
+              <card name="Card2"/>
+            </constraints>
+            <properties>
+              <background color="-12387639"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="9b48b" class="javax.swing.JLabel">
+                <constraints border-constraint="North"/>
+                <properties>
+                  <text value="Đổi mật khẩu"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+        </children>
+      </grid>
     </children>
   </grid>
 </form>

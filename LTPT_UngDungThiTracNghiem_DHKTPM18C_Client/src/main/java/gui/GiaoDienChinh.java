@@ -25,7 +25,7 @@ public class GiaoDienChinh extends JPanel {
     private void $$$setupUI$$$() {
         panel1 = new JPanel();
         panel1.setLayout(new BorderLayout(0, 0));
-        panel1.add(new GiaoDienMenuHocSinh().$$$getRootComponent$$$(), BorderLayout.CENTER);
+        panel1.add(new GiaoDienMenuGiaoVien().$$$getRootComponent$$$(), BorderLayout.CENTER);
     }
 
     /**

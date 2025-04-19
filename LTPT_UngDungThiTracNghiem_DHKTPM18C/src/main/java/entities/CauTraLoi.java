@@ -1,18 +1,21 @@
 package entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
-@Data
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "CauTraLoi")
-@ToString
+
 public class CauTraLoi implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,28 +23,33 @@ public class CauTraLoi implements Serializable {
     @EqualsAndHashCode.Include
     private int maCauTraLoi;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "maCauHoi")  // Không cần insertable = false, updatable = false
-    private CauHoi cauHoi;
-
     @Column(columnDefinition = "varchar(1000)", nullable = false)
-    private String dapAnA;
+    private String noiDungCauHoi;
 
-    @Column(columnDefinition = "varchar(1000)", nullable = false)
-    private String dapAnB;
-
-    @Column(columnDefinition = "varchar(1000)", nullable = false)
-    private String dapAnC;
-
-    @Column(columnDefinition = "varchar(1000)", nullable = false)
-    private String dapAnD;
+    @ElementCollection
+    private List<String> danhSachDapAn = new ArrayList<>();
 
     @Column(columnDefinition = "varchar(1000)", nullable = false)
     private String dapAnDaChon;
+
+    boolean ketQua;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "maPhien") // Tham chiếu tới khóa chính của bảng PhienLamBai
     private PhienLamBai phienLamBai;
 
-
 }
+//@Entity
+//public class CauTraLoi {
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private int id;
+//
+//    @ManyToOne
+//    private CauHoi cauHoi;
+//
+//    private int dapAnDuocChon;
+//    boolean ketQua;
+//    @ManyToOne
+//    private PhienLamBai phienLamBai;
+//}

@@ -1,18 +1,20 @@
 package entities;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "GiaoVien")
-@ToString
+
 public class GiaoVien implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,18 +33,33 @@ public class GiaoVien implements Serializable {
 
     // Quan hệ OneToMany với BaiThi
     @OneToMany(mappedBy = "giaoVien") // Tham chiếu thuộc tính giaoVien trong BaiThi
-    private Set<BaiThi> danhSachBaiThi;
+    private List<BaiThi> danhSachBaiThi = new ArrayList<BaiThi>();
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "GiaoVien_MonHoc",
-            joinColumns = @JoinColumn(name = "MaGiaoVien"),
-            inverseJoinColumns = @JoinColumn(name = "MaMonHoc")
-    )
-    private List<MonHoc> monHocGiaoVienPhuTrach;
-
+//18/4
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "email", referencedColumnName = "tenDangNhap", insertable = false, updatable = false)
     private TaiKhoan taiKhoan;
 
+
 }
+//@Entity
+//public class GiaoVien {
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private int id;
+//    private String hoTen;
+//    private String email;
+//    private String soDienThoai;
+//
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "tenDangNhap")
+//    private TaiKhoan taiKhoan;
+//
+//    @ManyToMany
+//    @JoinTable(
+//            name = "giao_vien_mon",
+//            joinColumns = @JoinColumn(name = "giaoVien_id"),
+//            inverseJoinColumns = @JoinColumn(name = "monHoc_id")
+//    )
+//    private List<MonHoc> monPhuTrach;
+//}

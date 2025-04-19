@@ -1,13 +1,14 @@
 package entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @ToString
@@ -34,3 +35,14 @@ public class KetQua implements Serializable {
     @Column(nullable = false)
     private int tongThoiGianLamBai;
 }
+
+//@Entity
+//public class KetQua {
+//    @Id
+//    @OneToOne
+//    @MapsId
+//    @JoinColumn(name = "MaPhien")
+//
+//    private int soCauDung;
+//    private double diem;
+//}

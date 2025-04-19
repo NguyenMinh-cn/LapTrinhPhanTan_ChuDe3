@@ -1,18 +1,21 @@
 package entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 
 @Table(name = "MonHoc")
-@ToString(of = "tenMon")
 public class MonHoc implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +27,25 @@ public class MonHoc implements Serializable {
     private String tenMon;
 
     @OneToMany(mappedBy = "monHoc", cascade = CascadeType.ALL)
-    private Set<BaiThi> danhSachBaiThiTheoMon;
+    private List<BaiThi> danhSachBaiThiTheoMon = new ArrayList();
+    //18/4
+    @OneToMany(mappedBy = "monHoc", cascade = CascadeType.ALL)
+    private List<BaiThi> danhSachChuDe = new ArrayList<>();
 
+    @Override
+    public String toString() {
+        return "MonHoc{" +
+                "maMon=" + maMon +
+                ", tenMon='" + tenMon + '\'' +
+
+                ", danhSachChuDe=" + danhSachChuDe +
+                '}';
+    }
 }
+//@Entity
+//public class MonHoc {
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private int id;
+//    private String tenMon;
+//}

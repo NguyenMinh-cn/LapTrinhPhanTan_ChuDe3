@@ -1,13 +1,16 @@
 package entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "CauHoi")
@@ -19,31 +22,23 @@ public class CauHoi implements Serializable {
     private int maCauHoi;
     @Column(columnDefinition = "varchar(1000)", nullable = false)
     private String noiDung;
-    @Column(columnDefinition = "varchar(1000)", nullable = false)
-    private String dapAnA;
-    @Column(columnDefinition = "varchar(1000)", nullable = false)
-    private String dapAnB;
-    @Column(columnDefinition = "varchar(1000)", nullable = false)
-    private String dapAnC;
-    @Column(columnDefinition = "varchar(1000)", nullable = false)
-    private String dapAnD;
-    @Column(columnDefinition = "varchar(1000)", nullable = false)
+
+    //18-4
+    @ElementCollection
+    private List<String> danhSachDapAn = new ArrayList<>();
+
     private String dapAnDung;
+
     // Quan hệ Many-to-Many với BaiThi
     @ManyToMany(mappedBy = "danhSachCauHoi", cascade = CascadeType.ALL)
-    private Set<BaiThi> danhSachBaiThi;
+    private List<BaiThi> danhSachBaiThi = new ArrayList<>();
 
-    @OneToMany(mappedBy = "cauHoi", cascade = CascadeType.ALL)
-    private Set<CauTraLoi> danhSachCauTraLoi;
+//    @OneToMany(mappedBy = "cauHoi", cascade = CascadeType.ALL)
+//    private List<CauTraLoi> danhSachCauTraLoi = new ArrayList<>();
 
-    public CauHoi() {}
-    public CauHoi(String noiDung, String dapAnA, String dapAnB, String dapAnC, String dapAnD, String dapAnDung) {
-        this.noiDung = noiDung;
-        this.dapAnA = dapAnA;
-        this.dapAnB = dapAnB;
-        this.dapAnC = dapAnC;
-        this.dapAnD = dapAnD;
-        this.dapAnDung = dapAnDung;
-    }
+    //18-4
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "maChuDe", nullable = true)
+    private ChuDe chuDe;
 
 }
