@@ -30,7 +30,7 @@ public class MonHoc implements Serializable {
     private List<BaiThi> danhSachBaiThiTheoMon = new ArrayList();
     //18/4
     @OneToMany(mappedBy = "monHoc", cascade = CascadeType.ALL)
-    private List<BaiThi> danhSachChuDe = new ArrayList<>();
+    private List<ChuDe> danhSachChuDe = new ArrayList<>();
 
     @Override
     public String toString() {

@@ -30,11 +30,13 @@ public class PhienLamBai implements Serializable {
     private double diem;
 
     //18/4
-    @ManyToOne(cascade = CascadeType.ALL)
+//    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "maHocSinh") // Tham chiếu tới khóa chính của bảng HocSinh
     private HocSinh hocSinh;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+//    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "maBaiThi") // Tham chiếu tới khóa chính của bảng BaiThi
     private BaiThi baiThi;
 

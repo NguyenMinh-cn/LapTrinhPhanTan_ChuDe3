@@ -24,9 +24,12 @@ public class Lop implements Serializable {
 
     @Column(nullable = false)
     private String tenLop;
+
     //18/4
-    @OneToMany(mappedBy = "lop", cascade = CascadeType.ALL)
+//    @OneToMany(mappedBy = "lop", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "lop")
     private List<HocSinh> danhSachHocSinh = new ArrayList<>();
+
     //18/4
     @ManyToMany(mappedBy = "danhSachLop")
     private List<BaiThi> danhSachBaiThi = new ArrayList<>();

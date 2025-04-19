@@ -26,11 +26,12 @@ public class ChuDe implements Serializable {
     private String tenChuDe;
 
     //18/4
-    @ManyToOne(cascade = CascadeType.ALL)
+//    @ManyToOne(cascade = CascadeType.ALL) //??
+    @ManyToOne
     @JoinColumn(name = "maMon") // Tham chiếu tới khóa chính của bảng PhienLamBai
     private MonHoc monHoc;
 
     //18-4
-    @OneToMany(mappedBy = "chuDe", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "chuDe", cascade = CascadeType.ALL) //ok
     private List<CauHoi> danhSachCauHoi = new ArrayList<>();
 }

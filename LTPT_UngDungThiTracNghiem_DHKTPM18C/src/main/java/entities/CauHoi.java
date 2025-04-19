@@ -30,14 +30,16 @@ public class CauHoi implements Serializable {
     private String dapAnDung;
 
     // Quan hệ Many-to-Many với BaiThi
-    @ManyToMany(mappedBy = "danhSachCauHoi", cascade = CascadeType.ALL)
+// @ManyToMany(mappedBy = "danhSachCauHoi", cascade = CascadeType.ALL) //??
+    @ManyToMany(mappedBy = "danhSachCauHoi")
     private List<BaiThi> danhSachBaiThi = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "cauHoi", cascade = CascadeType.ALL)
 //    private List<CauTraLoi> danhSachCauTraLoi = new ArrayList<>();
 
     //18-4
-    @ManyToOne(cascade = CascadeType.ALL)
+//    @ManyToOne(cascade = CascadeType.ALL) //??
+    @ManyToOne
     @JoinColumn(name = "maChuDe", nullable = true)
     private ChuDe chuDe;
 

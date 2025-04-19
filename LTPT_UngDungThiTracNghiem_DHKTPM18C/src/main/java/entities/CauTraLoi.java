@@ -34,7 +34,8 @@ public class CauTraLoi implements Serializable {
 
     boolean ketQua;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+//    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "maPhien") // Tham chiếu tới khóa chính của bảng PhienLamBai
     private PhienLamBai phienLamBai;
 

@@ -31,7 +31,8 @@ public class HocSinh implements Serializable {
     private String soDienThoai;
 
     //18/4
-    @ManyToOne(cascade = CascadeType.ALL)
+//    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "maLop")
     private Lop lop;
 

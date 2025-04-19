@@ -48,7 +48,8 @@ public class BaiThi implements Serializable {
     private String matKhau;
 
     // Quan hệ Many-to-Many với CauHoi
-    @ManyToMany(cascade = CascadeType.ALL)
+//    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "BaiThi_CauHoi",
             joinColumns = @JoinColumn(name = "maBaiThi"),
