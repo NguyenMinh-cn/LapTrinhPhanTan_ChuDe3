@@ -21,7 +21,7 @@ public class CauTraLoi implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MaCauTraLoi")
     @EqualsAndHashCode.Include
-    private int maCauTraLoi;
+    private long maCauTraLoi;
 
     @Column(columnDefinition = "varchar(1000)", nullable = false)
     private String noiDungCauHoi;
@@ -34,23 +34,19 @@ public class CauTraLoi implements Serializable {
 
     boolean ketQua;
 
-//    @ManyToOne(cascade = CascadeType.ALL)
     @ManyToOne
     @JoinColumn(name = "maPhien") // Tham chiếu tới khóa chính của bảng PhienLamBai
     private PhienLamBai phienLamBai;
 
+    @Override
+    public String toString() {
+        return "CauTraLoi{" +
+                "maCauTraLoi=" + maCauTraLoi +
+                ", noiDungCauHoi='" + noiDungCauHoi + '\'' +
+                ", danhSachDapAn=" + danhSachDapAn +
+                ", dapAnDaChon='" + dapAnDaChon + '\'' +
+                ", ketQua=" + ketQua +
+                ", phienLamBai=" + phienLamBai +
+                '}';
+    }
 }
-//@Entity
-//public class CauTraLoi {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private int id;
-//
-//    @ManyToOne
-//    private CauHoi cauHoi;
-//
-//    private int dapAnDuocChon;
-//    boolean ketQua;
-//    @ManyToOne
-//    private PhienLamBai phienLamBai;
-//}

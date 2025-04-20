@@ -14,7 +14,6 @@ import java.util.Set;
 @AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@ToString
 @Table(name = "Lop")
 public class Lop implements Serializable {
     @Id
@@ -25,8 +24,6 @@ public class Lop implements Serializable {
     @Column(nullable = false)
     private String tenLop;
 
-    //18/4
-//    @OneToMany(mappedBy = "lop", cascade = CascadeType.ALL)
     @OneToMany(mappedBy = "lop")
     private List<HocSinh> danhSachHocSinh = new ArrayList<>();
 
@@ -34,17 +31,14 @@ public class Lop implements Serializable {
     @ManyToMany(mappedBy = "danhSachLop")
     private List<BaiThi> danhSachBaiThi = new ArrayList<>();
 
+    @Override
+    public String toString() {
+        return "Lop{" +
+                "maLop=" + maLop +
+                ", tenLop='" + tenLop + '\'' +
+                ", danhSachHocSinh=" + danhSachHocSinh +
+                ", danhSachBaiThi=" + danhSachBaiThi +
+                '}';
+    }
 }
-//@Entity
-//public class Lop {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private int id;
-//    private String tenLop;
-//
-//    @OneToMany(mappedBy = "lop")
-//    private List<HocSinh> danhSachHocSinh;
-//@ManyToMany(mappedBy = "danhSachLop")
-//private List<BaiThi> danhSachBaiThi;
 
-//}

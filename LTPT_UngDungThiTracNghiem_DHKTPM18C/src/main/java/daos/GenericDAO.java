@@ -21,7 +21,7 @@ public abstract class GenericDAO <T, ID>{
         this.clazz = clazz;
     }
 
-    public T findById(ID id){
+    public T findByID(ID id){
         return em.find(clazz, id);
     }
 

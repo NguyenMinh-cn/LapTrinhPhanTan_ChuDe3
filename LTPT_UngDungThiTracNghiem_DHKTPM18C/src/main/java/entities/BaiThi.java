@@ -13,7 +13,6 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "BaiThi")
-@ToString
 public class BaiThi implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,8 +46,6 @@ public class BaiThi implements Serializable {
     @Column(nullable = true)
     private String matKhau;
 
-    // Quan hệ Many-to-Many với CauHoi
-//    @ManyToMany(cascade = CascadeType.ALL)
     @ManyToMany
     @JoinTable(
             name = "BaiThi_CauHoi",
@@ -63,36 +60,22 @@ public class BaiThi implements Serializable {
     @ManyToOne
     @JoinColumn(name = "maGiaoVien")
     private GiaoVien giaoVien;
+
+    @Override
+    public String toString() {
+        return "BaiThi{" +
+                "maBaiThi=" + maBaiThi +
+                ", tenBaiThi='" + tenBaiThi + '\'' +
+                ", monHoc=" + monHoc +
+                ", thoiGianBatDau=" + thoiGianBatDau +
+                ", thoiGianKetThuc=" + thoiGianKetThuc +
+                ", thoiLuong=" + thoiLuong +
+                ", danhSachLop=" + danhSachLop +
+                ", matKhau='" + matKhau + '\'' +
+                ", danhSachCauHoi=" + danhSachCauHoi +
+                ", danhSachPhienLamBaiCuaBaiThi=" + danhSachPhienLamBaiCuaBaiThi +
+                ", giaoVien=" + giaoVien +
+                '}';
+    }
 }
 
-//@Entity
-//public class BaiThi {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private int id;
-//    private String tenBaiThi;
-//    private LocalDateTime thoiGianBatDau;
-//    private int thoiLuongPhut;
-//
-//    @ManyToOne
-//    private MonHoc monHoc;
-//
-//    @ManyToOne
-//    private GiaoVien giaoVienTao;
-//
-//    @ManyToMany
-//    @JoinTable(
-//            name = "bai_thi_cau_hoi",
-//            joinColumns = @JoinColumn(name = "baiThi_id"),
-//            inverseJoinColumns = @JoinColumn(name = "cauHoi_id")
-//    )
-//    private List<CauHoi> danhSachCauHoi;
-//@ManyToMany
-//@JoinTable(
-//        name = "bai_thi_lop",
-//        joinColumns = @JoinColumn(name = "bai_thi_id"),
-//        inverseJoinColumns = @JoinColumn(name = "lop_id")
-//)
-//private List<Lop> danhSachLop;
-
-//}

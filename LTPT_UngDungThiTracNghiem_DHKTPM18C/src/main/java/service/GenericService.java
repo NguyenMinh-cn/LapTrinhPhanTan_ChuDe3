@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface GenericService<T, ID> extends Remote {
 
-    T findById(ID id) throws RemoteException;
+    T finByID(ID id) throws RemoteException;
     boolean save(T t) throws RemoteException;
     List<T> getAll() throws RemoteException;
 

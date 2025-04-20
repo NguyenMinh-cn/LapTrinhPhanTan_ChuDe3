@@ -28,7 +28,7 @@ public class MonHoc implements Serializable {
 
     @OneToMany(mappedBy = "monHoc", cascade = CascadeType.ALL)
     private List<BaiThi> danhSachBaiThiTheoMon = new ArrayList();
-    //18/4
+
     @OneToMany(mappedBy = "monHoc", cascade = CascadeType.ALL)
     private List<ChuDe> danhSachChuDe = new ArrayList<>();
 
@@ -42,10 +42,3 @@ public class MonHoc implements Serializable {
                 '}';
     }
 }
-//@Entity
-//public class MonHoc {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private int id;
-//    private String tenMon;
-//}

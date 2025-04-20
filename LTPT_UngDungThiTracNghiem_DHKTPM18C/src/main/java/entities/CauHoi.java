@@ -14,33 +14,36 @@ import java.util.Set;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "CauHoi")
-@ToString
 public class CauHoi implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    private int maCauHoi;
+    private long maCauHoi;
     @Column(columnDefinition = "varchar(1000)", nullable = false)
     private String noiDung;
 
-    //18-4
     @ElementCollection
     private List<String> danhSachDapAn = new ArrayList<>();
 
     private String dapAnDung;
 
-    // Quan hệ Many-to-Many với BaiThi
-// @ManyToMany(mappedBy = "danhSachCauHoi", cascade = CascadeType.ALL) //??
+
     @ManyToMany(mappedBy = "danhSachCauHoi")
     private List<BaiThi> danhSachBaiThi = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "cauHoi", cascade = CascadeType.ALL)
-//    private List<CauTraLoi> danhSachCauTraLoi = new ArrayList<>();
-
-    //18-4
-//    @ManyToOne(cascade = CascadeType.ALL) //??
     @ManyToOne
     @JoinColumn(name = "maChuDe", nullable = true)
     private ChuDe chuDe;
 
+    @Override
+    public String toString() {
+        return "CauHoi{" +
+                "maCauHoi=" + maCauHoi +
+                ", noiDung='" + noiDung + '\'' +
+                ", danhSachDapAn=" + danhSachDapAn +
+                ", dapAnDung='" + dapAnDung + '\'' +
+                ", danhSachBaiThi=" + danhSachBaiThi +
+                ", chuDe=" + chuDe +
+                '}';
+    }
 }

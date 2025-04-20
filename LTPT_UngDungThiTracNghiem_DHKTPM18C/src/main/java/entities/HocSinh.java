@@ -18,8 +18,9 @@ import java.util.Set;
 public class HocSinh implements Serializable {
     @Id
     @EqualsAndHashCode.Include
-    @Column(columnDefinition = "varchar(15)", nullable = false)
-    private String maHocSinh;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "maHocSinh", unique = true, nullable = false)
+    private long maHocSinh;
 
     @Column(columnDefinition = "varchar(60)", nullable = false)
     private String hoTen;
@@ -30,8 +31,6 @@ public class HocSinh implements Serializable {
     @Column(columnDefinition = "varchar(15)",nullable = false)
     private String soDienThoai;
 
-    //18/4
-//    @ManyToOne(cascade = CascadeType.ALL)
     @ManyToOne
     @JoinColumn(name = "maLop")
     private Lop lop;
@@ -40,26 +39,20 @@ public class HocSinh implements Serializable {
 //    tự động xóa các "orphan" (đối tượng mồ côi)
     private List<PhienLamBai> danhSachPhienLamBai = new ArrayList<>();
 
-    //18/4
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "email", referencedColumnName = "tenDangNhap", insertable = false, updatable = false)
     private TaiKhoan taiKhoan;
 
+    @Override
+    public String toString() {
+        return "HocSinh{" +
+                "maHocSinh='" + maHocSinh + '\'' +
+                ", hoTen='" + hoTen + '\'' +
+                ", email='" + email + '\'' +
+                ", soDienThoai='" + soDienThoai + '\'' +
+                ", lop=" + lop +
+                ", danhSachPhienLamBai=" + danhSachPhienLamBai +
+                ", taiKhoan=" + taiKhoan +
+                '}';
+    }
 }
-//@Entity
-//public class HocSinh {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private int id;
-//    private String hoTen;
-//    private String email;
-//    private String soDienThoai;
-//
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "tenDangNhap")
-//    private TaiKhoan taiKhoan;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "lop_id")
-//    private Lop lop;
-//}

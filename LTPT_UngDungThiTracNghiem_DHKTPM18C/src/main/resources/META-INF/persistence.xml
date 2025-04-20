@@ -13,7 +13,7 @@
         <class>entities.BaiThi</class>
         <class>entities.PhienLamBai</class>
         <class>entities.CauTraLoi</class>
-        <class>entities.KetQua</class>
+        <class>entities.ChuDe</class>
         <properties>
             <property name="jakarta.persistence.jdbc.driver"
                       value="org.mariadb.jdbc.Driver" />

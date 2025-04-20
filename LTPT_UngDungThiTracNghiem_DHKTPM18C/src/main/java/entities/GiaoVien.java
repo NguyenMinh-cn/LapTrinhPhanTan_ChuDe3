@@ -31,35 +31,22 @@ public class GiaoVien implements Serializable {
     @Column(columnDefinition = "varchar(10)", nullable = false)
     private String soDienThoai;
 
-    // Quan hệ OneToMany với BaiThi
     @OneToMany(mappedBy = "giaoVien") // Tham chiếu thuộc tính giaoVien trong BaiThi
     private List<BaiThi> danhSachBaiThi = new ArrayList<BaiThi>();
 
-//18/4
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "email", referencedColumnName = "tenDangNhap", insertable = false, updatable = false)
     private TaiKhoan taiKhoan;
 
-
+    @Override
+    public String toString() {
+        return "GiaoVien{" +
+                "maGiaoVien=" + maGiaoVien +
+                ", hoTen='" + hoTen + '\'' +
+                ", email='" + email + '\'' +
+                ", soDienThoai='" + soDienThoai + '\'' +
+                ", danhSachBaiThi=" + danhSachBaiThi +
+                ", taiKhoan=" + taiKhoan +
+                '}';
+    }
 }
-//@Entity
-//public class GiaoVien {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private int id;
-//    private String hoTen;
-//    private String email;
-//    private String soDienThoai;
-//
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "tenDangNhap")
-//    private TaiKhoan taiKhoan;
-//
-//    @ManyToMany
-//    @JoinTable(
-//            name = "giao_vien_mon",
-//            joinColumns = @JoinColumn(name = "giaoVien_id"),
-//            inverseJoinColumns = @JoinColumn(name = "monHoc_id")
-//    )
-//    private List<MonHoc> monPhuTrach;
-//}

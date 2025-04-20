@@ -1,69 +1,18 @@
 package test;
 
-import entities.CauHoi;
+import daos.GiaoVienDAO;
 import entities.GiaoVien;
-import entities.MonHoc;
 import entities.TaiKhoan;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import net.datafaker.Faker;
+import util.JPAUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class InsertGiaoVien {
 
-    // Phương thức chèn giáo viên vào cơ sở dữ liệu
-    public void themDSGiaoVien() {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("mariadb");
-        EntityManager em = emf.createEntityManager();
-        Faker faker = new Faker();
-
-        try {
-            List<MonHoc> monHocList = em.createQuery("SELECT m FROM MonHoc m", MonHoc.class).getResultList();
-//            System.out.println("Danh sách môn học:");
-//            for (MonHoc monHoc : monHocList) {
-//                System.out.println("Mã môn: " + monHoc.getMaMon() + ", Tên môn: " + monHoc.getTenMon());
-//            }
-
-            em.getTransaction().begin();
-            for (int i = 0; i < 10; i++) {
-                GiaoVien giaoVien = new GiaoVien();
-                giaoVien.setHoTen(faker.name().fullName());
-                giaoVien.setEmail(faker.internet().emailAddress());
-                giaoVien.setSoDienThoai(faker.phoneNumber().subscriberNumber(10));
-
-                TaiKhoan taiKhoan = new TaiKhoan();
-                taiKhoan.setTenDangNhap(giaoVien.getEmail());
-                taiKhoan.setMatKhau(faker.internet().password());
-                taiKhoan.setLoaiTaiKhoan("giaovien");
-
-                giaoVien.setTaiKhoan(taiKhoan);
-
-                List<MonHoc> monHocDangDay = new ArrayList<>();
-                monHocDangDay.add(monHocList.get(i % monHocList.size()));
-                giaoVien.setMonHocGiaoVienPhuTrach(monHocDangDay);
-
-                em.persist(taiKhoan);
-                em.persist(giaoVien);
-            }
-
-            em.getTransaction().commit();
-            System.out.println("Dữ liệu giáo viên đã được ghi thành công!");
-
-        } catch (Exception e) {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-            e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-            if (emf != null) {
-                emf.close();
-            }
-        }
-    }
 }

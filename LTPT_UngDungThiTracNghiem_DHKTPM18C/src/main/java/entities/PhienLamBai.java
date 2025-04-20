@@ -16,9 +16,8 @@ import java.util.Set;
 @Entity
 @Table(name = "PhienLamBai")
 public class PhienLamBai implements Serializable {
-
     @Id
-    @Column(name = "MaPhien")
+    @Column(name = "MaPhien", nullable = false, unique = true)
     private String maPhien;
 
     @Column(nullable = false)
@@ -29,39 +28,27 @@ public class PhienLamBai implements Serializable {
 
     private double diem;
 
-    //18/4
-//    @ManyToOne(cascade = CascadeType.ALL)
     @ManyToOne
     @JoinColumn(name = "maHocSinh") // Tham chiếu tới khóa chính của bảng HocSinh
     private HocSinh hocSinh;
 
-//    @ManyToOne(cascade = CascadeType.ALL)
     @ManyToOne
     @JoinColumn(name = "maBaiThi") // Tham chiếu tới khóa chính của bảng BaiThi
     private BaiThi baiThi;
 
-    //18/4
     @OneToMany(mappedBy="phienLamBai", cascade = CascadeType.ALL)//tên thuộc tính, không phải tên bảng
     private List<CauTraLoi> danhSachCauTraLoi = new ArrayList<>();
 
-
+    @Override
+    public String toString() {
+        return "PhienLamBai{" +
+                "maPhien='" + maPhien + '\'' +
+                ", thoiGianBatDau=" + thoiGianBatDau +
+                ", thoiGianKetThuc=" + thoiGianKetThuc +
+                ", diem=" + diem +
+                ", hocSinh=" + hocSinh +
+                ", baiThi=" + baiThi +
+                ", danhSachCauTraLoi=" + danhSachCauTraLoi +
+                '}';
+    }
 }
-//@Entity
-//public class PhienLamBai {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private int id;
-//    private double diem;
-
-//    @ManyToOne
-//    private HocSinh hocSinh;
-//
-//    @ManyToOne
-//    private BaiThi baiThi;
-//
-//    private LocalDateTime batDau;
-//    private LocalDateTime ketThuc;
-//
-//    @OneToMany(mappedBy = "phienLamBai", cascade = CascadeType.ALL)
-//    private List<CauTraLoi> cauTraLoi;
-//}

@@ -24,7 +24,7 @@ public class Main {
 
         // Tìm môn học theo ID
 
-        MonHoc monTim = monHocDAO.findById(11);
+        MonHoc monTim = monHocDAO.findByID(11);
         if (monTim != null) {
             System.out.println("Tìm thấy môn học: " + monTim.getTenMon());
         } else {
