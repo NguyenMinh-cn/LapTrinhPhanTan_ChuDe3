@@ -2,107 +2,88 @@
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="gui.GiaoDienMenuGiaoVien">
   <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="BorderLayout" hgap="0" vgap="0">
     <constraints>
-      <xy x="20" y="20" width="720" height="400"/>
+      <xy x="20" y="20" width="803" height="400"/>
     </constraints>
     <properties/>
     <border type="none"/>
     <children>
-      <grid id="c60f7" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+      <grid id="c60f7" layout-manager="BorderLayout" hgap="0" vgap="0">
         <constraints border-constraint="West"/>
         <properties>
-          <background color="-4725252"/>
+          <background color="-6106369"/>
           <preferredSize width="200" height="10"/>
         </properties>
         <border type="none"/>
         <children>
-          <component id="124a0" class="javax.swing.JLabel">
-            <constraints/>
+          <component id="ec300" class="javax.swing.JLabel" binding="lbTenGiaoVien">
+            <constraints border-constraint="North"/>
             <properties>
-              <font size="20"/>
-              <text value="Giáo viên"/>
+              <background color="-6106369"/>
+              <horizontalAlignment value="0"/>
+              <horizontalTextPosition value="0"/>
+              <preferredSize width="200" height="50"/>
+              <text value="Tên giáo viên"/>
             </properties>
           </component>
-          <grid id="8bb9c" layout-manager="BorderLayout" hgap="0" vgap="0">
-            <constraints/>
+          <component id="5740e" class="javax.swing.JLabel" binding="lbDangXuat">
+            <constraints border-constraint="South"/>
             <properties>
-              <preferredSize width="200" height="30"/>
+              <alignmentX value="0.5"/>
+              <horizontalAlignment value="0"/>
+              <horizontalTextPosition value="0"/>
+              <preferredSize width="71" height="30"/>
+              <text value="Đăng xuất"/>
+            </properties>
+          </component>
+          <grid id="14e75" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+            <constraints border-constraint="Center"/>
+            <properties>
+              <background color="-6106369"/>
             </properties>
             <border type="none"/>
             <children>
-              <component id="32d32" class="javax.swing.JLabel">
-                <constraints border-constraint="Center"/>
+              <component id="3f660" class="javax.swing.JLabel" binding="lbNganHangCauHoi">
+                <constraints/>
                 <properties>
+                  <background color="-4333314"/>
                   <horizontalAlignment value="0"/>
                   <horizontalTextPosition value="0"/>
+                  <opaque value="true"/>
+                  <preferredSize width="200" height="30"/>
                   <text value="Ngân hàng câu hỏi"/>
                 </properties>
               </component>
-            </children>
-          </grid>
-          <grid id="4e59e" layout-manager="BorderLayout" hgap="0" vgap="0">
-            <constraints/>
-            <properties>
-              <preferredSize width="200" height="30"/>
-            </properties>
-            <border type="none"/>
-            <children>
-              <component id="46641" class="javax.swing.JLabel">
-                <constraints border-constraint="Center"/>
+              <component id="a30c1" class="javax.swing.JLabel" binding="lbDSDeThi">
+                <constraints/>
                 <properties>
+                  <background color="-4333314"/>
                   <horizontalAlignment value="0"/>
                   <horizontalTextPosition value="0"/>
-                  <text value="Danh sách đề thi "/>
+                  <opaque value="true"/>
+                  <preferredSize width="200" height="30"/>
+                  <text value="Danh sách đề thi"/>
                 </properties>
               </component>
-            </children>
-          </grid>
-          <grid id="dd112" layout-manager="BorderLayout" hgap="0" vgap="0">
-            <constraints/>
-            <properties>
-              <preferredSize width="200" height="30"/>
-            </properties>
-            <border type="none"/>
-            <children>
-              <component id="4f32c" class="javax.swing.JLabel">
-                <constraints border-constraint="Center"/>
+              <component id="c13de" class="javax.swing.JLabel" binding="lbLopHocTap">
+                <constraints/>
                 <properties>
+                  <background color="-4333314"/>
                   <horizontalAlignment value="0"/>
                   <horizontalTextPosition value="0"/>
-                  <text value="Quản lý lớp học"/>
+                  <opaque value="true"/>
+                  <preferredSize width="200" height="30"/>
+                  <text value="Lớp học tập"/>
                 </properties>
               </component>
-            </children>
-          </grid>
-          <grid id="c9432" binding="chucNangCDTK" layout-manager="BorderLayout" hgap="0" vgap="0">
-            <constraints/>
-            <properties>
-              <preferredSize width="200" height="30"/>
-            </properties>
-            <border type="none"/>
-            <children>
-              <component id="36ebf" class="javax.swing.JLabel" binding="txtCaiDatTK">
-                <constraints border-constraint="Center"/>
+              <component id="e881" class="javax.swing.JLabel" binding="lbCaiDatTaiKhoan">
+                <constraints/>
                 <properties>
+                  <background color="-4333314"/>
                   <horizontalAlignment value="0"/>
                   <horizontalTextPosition value="0"/>
-                  <text value="Cài đặt tài khoản"/>
-                </properties>
-              </component>
-            </children>
-          </grid>
-          <grid id="f1002" layout-manager="BorderLayout" hgap="0" vgap="0">
-            <constraints/>
-            <properties>
-              <preferredSize width="200" height="30"/>
-            </properties>
-            <border type="none"/>
-            <children>
-              <component id="d60d" class="javax.swing.JLabel">
-                <constraints border-constraint="Center"/>
-                <properties>
-                  <horizontalAlignment value="0"/>
-                  <horizontalTextPosition value="0"/>
-                  <text value="Đăng xuất"/>
+                  <opaque value="true"/>
+                  <preferredSize width="200" height="30"/>
+                  <text value="Tài khoản"/>
                 </properties>
               </component>
             </children>

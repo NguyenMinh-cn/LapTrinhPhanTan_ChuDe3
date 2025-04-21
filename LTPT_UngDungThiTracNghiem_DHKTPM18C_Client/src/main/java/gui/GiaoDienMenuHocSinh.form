@@ -7,74 +7,57 @@
     <properties/>
     <border type="none"/>
     <children>
-      <grid id="759a1" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+      <grid id="759a1" layout-manager="BorderLayout" hgap="0" vgap="0">
         <constraints border-constraint="West"/>
         <properties>
-          <background color="-4725252"/>
+          <background color="-6106369"/>
           <preferredSize width="200" height="20"/>
         </properties>
         <border type="none"/>
         <children>
-          <component id="c07f7" class="javax.swing.JLabel">
-            <constraints/>
+          <component id="e71af" class="javax.swing.JLabel" binding="lbTenHocSinh">
+            <constraints border-constraint="North"/>
             <properties>
-              <font size="20"/>
-              <text value="Học sinh"/>
+              <background color="-6106369"/>
+              <horizontalAlignment value="0"/>
+              <horizontalTextPosition value="0"/>
+              <preferredSize width="200" height="50"/>
+              <text value="Label"/>
             </properties>
           </component>
-          <grid id="416a8" binding="panelDanhSachBaiThi" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
-            <constraints/>
+          <component id="f1081" class="javax.swing.JLabel" binding="lbDangXuat">
+            <constraints border-constraint="South"/>
             <properties>
-              <alignmentX value="0.0"/>
-              <alignmentY value="0.0"/>
-              <autoscrolls value="false"/>
-              <opaque value="true"/>
-              <preferredSize width="200" height="30"/>
+              <horizontalAlignment value="0"/>
+              <preferredSize width="71" height="30"/>
+              <text value="Đăng xuất"/>
+            </properties>
+          </component>
+          <grid id="79b53" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+            <constraints border-constraint="Center"/>
+            <properties>
+              <background color="-6106369"/>
             </properties>
             <border type="none"/>
             <children>
-              <component id="808b3" class="javax.swing.JLabel">
+              <component id="a2b86" class="javax.swing.JLabel">
                 <constraints/>
                 <properties>
+                  <background color="-4333314"/>
+                  <horizontalAlignment value="0"/>
+                  <opaque value="true"/>
+                  <preferredSize width="200" height="30"/>
                   <text value="Danh sách bài thi"/>
                 </properties>
               </component>
-            </children>
-          </grid>
-          <grid id="6e27a" binding="panelCaiDatTaiKhoan" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
-            <constraints/>
-            <properties>
-              <alignmentX value="0.0"/>
-              <alignmentY value="0.0"/>
-              <autoscrolls value="false"/>
-              <opaque value="true"/>
-              <preferredSize width="200" height="30"/>
-            </properties>
-            <border type="none"/>
-            <children>
-              <component id="2a672" class="javax.swing.JLabel">
+              <component id="b42ff" class="javax.swing.JLabel" binding="lbTaiKhoan">
                 <constraints/>
                 <properties>
-                  <text value="Cài đặt tài khoản"/>
-                </properties>
-              </component>
-            </children>
-          </grid>
-          <grid id="b7ab1" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
-            <constraints/>
-            <properties>
-              <alignmentX value="0.0"/>
-              <alignmentY value="0.0"/>
-              <autoscrolls value="false"/>
-              <opaque value="true"/>
-              <preferredSize width="200" height="30"/>
-            </properties>
-            <border type="none"/>
-            <children>
-              <component id="731bb" class="javax.swing.JLabel">
-                <constraints/>
-                <properties>
-                  <text value="Đăng xuất"/>
+                  <background color="-4333314"/>
+                  <horizontalAlignment value="0"/>
+                  <opaque value="true"/>
+                  <preferredSize width="200" height="30"/>
+                  <text value="Tài khoản"/>
                 </properties>
               </component>
             </children>

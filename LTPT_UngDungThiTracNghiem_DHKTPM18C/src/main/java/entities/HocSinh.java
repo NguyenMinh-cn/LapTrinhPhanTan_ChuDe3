@@ -16,6 +16,8 @@ import java.util.Set;
 @Entity
 @Table(name = "HocSinh")
 public class HocSinh implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,13 +48,13 @@ public class HocSinh implements Serializable {
     @Override
     public String toString() {
         return "HocSinh{" +
-                "maHocSinh='" + maHocSinh + '\'' +
+                "maHocSinh=" + maHocSinh +
                 ", hoTen='" + hoTen + '\'' +
                 ", email='" + email + '\'' +
                 ", soDienThoai='" + soDienThoai + '\'' +
-                ", lop=" + lop +
-                ", danhSachPhienLamBai=" + danhSachPhienLamBai +
-                ", taiKhoan=" + taiKhoan +
+                ", lop=" + (lop != null ? lop.getTenLop() : "null") +
+                ", taiKhoan=" + (taiKhoan != null ? taiKhoan.getTenDangNhap() : "null") +
+                ", soPhienLamBai=" + (danhSachPhienLamBai != null ? danhSachPhienLamBai.size() : 0) +
                 '}';
     }
 }

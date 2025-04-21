@@ -15,6 +15,8 @@ import java.util.Set;
 @Entity
 @Table(name = "CauHoi")
 public class CauHoi implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
@@ -42,8 +44,8 @@ public class CauHoi implements Serializable {
                 ", noiDung='" + noiDung + '\'' +
                 ", danhSachDapAn=" + danhSachDapAn +
                 ", dapAnDung='" + dapAnDung + '\'' +
-                ", danhSachBaiThi=" + danhSachBaiThi +
-                ", chuDe=" + chuDe +
+                ", soBaiThiThamGia=" + (danhSachBaiThi != null ? danhSachBaiThi.size() : 0) +
+                ", chuDe=" + (chuDe != null ? chuDe.getTenChuDe() : "null") +
                 '}';
     }
 }

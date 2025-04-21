@@ -2,8 +2,14 @@ package daos;
 
 import entities.HocSinh;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import org.hibernate.Session;
+import org.hibernate.SessionBuilder;
+import org.hibernate.query.Query;
 
-public class HocSinhDAO extends GenericDAO<HocSinh, String> {
+
+public class HocSinhDAO extends GenericDAO<HocSinh, Integer> {
+
     public HocSinhDAO(Class<HocSinh> clazz) {
         super(clazz);
     }
@@ -11,4 +17,23 @@ public class HocSinhDAO extends GenericDAO<HocSinh, String> {
     public HocSinhDAO(EntityManager em, Class<HocSinh> clazz) {
         super(em, clazz);
     }
+
+    public HocSinh timHocSinhTheoEmail(String email) {
+        String jpql = "SELECT hs FROM HocSinh hs " +
+                "LEFT JOIN FETCH hs.lop " +
+                "LEFT JOIN FETCH hs.danhSachPhienLamBai " +
+                "LEFT JOIN FETCH hs.taiKhoan " +
+                "WHERE hs.email = :email";
+
+        try {
+            return em.createQuery(jpql, HocSinh.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
 }

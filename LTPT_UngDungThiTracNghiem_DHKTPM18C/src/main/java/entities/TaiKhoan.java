@@ -14,6 +14,8 @@ import java.io.Serializable;
 @Entity
 @Table(name = "TaiKhoan")
 public class TaiKhoan implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @Column(name = "TenDangNhap", unique = true, nullable = false) // Email là khóa chính và là tên đăng nhập
     @EqualsAndHashCode.Include

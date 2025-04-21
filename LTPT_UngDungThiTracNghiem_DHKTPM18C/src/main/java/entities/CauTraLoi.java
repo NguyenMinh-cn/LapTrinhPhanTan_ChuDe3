@@ -17,6 +17,8 @@ import java.util.List;
 @Table(name = "CauTraLoi")
 
 public class CauTraLoi implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MaCauTraLoi")
@@ -46,7 +48,7 @@ public class CauTraLoi implements Serializable {
                 ", danhSachDapAn=" + danhSachDapAn +
                 ", dapAnDaChon='" + dapAnDaChon + '\'' +
                 ", ketQua=" + ketQua +
-                ", phienLamBai=" + phienLamBai +
+                ", maPhien=" + (phienLamBai != null ? phienLamBai.getMaPhien() : "null") +
                 '}';
     }
 }

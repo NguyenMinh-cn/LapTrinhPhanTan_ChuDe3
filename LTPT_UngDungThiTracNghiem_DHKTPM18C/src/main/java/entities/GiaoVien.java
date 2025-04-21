@@ -16,6 +16,8 @@ import java.util.Set;
 @Table(name = "GiaoVien")
 
 public class GiaoVien implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MaGiaoVien")
@@ -45,8 +47,8 @@ public class GiaoVien implements Serializable {
                 ", hoTen='" + hoTen + '\'' +
                 ", email='" + email + '\'' +
                 ", soDienThoai='" + soDienThoai + '\'' +
-                ", danhSachBaiThi=" + danhSachBaiThi +
-                ", taiKhoan=" + taiKhoan +
+                ", taiKhoan=" + (taiKhoan != null ? taiKhoan.getTenDangNhap() : "null") +
+                ", soLuongBaiThi=" + (danhSachBaiThi != null ? danhSachBaiThi.size() : 0) +
                 '}';
     }
 }

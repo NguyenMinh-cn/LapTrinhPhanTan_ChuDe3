@@ -14,6 +14,8 @@ import java.util.Set;
 @Entity
 @Table(name = "BaiThi")
 public class BaiThi implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int maBaiThi;
@@ -66,15 +68,15 @@ public class BaiThi implements Serializable {
         return "BaiThi{" +
                 "maBaiThi=" + maBaiThi +
                 ", tenBaiThi='" + tenBaiThi + '\'' +
-                ", monHoc=" + monHoc +
+                ", monHoc=" + (monHoc != null ? monHoc.getTenMon() : "null") +
                 ", thoiGianBatDau=" + thoiGianBatDau +
                 ", thoiGianKetThuc=" + thoiGianKetThuc +
                 ", thoiLuong=" + thoiLuong +
-                ", danhSachLop=" + danhSachLop +
+                ", soLopThamGia=" + (danhSachLop != null ? danhSachLop.size() : 0) +
                 ", matKhau='" + matKhau + '\'' +
-                ", danhSachCauHoi=" + danhSachCauHoi +
-                ", danhSachPhienLamBaiCuaBaiThi=" + danhSachPhienLamBaiCuaBaiThi +
-                ", giaoVien=" + giaoVien +
+                ", soCauHoi=" + (danhSachCauHoi != null ? danhSachCauHoi.size() : 0) +
+                ", soPhienLamBai=" + (danhSachPhienLamBaiCuaBaiThi != null ? danhSachPhienLamBaiCuaBaiThi.size() : 0) +
+                ", giaoVien=" + (giaoVien != null ? giaoVien.getHoTen() : "null") +
                 '}';
     }
 }

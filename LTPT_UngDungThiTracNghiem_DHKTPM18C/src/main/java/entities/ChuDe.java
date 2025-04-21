@@ -15,6 +15,8 @@ import java.util.List;
 @Entity
 @Table(name = "ChuDe")
 public class ChuDe implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MaChuDe")
@@ -37,8 +39,8 @@ public class ChuDe implements Serializable {
         return "ChuDe{" +
                 "maChuDe=" + maChuDe +
                 ", tenChuDe='" + tenChuDe + '\'' +
-                ", monHoc=" + monHoc +
-                ", danhSachCauHoi=" + danhSachCauHoi +
+                ", maMon=" + (monHoc != null ? monHoc.getMaMon() : "null") +
+                ", soCauHoi=" + (danhSachCauHoi != null ? danhSachCauHoi.size() : 0) +
                 '}';
     }
 }

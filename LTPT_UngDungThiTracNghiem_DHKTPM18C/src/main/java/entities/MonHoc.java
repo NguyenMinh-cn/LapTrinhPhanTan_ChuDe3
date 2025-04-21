@@ -17,6 +17,8 @@ import java.util.Set;
 
 @Table(name = "MonHoc")
 public class MonHoc implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MaMon")
@@ -37,8 +39,8 @@ public class MonHoc implements Serializable {
         return "MonHoc{" +
                 "maMon=" + maMon +
                 ", tenMon='" + tenMon + '\'' +
-
-                ", danhSachChuDe=" + danhSachChuDe +
+                ", soChuDe=" + (danhSachChuDe != null ? danhSachChuDe.size() : 0) +
+                ", soBaiThi=" + (danhSachBaiThiTheoMon != null ? danhSachBaiThiTheoMon.size() : 0) +
                 '}';
     }
 }

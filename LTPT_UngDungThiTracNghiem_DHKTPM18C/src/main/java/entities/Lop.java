@@ -16,6 +16,8 @@ import java.util.Set;
 @Entity
 @Table(name = "Lop")
 public class Lop implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
@@ -36,8 +38,8 @@ public class Lop implements Serializable {
         return "Lop{" +
                 "maLop=" + maLop +
                 ", tenLop='" + tenLop + '\'' +
-                ", danhSachHocSinh=" + danhSachHocSinh +
-                ", danhSachBaiThi=" + danhSachBaiThi +
+                ", soHocSinh=" + (danhSachHocSinh != null ? danhSachHocSinh.size() : 0) +
+                ", soBaiThi=" + (danhSachBaiThi != null ? danhSachBaiThi.size() : 0) +
                 '}';
     }
 }

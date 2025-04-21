@@ -16,6 +16,8 @@ import java.util.Set;
 @Entity
 @Table(name = "PhienLamBai")
 public class PhienLamBai implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @Column(name = "MaPhien", nullable = false, unique = true)
     private String maPhien;
@@ -46,9 +48,9 @@ public class PhienLamBai implements Serializable {
                 ", thoiGianBatDau=" + thoiGianBatDau +
                 ", thoiGianKetThuc=" + thoiGianKetThuc +
                 ", diem=" + diem +
-                ", hocSinh=" + hocSinh +
-                ", baiThi=" + baiThi +
-                ", danhSachCauTraLoi=" + danhSachCauTraLoi +
+                ", hocSinhId=" + (hocSinh != null ? hocSinh.getMaHocSinh() : "null") +
+                ", baiThiId=" + (baiThi != null ? baiThi.getMaBaiThi() : "null") +
+                ", soCauTraLoi=" + (danhSachCauTraLoi != null ? danhSachCauTraLoi.size() : 0) +
                 '}';
     }
 }
