@@ -15,7 +15,7 @@ import java.util.Set;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 
-@Table(name = "MonHoc")
+@Table(name = "monhoc")
 public class MonHoc implements Serializable {
     private static final long serialVersionUID = 1L;
 
