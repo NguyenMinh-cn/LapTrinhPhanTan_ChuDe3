@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="gui.GiaoDienDangNhap">
+  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="578" height="400"/>
+    </constraints>
+    <properties>
+      <background color="-1"/>
+      <font name="JetBrains Mono" size="16"/>
+      <preferredSize width="550" height="300"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <grid id="70a15" layout-manager="FlowLayout" hgap="5" vgap="8" flow-align="1">
+        <constraints border-constraint="South"/>
+        <properties>
+          <background color="-1"/>
+          <foreground color="-1"/>
+          <preferredSize width="162" height="60"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="c110" class="javax.swing.JButton" binding="btnDangNhap">
+            <constraints/>
+            <properties>
+              <background color="-12020241"/>
+              <enabled value="true"/>
+              <font name="Consolas" size="22" style="1"/>
+              <foreground color="-1"/>
+              <horizontalTextPosition value="0"/>
+              <text value="Đăng nhập"/>
+              <verticalAlignment value="0"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="11c7b" layout-manager="GridLayoutManager" row-count="2" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints border-constraint="Center"/>
+        <properties>
+          <background color="-1"/>
+          <preferredSize width="400" height="200"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="6f73e" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Consolas" size="22" style="1"/>
+              <foreground color="-41585"/>
+              <text value="Tên đăng nhập"/>
+            </properties>
+          </component>
+          <component id="57dab" class="javax.swing.JLabel">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+            </constraints>
+            <properties>
+              <font name="Consolas" size="22" style="1"/>
+              <foreground color="-41585"/>
+              <text value="Mật khẩu"/>
+            </properties>
+          </component>
+          <component id="56ca1" class="javax.swing.JTextField" binding="txtTenDangNhap" custom-create="true">
+            <constraints>
+              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <caretColor color="-16777216"/>
+              <font name="Consolas" size="22"/>
+            </properties>
+          </component>
+          <component id="b6756" class="javax.swing.JPasswordField" binding="txtMatKhau" custom-create="true">
+            <constraints>
+              <grid row="1" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                <preferred-size width="150" height="-1"/>
+              </grid>
+            </constraints>
+            <properties>
+              <caretColor color="-16777216"/>
+              <font name="Consolas" size="22"/>
+            </properties>
+          </component>
+          <hspacer id="6db8">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </hspacer>
+          <hspacer id="57ce4">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </hspacer>
+          <hspacer id="60b7">
+            <constraints>
+              <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </hspacer>
+          <hspacer id="8af4d">
+            <constraints>
+              <grid row="1" column="4" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+            </constraints>
+          </hspacer>
+        </children>
+      </grid>
+      <grid id="f86f0" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+        <constraints border-constraint="North"/>
+        <properties>
+          <background color="-1"/>
+          <preferredSize width="755" height="100"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="4c12" class="javax.swing.JLabel">
+            <constraints/>
+            <properties>
+              <font name="Consolas" size="30" style="1"/>
+              <foreground color="-12020241"/>
+              <horizontalAlignment value="0"/>
+              <horizontalTextPosition value="0"/>
+              <preferredSize width="500" height="40"/>
+              <text value="Đăng nhập hệ thống"/>
+            </properties>
+          </component>
+          <component id="d67f4" class="javax.swing.JLabel">
+            <constraints/>
+            <properties>
+              <font name="Consolas" size="30" style="1"/>
+              <foreground color="-12020241"/>
+              <horizontalAlignment value="0"/>
+              <horizontalTextPosition value="0"/>
+              <preferredSize width="500" height="40"/>
+              <text value="thi trắc nghiệm"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+    </children>
+  </grid>
+</form>

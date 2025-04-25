@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="gui.GiaoDienMenuGiaoVien">
+  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="803" height="400"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <grid id="c60f7" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="West"/>
+        <properties>
+          <background color="-6106369"/>
+          <preferredSize width="200" height="10"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="ec300" class="javax.swing.JLabel" binding="lbTenGiaoVien">
+            <constraints border-constraint="North"/>
+            <properties>
+              <background color="-6106369"/>
+              <horizontalAlignment value="0"/>
+              <horizontalTextPosition value="0"/>
+              <preferredSize width="200" height="50"/>
+              <text value="Tên giáo viên"/>
+            </properties>
+          </component>
+          <component id="5740e" class="javax.swing.JLabel" binding="lbDangXuat">
+            <constraints border-constraint="South"/>
+            <properties>
+              <alignmentX value="0.5"/>
+              <horizontalAlignment value="0"/>
+              <horizontalTextPosition value="0"/>
+              <preferredSize width="71" height="30"/>
+              <text value="Đăng xuất"/>
+            </properties>
+          </component>
+          <grid id="14e75" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+            <constraints border-constraint="Center"/>
+            <properties>
+              <background color="-6106369"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="3f660" class="javax.swing.JLabel" binding="lbNganHangCauHoi">
+                <constraints/>
+                <properties>
+                  <background color="-4333314"/>
+                  <horizontalAlignment value="0"/>
+                  <horizontalTextPosition value="0"/>
+                  <opaque value="true"/>
+                  <preferredSize width="200" height="30"/>
+                  <text value="Ngân hàng câu hỏi"/>
+                </properties>
+              </component>
+              <component id="a30c1" class="javax.swing.JLabel" binding="lbDSDeThi">
+                <constraints/>
+                <properties>
+                  <background color="-4333314"/>
+                  <horizontalAlignment value="0"/>
+                  <horizontalTextPosition value="0"/>
+                  <opaque value="true"/>
+                  <preferredSize width="200" height="30"/>
+                  <text value="Danh sách đề thi"/>
+                </properties>
+              </component>
+              <component id="c13de" class="javax.swing.JLabel" binding="lbLopHocTap">
+                <constraints/>
+                <properties>
+                  <background color="-4333314"/>
+                  <horizontalAlignment value="0"/>
+                  <horizontalTextPosition value="0"/>
+                  <opaque value="true"/>
+                  <preferredSize width="200" height="30"/>
+                  <text value="Lớp học tập"/>
+                </properties>
+              </component>
+              <component id="e881" class="javax.swing.JLabel" binding="lbCaiDatTaiKhoan">
+                <constraints/>
+                <properties>
+                  <background color="-4333314"/>
+                  <horizontalAlignment value="0"/>
+                  <horizontalTextPosition value="0"/>
+                  <opaque value="true"/>
+                  <preferredSize width="200" height="30"/>
+                  <text value="Tài khoản"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+        </children>
+      </grid>
+      <grid id="805ad" binding="panelNoiDung" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="Center"/>
+        <properties/>
+        <border type="none"/>
+        <children/>
+      </grid>
+    </children>
+  </grid>
+</form>
