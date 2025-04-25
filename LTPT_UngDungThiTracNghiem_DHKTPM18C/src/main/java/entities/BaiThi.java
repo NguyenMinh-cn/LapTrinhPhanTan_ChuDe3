@@ -63,21 +63,6 @@ public class BaiThi implements Serializable {
     @JoinColumn(name = "maGiaoVien")
     private GiaoVien giaoVien;
 
-    @Override
-    public String toString() {
-        return "BaiThi{" +
-                "maBaiThi=" + maBaiThi +
-                ", tenBaiThi='" + tenBaiThi + '\'' +
-                ", monHoc=" + (monHoc != null ? monHoc.getTenMon() : "null") +
-                ", thoiGianBatDau=" + thoiGianBatDau +
-                ", thoiGianKetThuc=" + thoiGianKetThuc +
-                ", thoiLuong=" + thoiLuong +
-                ", soLopThamGia=" + (danhSachLop != null ? danhSachLop.size() : 0) +
-                ", matKhau='" + matKhau + '\'' +
-                ", soCauHoi=" + (danhSachCauHoi != null ? danhSachCauHoi.size() : 0) +
-                ", soPhienLamBai=" + (danhSachPhienLamBaiCuaBaiThi != null ? danhSachPhienLamBaiCuaBaiThi.size() : 0) +
-                ", giaoVien=" + (giaoVien != null ? giaoVien.getHoTen() : "null") +
-                '}';
-    }
+
 }
 
