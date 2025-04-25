@@ -24,6 +24,7 @@ public class GiaoVien implements Serializable {
     @EqualsAndHashCode.Include
     private int maGiaoVien;
 
+
     @Column(columnDefinition = "varchar(60)", nullable = false)
     private String hoTen;
 

@@ -3,6 +3,8 @@ package gui;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import entities.GiaoVien;
 import entities.HocSinh;
+import entities.MonHoc;
+import service.MonHocService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +20,7 @@ public class GiaoDienChinh extends JPanel {
             panel1.add(new GiaoDienMenuGiaoVien(giaoVien).$$$getRootComponent$$$(), BorderLayout.CENTER);
         } else if (taiKhoan instanceof HocSinh hocSinh) {
             panel1.add(new GiaoDienMenuHocSinh(hocSinh).$$$getRootComponent$$$(), BorderLayout.CENTER);
-        } else {
+        } else{
             panel1.add(new JLabel("Không xác định vai trò"), BorderLayout.CENTER);
         }
     }
