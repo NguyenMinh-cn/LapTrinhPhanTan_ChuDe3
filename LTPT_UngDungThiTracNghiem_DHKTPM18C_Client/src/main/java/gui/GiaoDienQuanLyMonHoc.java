@@ -239,7 +239,7 @@ public class GiaoDienQuanLyMonHoc extends JPanel {
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
-            
+
 
             JFrame frame = new JFrame("Quản lý môn học");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

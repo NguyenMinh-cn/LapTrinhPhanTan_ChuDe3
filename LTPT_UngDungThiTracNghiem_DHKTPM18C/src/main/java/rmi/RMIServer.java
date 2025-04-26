@@ -37,6 +37,7 @@ public class RMIServer {
 
         HocSinhDAO hocSinhDAO = new HocSinhDAO(HocSinh.class);
         HocSinhService hocSinhService = new HocSinhServiceImpl(hocSinhDAO);
+
         context.bind("rmi://localhost:8081/hocSinhService", hocSinhService);
 
         LopDAO lopDAO = new LopDAO(Lop.class);

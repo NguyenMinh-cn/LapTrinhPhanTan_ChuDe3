@@ -1,6 +1,5 @@
 package daos;
 
-import entities.BaiThi;
 import entities.CauHoi;
 import jakarta.persistence.EntityManager;
 
@@ -96,11 +95,19 @@ public List<CauHoi> timCauHoiTheoMaBaiThi(int maBaiThi) {
             return null;
         }
     }
+    //Kiểm tra câu hỏi có trong bài thi (BaiThi) hay không
+    public boolean inBaiThi(int maCauHoi) {
+        String jpql = "SELECT COUNT(bt) FROM BaiThi bt WHERE :maCauHoi MEMBER OF bt.danhSachCauHoi";
+        Long count = em.createQuery(jpql, Long.class)
+                .setParameter("maCauHoi", maCauHoi)
+                .getSingleResult();
+        return count > 0;
+    }
     public static void main(String[] args) {
         CauHoiDAO chDAO = new CauHoiDAO(CauHoi.class);
         List<String> list = chDAO.timDSDapAnTheoCauHoi(1);
         for (String ch : list) {
-            System.out.println(ch+"/n");
+            System.out.println(ch + "/n");
 
         }
     }

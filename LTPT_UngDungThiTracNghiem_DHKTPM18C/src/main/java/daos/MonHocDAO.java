@@ -69,5 +69,4 @@ public class MonHocDAO extends GenericDAO<MonHoc, Integer> {
             return false;
         }
     }
-
 }

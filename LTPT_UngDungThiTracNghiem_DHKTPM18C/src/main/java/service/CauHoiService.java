@@ -1,6 +1,5 @@
 package service;
 
-
 import entities.CauHoi;
 
 import java.rmi.RemoteException;
@@ -11,4 +10,5 @@ public interface CauHoiService extends GenericService<CauHoi, Integer>{
     public List<String> timDSDapAnTheoCauHoi(int maCH) throws RemoteException;
     CauHoi luuVaTraVeMa(CauHoi cauHoi) throws RemoteException;
     public List<CauHoi> luuNhieuVaTraVeMa(List<CauHoi> danhSachCauHoi) throws RemoteException;
+
 }
