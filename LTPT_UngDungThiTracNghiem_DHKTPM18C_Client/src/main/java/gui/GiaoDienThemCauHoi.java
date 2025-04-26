@@ -1,30 +1,49 @@
 package gui;
 
 import entities.CauHoi;
+import entities.ChuDe;
+import entities.MonHoc;
+import service.CauHoiService;
+import service.ChuDeService;
+import service.MonHocService;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class GiaoDienThemCauHoi extends JPanel {
     private JTextArea txtNoiDungCauHoi;
     private JTextField txtDapAnDung, txtDapAnSai1, txtDapAnSai2, txtDapAnSai3;
     private JButton btnLuu, btnHuy;
+    private JComboBox<String> cbMonHoc, cbChuDe;
+    private ChuDeService chuDeService = (ChuDeService) Naming.lookup("rmi://localhost:9090/chuDeService");
+    private CauHoiService cauHoiService = (CauHoiService) Naming.lookup("rmi://localhost:9090/cauHoiService");
+    private MonHocService monHocService = (MonHocService) Naming.lookup("rmi://localhost:9090/monHocService");
 
-    public GiaoDienThemCauHoi() {
+    public GiaoDienThemCauHoi() throws MalformedURLException, NotBoundException, RemoteException {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
         // --- Panel để chọn môn học và chủ đề từ JComboBox---
         JPanel panelLuaChon = new JPanel(new GridLayout(1, 2, 10, 10));
-        String[] monHoc = {"Môn học 1", "Môn học 2", "Môn học 3"};
-        String[] chuDe = {"Chủ đề 1", "Chủ đề 2", "Chủ đề 3"};
-        JComboBox<String> cbMonHoc = new JComboBox<>(monHoc);
+        List<MonHoc> dsMonHoc = monHocService.getAll();
+        String[] monHoc = new String[dsMonHoc.size()];
+        for (int i = 0; i < dsMonHoc.size(); i++) {
+            MonHoc mh = dsMonHoc.get(i);
+            monHoc[i] = mh.getTenMon();
+        }
+        cbMonHoc = new JComboBox<>(monHoc);
         cbMonHoc.setPreferredSize(new Dimension(350, 30)); // tăng kích thước JComboBox
-        JComboBox<String> cbChuDe = new JComboBox<>(chuDe);
+        cbChuDe = new JComboBox<>();
         cbChuDe.setPreferredSize(new Dimension(350, 30)); // tăng kích thước JComboBox
+        loadChuDe();
         JLabel lblMonHoc = new JLabel("Chọn môn học:");
         JLabel lblChuDe = new JLabel("Chọn chủ đề:");
 
@@ -115,11 +134,30 @@ public class GiaoDienThemCauHoi extends JPanel {
         setPreferredSize(new Dimension(1200, 750)); // tăng kích thước tổng thể
 
         // --- Thêm ActionListener cho các nút ---
-        btnLuu.addActionListener(this::actionPerformed);
-        btnHuy.addActionListener(this::actionPerformed);
+        btnLuu.addActionListener(e -> {
+            try {
+                actionPerformed(e);
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+            }
+        });
+        btnHuy.addActionListener(e -> {
+            txtNoiDungCauHoi.setText("");
+            txtDapAnDung.setText("");
+            txtDapAnSai1.setText("");
+            txtDapAnSai2.setText("");
+            txtDapAnSai3.setText("");
+        });
+        cbMonHoc.addActionListener(e -> {
+            try {
+                actionPerformed(e);
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e) throws RemoteException {
         if (e.getSource() == btnLuu) {
             String noiDung = txtNoiDungCauHoi.getText();
             String dapAnDung = txtDapAnDung.getText();
@@ -131,16 +169,44 @@ public class GiaoDienThemCauHoi extends JPanel {
             if (noiDung.isEmpty() || dapAnDung.isEmpty() || dapAnSai1.isEmpty() || dapAnSai2.isEmpty() || dapAnSai3.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Vui lòng điền đầy đủ thông tin!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             } else {
-                // Xử lý lưu câu hỏi ở đây
+                String selectedChuDe = cbChuDe.getSelectedItem().toString();
+                String selectedMonHoc = cbMonHoc.getSelectedItem().toString();
+
+                ChuDe chuDe = chuDeService.findByTenMonHocAndTenChuDe(selectedMonHoc, selectedChuDe);
+
+                List<String> dsDapAn = new ArrayList<>();
+                dsDapAn.add(dapAnDung);
+                dsDapAn.add(dapAnSai1);
+                dsDapAn.add(dapAnSai2);
+                dsDapAn.add(dapAnSai3);
+
+                CauHoi cauHoi = new CauHoi(0, noiDung,dsDapAn, dapAnDung, null, chuDe);
+                cauHoiService.save(cauHoi);
+
                 JOptionPane.showMessageDialog(this, "Câu hỏi đã được lưu thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             }
-        } else if (e.getSource() == btnHuy) {
-            // Xử lý hủy bỏ
-            txtNoiDungCauHoi.setText("");
-            txtDapAnDung.setText("");
-            txtDapAnSai1.setText("");
-            txtDapAnSai2.setText("");
-            txtDapAnSai3.setText("");
+        }
+        //Sự kiện cho JComboBox môn học
+        else if (e.getSource() == cbMonHoc) {
+            //Lấy danh sách chủ đề theo môn học
+            loadChuDe();
+        }
+    }
+
+    private void loadChuDe() throws RemoteException {
+        String tenMonHoc = (String) cbMonHoc.getSelectedItem();
+        List<ChuDe> dsChuDe = chuDeService.findByTenMonHoc(tenMonHoc);
+        if (dsChuDe != null) {
+            //Cập nhật danh sách chủ đề vào JComboBox
+            String[] chuDe = new String[dsChuDe.size()];
+            for (int i = 0; i < dsChuDe.size(); i++) {
+                ChuDe cd = dsChuDe.get(i);
+                chuDe[i] = cd.getTenChuDe();
+            }
+            cbChuDe.setModel(new DefaultComboBoxModel<>(chuDe));
+            cbChuDe.setSelectedIndex(0);
+        } else {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy chủ đề cho môn học này!", "Thông báo", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -149,7 +215,11 @@ public class GiaoDienThemCauHoi extends JPanel {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Nhập câu hỏi");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setContentPane(new GiaoDienThemCauHoi());
+            try {
+                frame.add(new GiaoDienThemCauHoi());
+            } catch (MalformedURLException | NotBoundException | RemoteException e) {
+                e.printStackTrace();
+            }
             frame.pack();
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);

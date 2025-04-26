@@ -31,4 +31,14 @@ public abstract class GenericServiceImpl<T, ID> extends UnicastRemoteObject impl
     public List<T> getAll() throws RemoteException {
         return genericDAO.getAll();
     }
+
+    @Override
+    public boolean update(T t) throws RemoteException {
+        return genericDAO.update(t);
+    }
+
+    @Override
+    public boolean delete(ID id) throws RemoteException {
+        return genericDAO.delete(id);
+    }
 }

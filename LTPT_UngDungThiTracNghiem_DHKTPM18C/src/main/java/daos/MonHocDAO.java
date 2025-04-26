@@ -11,4 +11,5 @@ public class MonHocDAO extends GenericDAO<MonHoc, Integer> {
     public MonHocDAO(EntityManager em, Class<MonHoc> clazz) {
         super(em, clazz);
     }
+
 }
