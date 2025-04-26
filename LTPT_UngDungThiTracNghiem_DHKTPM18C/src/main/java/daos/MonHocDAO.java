@@ -31,28 +31,7 @@ public class MonHocDAO extends GenericDAO<MonHoc, Integer> {
 //            return false;
 //        }
 //    }
-    public boolean save(MonHoc monHoc){
-        EntityTransaction tr = em.getTransaction();
-        try{
-            tr.begin();
-            em.persist(monHoc);
-            tr.commit();
-            return true;
-        }catch (Exception ex){
-            if(tr.isActive())
-                tr.rollback();
-            throw new RuntimeException(ex.getMessage(), ex);
-        }
-    }
 
-    public List<MonHoc> getAllMonHoc() {
-        try {
-            return em.createQuery("SELECT m FROM MonHoc m", MonHoc.class).getResultList();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     public boolean update(MonHoc monHoc) {
         EntityTransaction transaction = em.getTransaction();
@@ -91,12 +70,4 @@ public class MonHocDAO extends GenericDAO<MonHoc, Integer> {
         }
     }
 
-    public MonHoc findById(int maMon) {
-        try {
-            return em.find(MonHoc.class, maMon);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 }

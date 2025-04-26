@@ -470,15 +470,17 @@ public class Runner {
         EntityManager em = JPAUtil.getEntityManager();
         try {
             em.getTransaction().begin();
-
-            // Tạo lớp học
-            Lop lop10A = new Lop();
-            lop10A.setTenLop("10A");
-            em.persist(lop10A);
-
-            Lop lop11A = new Lop();
-            lop11A.setTenLop("11A");
-            em.persist(lop11A);
+            LopDAO lopDAO = new LopDAO(Lop.class);
+            Lop lop1 = lopDAO.findByID(1);
+            Lop lop2 = lopDAO.findByID(2);
+//            // Tạo lớp học
+//            Lop lop10A = new Lop();
+//            lop10A.setTenLop("10A");
+//            em.persist(lop10A);
+//
+//            Lop lop11A = new Lop();
+//            lop11A.setTenLop("11A");
+//            em.persist(lop11A);
 
             // Lấy MonHoc
             MonHoc toan = em.createQuery("SELECT m FROM MonHoc m WHERE m.tenMon = :tenMon", MonHoc.class)
@@ -518,7 +520,7 @@ public class Runner {
             baiThi10Toan.setThoiLuong(60);
             baiThi10Toan.setMonHoc(toan);
             baiThi10Toan.setGiaoVien(giaoVien);
-            baiThi10Toan.getDanhSachLop().add(lop10A);
+            baiThi10Toan.getDanhSachLop().add(lop1);
             baiThi10Toan.setDanhSachCauHoi(cauHoiToan);
             em.persist(baiThi10Toan);
 
@@ -531,7 +533,7 @@ public class Runner {
             baiThi11NgoaiNgu.setThoiLuong(90);
             baiThi11NgoaiNgu.setMonHoc(ngoaiNgu);
             baiThi11NgoaiNgu.setGiaoVien(giaoVien);
-            baiThi11NgoaiNgu.getDanhSachLop().add(lop11A);
+            baiThi11NgoaiNgu.getDanhSachLop().add(lop2);
             baiThi11NgoaiNgu.setDanhSachCauHoi(cauHoiNgoaiNgu);
             em.persist(baiThi11NgoaiNgu);
 

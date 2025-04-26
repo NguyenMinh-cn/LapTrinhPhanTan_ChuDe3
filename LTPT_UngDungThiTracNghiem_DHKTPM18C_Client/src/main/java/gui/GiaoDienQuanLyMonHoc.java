@@ -8,6 +8,9 @@ import service.impl.MonHocServiceImpl;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.List;
 
@@ -68,45 +71,45 @@ public class GiaoDienQuanLyMonHoc extends JPanel {
 
         // Xóa môn học
         btnXoa.addActionListener(e -> {
-            int selectedRow = tblMonHoc.getSelectedRow();
-            if (selectedRow != -1) {
-                String maMonStr = tableModel.getValueAt(selectedRow, 0).toString();
-                try {
-                    int maMon = Integer.parseInt(maMonStr);
-
-                    int confirm = JOptionPane.showConfirmDialog(this,
-                            "Bạn có chắc chắn muốn xóa môn học có mã " + maMon + "?",
-                            "Xóa môn học", JOptionPane.YES_NO_OPTION);
-
-                    if (confirm == JOptionPane.YES_OPTION) {
-                        try {
-                            MonHoc monHoc = new MonHoc();
-                            monHoc.setMaMon(maMon);
-
-                            if (monHocService.delete(monHoc.getMaMon())) {
-
-                                int rowCount = tableModel.getRowCount();
-                                for (int i = selectedRow + 1; i < rowCount; i++) {
-                                    int updatedMaMon = Integer.parseInt(tableModel.getValueAt(i, 0).toString()) - 1;
-                                    tableModel.setValueAt(updatedMaMon, i, 0);
-                                }
-
-                                // Xóa dòng trong bảng
-                                tableModel.removeRow(selectedRow);
-                                JOptionPane.showMessageDialog(this, "Xóa môn học thành công!");
-                            } else {
-                                JOptionPane.showMessageDialog(this, "Không thể xóa môn học.");
-                            }
-                        } catch (Exception ex) {
-                            JOptionPane.showMessageDialog(this, "Lỗi khi xóa môn học: " + ex.getMessage());
-                        }
-                    }
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(this, "Mã môn không hợp lệ.");
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, "Chọn một môn học để xóa.");
-            }
+//            int selectedRow = tblMonHoc.getSelectedRow();
+//            if (selectedRow != -1) {
+//                String maMonStr = tableModel.getValueAt(selectedRow, 0).toString();
+//                try {
+//                    int maMon = Integer.parseInt(maMonStr);
+//
+//                    int confirm = JOptionPane.showConfirmDialog(this,
+//                            "Bạn có chắc chắn muốn xóa môn học có mã " + maMon + "?",
+//                            "Xóa môn học", JOptionPane.YES_NO_OPTION);
+//
+//                    if (confirm == JOptionPane.YES_OPTION) {
+//                        try {
+//                            MonHoc monHoc = new MonHoc();
+//                            monHoc.setMaMon(maMon);
+//
+//                            if (monHocService.d(monHoc.getMaMon())) {
+//
+//                                int rowCount = tableModel.getRowCount();
+//                                for (int i = selectedRow + 1; i < rowCount; i++) {
+//                                    int updatedMaMon = Integer.parseInt(tableModel.getValueAt(i, 0).toString()) - 1;
+//                                    tableModel.setValueAt(updatedMaMon, i, 0);
+//                                }
+//
+//                                // Xóa dòng trong bảng
+//                                tableModel.removeRow(selectedRow);
+//                                JOptionPane.showMessageDialog(this, "Xóa môn học thành công!");
+//                            } else {
+//                                JOptionPane.showMessageDialog(this, "Không thể xóa môn học.");
+//                            }
+//                        } catch (Exception ex) {
+//                            JOptionPane.showMessageDialog(this, "Lỗi khi xóa môn học: " + ex.getMessage());
+//                        }
+//                    }
+//                } catch (NumberFormatException ex) {
+//                    JOptionPane.showMessageDialog(this, "Mã môn không hợp lệ.");
+//                }
+//            } else {
+//                JOptionPane.showMessageDialog(this, "Chọn một môn học để xóa.");
+//            }
         });
 
 
@@ -114,7 +117,7 @@ public class GiaoDienQuanLyMonHoc extends JPanel {
 
     private void loadAllMonHoc() {
         try {
-            List<MonHoc> monHocList = monHocService.getAllMonHoc();
+            List<MonHoc> monHocList = monHocService.getAll();
             for (MonHoc monHoc : monHocList) {
                 tableModel.addRow(new Object[]{monHoc.getMaMon(), monHoc.getTenMon()});
             }
@@ -226,13 +229,17 @@ public class GiaoDienQuanLyMonHoc extends JPanel {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            MonHocDAO monHocDAO = new MonHocDAO(MonHoc.class);
-            MonHocService monHocService;
+            MonHocService monHocService = null;
             try {
-                monHocService = new MonHocServiceImpl(monHocDAO);
+                monHocService = (MonHocService) Naming.lookup("rmi://localhost:8081/monHocService");
+            } catch (NotBoundException e) {
+                throw new RuntimeException(e);
+            } catch (MalformedURLException e) {
+                throw new RuntimeException(e);
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
+            
 
             JFrame frame = new JFrame("Quản lý môn học");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

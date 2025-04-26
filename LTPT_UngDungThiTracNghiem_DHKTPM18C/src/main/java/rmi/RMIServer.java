@@ -1,54 +1,59 @@
 package rmi;
 
-import daos.GiaoVienDAO;
-import daos.HocSinhDAO;
-import daos.MonHocDAO;
-import daos.TaiKhoanDAO;
-import entities.GiaoVien;
-import entities.HocSinh;
-import entities.MonHoc;
-import entities.TaiKhoan;
-import service.GiaoVienService;
-import service.HocSinhService;
-import service.MonHocService;
-import service.TaiKhoanService;
-import service.impl.GiaoVienServiceImpl;
-import service.impl.HocSinhServiceImpl;
-import service.impl.MonHocServiceImpl;
-import service.impl.TaiKhoanServiceImpl;
+import daos.*;
+import entities.*;
+import service.*;
+import service.impl.*;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 
 public class RMIServer {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception{
+        Context context = new InitialContext();
         LocateRegistry.createRegistry(8081);
 
-        try {
-            MonHocDAO monHocDAO = new MonHocDAO(MonHoc.class);
-            MonHocService monHocService = new MonHocServiceImpl(monHocDAO);
-            Naming.rebind("rmi://localhost:8081/monHocService", monHocService);
-            System.out.println("Dịch vụ RMI đã sẵn sàng trên port 8081.");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Lỗi khi khởi tạo dịch vụ RMI: " + e.getMessage());
-        }
+        BaiThiDAO baiThiDAO = new BaiThiDAO(BaiThi.class);
+        BaiThiService baiThiService = new BaiThiServiceImpl(baiThiDAO);
+        context.bind("rmi://localhost:8081/baiThiService", baiThiService);
 
-//        MonHocDAO monHocDAO = new MonHocDAO(MonHoc.class);
-//        MonHocService monHocService = new MonHocServiceImpl(monHocDAO);
-//        Naming.rebind("rmi://localhost:8081/monHocService", monHocService);
+        CauHoiDAO cauHoiDAO = new CauHoiDAO(CauHoi.class);
+        CauHoiService cauHoiService = new CauHoiServiceImpl(cauHoiDAO);
+        context.bind("rmi://localhost:8081/cauHoiService", cauHoiService);
 
-        TaiKhoanDAO taiKhoanDAO = new TaiKhoanDAO(TaiKhoan.class);
-        TaiKhoanService taiKhoanService = new TaiKhoanServiceImpl(taiKhoanDAO);
-        Naming.rebind("rmi://localhost:8081/taiKhoanService", taiKhoanService);
+        CauTraLoiDAO cauTraLoiDAO = new CauTraLoiDAO(CauTraLoi.class);
+        CauTraLoiService cauTraLoiService = new CauTraLoiServiceImpl(cauTraLoiDAO);
+        context.bind("rmi://localhost:8081/cauTraLoiService", cauTraLoiService);
 
-        HocSinhDAO hocSinhDAO = new HocSinhDAO(HocSinh.class);
-        HocSinhService hocSinhService = new HocSinhServiceImpl(hocSinhDAO);
-        Naming.rebind("rmi://localhost:8081/hocSinhService", hocSinhService);
+        ChuDeDAO chuDeDAO = new ChuDeDAO(ChuDe.class);
+        ChuDeService chuDeService = new ChuDeServiceImpl(chuDeDAO);
+        context.bind("rmi://localhost:8081/chuDeService", chuDeService);
 
         GiaoVienDAO giaoVienDAO = new GiaoVienDAO(GiaoVien.class);
         GiaoVienService giaoVienService = new GiaoVienServiceImpl(giaoVienDAO);
-        Naming.rebind("rmi://localhost:8081/giaoVienService", giaoVienService);
+        context.bind("rmi://localhost:8081/giaoVienService", giaoVienService);
+
+        HocSinhDAO hocSinhDAO = new HocSinhDAO(HocSinh.class);
+        HocSinhService hocSinhService = new HocSinhServiceImpl(hocSinhDAO);
+        context.bind("rmi://localhost:8081/hocSinhService", hocSinhService);
+
+        LopDAO lopDAO = new LopDAO(Lop.class);
+        LopService lopService = new LopServiceImpl(lopDAO);
+        context.bind("rmi://localhost:8081/lopService", lopService);
+
+        MonHocDAO  monHocDAO = new MonHocDAO(MonHoc.class);
+        MonHocService monHocService = new MonHocServiceImpl(monHocDAO);
+        context.bind("rmi://localhost:8081/monHocService", monHocService);
+
+        PhienLamBaiDAO phienLamBaiDAO = new PhienLamBaiDAO(PhienLamBai.class);
+        PhienLamBaiService phienLamBaiService = new PhienLamBaiServiceImpl(phienLamBaiDAO);
+        context.bind("rmi://localhost:8081/phienLamBaiService", phienLamBaiService);
+
+        TaiKhoanDAO taiKhoanDAO = new TaiKhoanDAO(TaiKhoan.class);
+        TaiKhoanService taiKhoanService = new TaiKhoanServiceImpl(taiKhoanDAO);
+        context.bind("rmi://localhost:8081/taiKhoanService", taiKhoanService);
 
         System.out.println("RMI Server is running...");
     }

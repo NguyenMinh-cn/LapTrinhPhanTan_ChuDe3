@@ -21,17 +21,14 @@ tasks.withType(JavaCompile) {
 }
 
 dependencies {
-    implementation('jakarta.servlet:jakarta.servlet-api:5.0.0')
-    implementation('org.hibernate:hibernate-core:6.0.2.Final')
-    implementation('org.glassfish.jaxb:jaxb-runtime:3.0.2')
-    compileOnly 'org.projectlombok:lombok:1.18.36'
-    annotationProcessor 'org.projectlombok:lombok:1.18.36'
-    implementation group: 'net.datafaker', name: 'datafaker', version: '2.4.2'
-    implementation 'org.mariadb.jdbc:mariadb-java-client:3.5.1'
+    implementation("org.hibernate:hibernate-core:6.0.2.Final")
+    implementation("org.glassfish.jaxb:jaxb-runtime:3.0.2")
     implementation("com.intellij:forms_rt:7.0.3")
-
+    implementation("com.github.lgooddatepicker:LGoodDatePicker:11.2.1")
+    implementation("org.kordamp.ikonli:ikonli-swing:12.4.0")
+    implementation("org.kordamp.ikonli:ikonli-materialdesign-pack:12.4.0")
     implementation(files("libs/LTPT_UngDungThiTracNghiem_DHKTPM18C-1.0-SNAPSHOT.jar"))
-
+    implementation ("com.formdev:flatlaf:3.2")
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }

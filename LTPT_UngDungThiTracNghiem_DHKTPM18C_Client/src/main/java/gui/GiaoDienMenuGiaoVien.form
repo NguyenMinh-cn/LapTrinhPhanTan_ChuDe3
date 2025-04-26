@@ -4,24 +4,30 @@
     <constraints>
       <xy x="20" y="20" width="803" height="400"/>
     </constraints>
-    <properties/>
+    <properties>
+      <background color="-3608842"/>
+      <preferredSize width="1000" height="800"/>
+    </properties>
     <border type="none"/>
     <children>
-      <grid id="c60f7" layout-manager="BorderLayout" hgap="0" vgap="0">
+      <grid id="c60f7" layout-manager="BorderLayout" hgap="10" vgap="0">
         <constraints border-constraint="West"/>
         <properties>
-          <background color="-6106369"/>
-          <preferredSize width="200" height="10"/>
+          <background color="-3543049"/>
+          <preferredSize width="250" height="10"/>
         </properties>
         <border type="none"/>
         <children>
           <component id="ec300" class="javax.swing.JLabel" binding="lbTenGiaoVien">
             <constraints border-constraint="North"/>
             <properties>
-              <background color="-6106369"/>
+              <background color="-12020241"/>
+              <font name="Arial" size="20" style="0"/>
+              <foreground color="-394759"/>
               <horizontalAlignment value="0"/>
               <horizontalTextPosition value="0"/>
-              <preferredSize width="200" height="50"/>
+              <opaque value="true"/>
+              <preferredSize width="200" height="70"/>
               <text value="Tên giáo viên"/>
             </properties>
           </component>
@@ -29,24 +35,29 @@
             <constraints border-constraint="South"/>
             <properties>
               <alignmentX value="0.5"/>
+              <font name="Arial" size="20" style="0"/>
+              <foreground color="-16777216"/>
               <horizontalAlignment value="0"/>
               <horizontalTextPosition value="0"/>
-              <preferredSize width="71" height="30"/>
+              <preferredSize width="71" height="50"/>
               <text value="Đăng xuất"/>
             </properties>
           </component>
-          <grid id="14e75" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+          <grid id="14e75" layout-manager="FlowLayout" hgap="10" vgap="10" flow-align="1">
             <constraints border-constraint="Center"/>
             <properties>
-              <background color="-6106369"/>
+              <background color="-3543049"/>
             </properties>
             <border type="none"/>
             <children>
               <component id="3f660" class="javax.swing.JLabel" binding="lbNganHangCauHoi">
                 <constraints/>
                 <properties>
-                  <background color="-4333314"/>
-                  <horizontalAlignment value="0"/>
+                  <alignmentX value="0.2"/>
+                  <background color="-3543049"/>
+                  <font name="Arial" size="20" style="0"/>
+                  <foreground color="-16777216"/>
+                  <horizontalAlignment value="2"/>
                   <horizontalTextPosition value="0"/>
                   <opaque value="true"/>
                   <preferredSize width="200" height="30"/>
@@ -56,8 +67,11 @@
               <component id="a30c1" class="javax.swing.JLabel" binding="lbDSDeThi">
                 <constraints/>
                 <properties>
-                  <background color="-4333314"/>
-                  <horizontalAlignment value="0"/>
+                  <alignmentX value="0.2"/>
+                  <background color="-3543049"/>
+                  <font name="Arial" size="20" style="0"/>
+                  <foreground color="-16777216"/>
+                  <horizontalAlignment value="2"/>
                   <horizontalTextPosition value="0"/>
                   <opaque value="true"/>
                   <preferredSize width="200" height="30"/>
@@ -67,8 +81,11 @@
               <component id="c13de" class="javax.swing.JLabel" binding="lbLopHocTap">
                 <constraints/>
                 <properties>
-                  <background color="-4333314"/>
-                  <horizontalAlignment value="0"/>
+                  <alignmentX value="0.2"/>
+                  <background color="-3543049"/>
+                  <font name="Arial" size="20" style="0"/>
+                  <foreground color="-16777216"/>
+                  <horizontalAlignment value="2"/>
                   <horizontalTextPosition value="0"/>
                   <opaque value="true"/>
                   <preferredSize width="200" height="30"/>
@@ -78,8 +95,11 @@
               <component id="e881" class="javax.swing.JLabel" binding="lbCaiDatTaiKhoan">
                 <constraints/>
                 <properties>
-                  <background color="-4333314"/>
-                  <horizontalAlignment value="0"/>
+                  <alignmentX value="0.2"/>
+                  <background color="-3543049"/>
+                  <font name="Arial" size="20" style="0"/>
+                  <foreground color="-16777216"/>
+                  <horizontalAlignment value="2"/>
                   <horizontalTextPosition value="0"/>
                   <opaque value="true"/>
                   <preferredSize width="200" height="30"/>
