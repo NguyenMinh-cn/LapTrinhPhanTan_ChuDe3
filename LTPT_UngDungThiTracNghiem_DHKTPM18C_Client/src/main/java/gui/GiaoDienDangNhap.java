@@ -3,16 +3,15 @@ package gui;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import gui.custom.RoundBorder;
 import service.TaiKhoanService;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.Naming;
 import java.util.Locale;
 
 public class GiaoDienDangNhap {

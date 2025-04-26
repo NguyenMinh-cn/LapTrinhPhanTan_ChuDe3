@@ -1,11 +1,8 @@
 package service.impl;
 
-import daos.BaiThiDAO;
 import daos.CauHoiDAO;
-import daos.GenericDAO;
-import entities.BaiThi;
 import entities.CauHoi;
-import service.BaiThiService;
+import jakarta.transaction.Transactional;
 import service.CauHoiService;
 
 import java.rmi.RemoteException;
@@ -23,4 +20,17 @@ public class CauHoiServiceImpl extends GenericServiceImpl<CauHoi, Integer> imple
         return cauHoiDAO.timCauHoiTheoMaBaiThi(maBaiThi);
     }
 
+    @Override
+    public List<String> timDSDapAnTheoCauHoi(int maCH) throws RemoteException {
+        return cauHoiDAO.timDSDapAnTheoCauHoi(maCH);
+    }
+
+    @Override
+    public CauHoi luuVaTraVeMa(CauHoi cauHoi) throws RemoteException {
+        return cauHoiDAO.luuVaTraVeMa(cauHoi);
+    }
+    @Override
+    public List<CauHoi> luuNhieuVaTraVeMa(List<CauHoi> danhSachCauHoi) throws RemoteException{
+        return cauHoiDAO.luuNhieuVaTraVeMa(danhSachCauHoi);
+    }
 }

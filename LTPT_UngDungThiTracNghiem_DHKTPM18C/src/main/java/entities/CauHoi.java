@@ -24,7 +24,7 @@ public class CauHoi implements Serializable {
     @Column(columnDefinition = "varchar(1000)", nullable = false)
     private String noiDung;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> danhSachDapAn = new ArrayList<>();
 
     private String dapAnDung;
@@ -42,7 +42,7 @@ public class CauHoi implements Serializable {
         return "CauHoi{" +
                 "maCauHoi=" + maCauHoi +
                 ", noiDung='" + noiDung + '\'' +
-                ", danhSachDapAn=" + danhSachDapAn +
+                ", danhSachDapAn=" + (danhSachDapAn != null ? danhSachDapAn : 0) +
                 ", dapAnDung='" + dapAnDung + '\'' +
                 ", soBaiThiThamGia=" + (danhSachBaiThi != null ? danhSachBaiThi.size() : 0) +
                 ", chuDe=" + (chuDe != null ? chuDe.getTenChuDe() : "null") +

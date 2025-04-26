@@ -1,6 +1,5 @@
-package gui;
+package gui.custom;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 

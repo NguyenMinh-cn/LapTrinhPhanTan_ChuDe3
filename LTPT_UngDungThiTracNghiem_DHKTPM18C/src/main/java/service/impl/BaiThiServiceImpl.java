@@ -20,4 +20,10 @@ public class BaiThiServiceImpl extends GenericServiceImpl<BaiThi, Integer> imple
     public List<BaiThi> timDSBaiTHiTheoMaGiaoVien(int maGiaoVien) throws RemoteException {
         return baiThiDAO.timDSBaiTHiTheoMaGiaoVien(maGiaoVien);
     }
+
+    @Override
+    public BaiThi layThongTinChiTietBaiThi(int maBaiThi) throws RemoteException {
+        return baiThiDAO.layThongTinChiTietBaiThi(maBaiThi);
+    }
+
 }
