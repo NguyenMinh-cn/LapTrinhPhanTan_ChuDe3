@@ -22,25 +22,33 @@ public class GiaoDienQuanLyChuDe extends JPanel {
     private MonHocService monHocService = (MonHocService) Naming.lookup("rmi://localhost:9090/monHocService");
     private ChuDeService chuDeService = (ChuDeService) Naming.lookup("rmi://localhost:9090/chuDeService");
     private MonHoc monHoc;
+    private JComboBox<String> cbMonHoc;
 
-    public GiaoDienQuanLyChuDe(int maMon) throws RemoteException, MalformedURLException, NotBoundException {
-        this.maMon = maMon;
+    public GiaoDienQuanLyChuDe() throws RemoteException, MalformedURLException, NotBoundException {
         //Lấy môn học từ database (bổ sung sau)
 
         setLayout(new BorderLayout());
 
         //Tạo panel cho tiêu đề
-        JPanel panelTitle = new JPanel();
-        panelTitle.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        JPanel panelMonHoc = new JPanel();
+        panelMonHoc.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 20));
+        panelMonHoc.setBackground(new Color(51, 184, 231));
 
-        monHoc = monHocService.finByID(maMon);
-        JLabel lblTitle = new JLabel("Môn học: " + monHoc.getTenMon());
-        lblTitle.setFont(new Font("Arial", Font.BOLD, 20));
-        lblTitle.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-        //màu nền
-        panelTitle.setBackground(new Color(51, 184, 231));
-        panelTitle.add(lblTitle);
-        add(panelTitle, BorderLayout.NORTH);
+        JLabel lblMonHoc = new JLabel("Chọn môn học:");
+        List<MonHoc> dsMonHoc = monHocService.getAll();
+        String[] dsmonHoc = new String[dsMonHoc.size()];
+        for (int i = 0; i < dsMonHoc.size(); i++) {
+            MonHoc mh = dsMonHoc.get(i);
+            dsmonHoc[i] = mh.getTenMon();
+        }
+        cbMonHoc = new JComboBox<>(dsmonHoc);
+        cbMonHoc.setPreferredSize(new Dimension(350, 30));
+        panelMonHoc.add(lblMonHoc);
+        panelMonHoc.add(cbMonHoc);
+
+
+
+        add(panelMonHoc, BorderLayout.NORTH);
 
         model = new DefaultTableModel(new Object[]{"Mã chủ đề", "Tên chủ đề", "Sửa", "Xoá"}, 0) {
             @Override
@@ -85,10 +93,7 @@ public class GiaoDienQuanLyChuDe extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
 
         //Lấy dữ liệu danh sách chủ đề
-        List<ChuDe> dsChuDe = chuDeService.findByTenMonHoc(monHoc.getTenMon());
-        for (ChuDe chuDe : dsChuDe) {
-            model.addRow(new Object[]{chuDe.getMaChuDe(), chuDe.getTenChuDe(), "", ""});
-        }
+        loadChuDe();
 
         // Tạo panel cho nút thêm
         JPanel panelButton = new JPanel();
@@ -116,6 +121,15 @@ public class GiaoDienQuanLyChuDe extends JPanel {
             }
 
         });
+
+        cbMonHoc.addActionListener(e -> {
+            try {
+                loadChuDe();
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+            }
+        });
+
         btnAdd.setBackground(new Color(51, 231, 166));
 
         panelButton.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -123,6 +137,15 @@ public class GiaoDienQuanLyChuDe extends JPanel {
         panelButton.setBackground(new Color(51, 184, 231));
         panelButton.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 10));
         add(panelButton, BorderLayout.SOUTH);
+    }
+
+    private void loadChuDe() throws RemoteException {
+        monHoc = monHocService.findByTenMon(cbMonHoc.getSelectedItem().toString());
+        List<ChuDe> dsChuDe = chuDeService.findByTenMonHoc(monHoc.getTenMon());
+        model.setRowCount(0); // Xóa dữ liệu cũ
+        for (ChuDe chuDe : dsChuDe) {
+            model.addRow(new Object[]{chuDe.getMaChuDe(), chuDe.getTenChuDe(), "", ""});
+        }
     }
 
     private void suaChuDe(int row) throws RemoteException {
@@ -175,7 +198,7 @@ public class GiaoDienQuanLyChuDe extends JPanel {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(900, 800);
         try {
-            frame.add(new GiaoDienQuanLyChuDe(1));
+            frame.add(new GiaoDienQuanLyChuDe());
         }catch (Exception e) {
             e.printStackTrace();
         }
