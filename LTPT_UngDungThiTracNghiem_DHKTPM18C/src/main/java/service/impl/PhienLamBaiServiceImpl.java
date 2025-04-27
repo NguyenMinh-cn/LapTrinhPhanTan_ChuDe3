@@ -7,10 +7,11 @@ import service.PhienLamBaiService;
 import java.rmi.RemoteException;
 import java.util.List;
 
-public class PhienLamBaiServiceImpl implements PhienLamBaiService {
+public class PhienLamBaiServiceImpl extends GenericServiceImpl<PhienLamBai, String> implements PhienLamBaiService {
     private PhienLamBaiDAO phienLamBaiDAO;
 
-    public PhienLamBaiServiceImpl(PhienLamBaiDAO phienLamBaiDAO) {
+    public PhienLamBaiServiceImpl(PhienLamBaiDAO phienLamBaiDAO) throws RemoteException {
+        super(phienLamBaiDAO);
         this.phienLamBaiDAO = phienLamBaiDAO;
     }
 
@@ -25,7 +26,7 @@ public class PhienLamBaiServiceImpl implements PhienLamBaiService {
     }
 
     @Override
-    public List<PhienLamBai> findByMaHocSinh(String maHocSinh) throws RemoteException {
+    public List<PhienLamBai> findByMaHocSinh(long maHocSinh) throws RemoteException {
         return phienLamBaiDAO.findByMaHocSinh(maHocSinh);
     }
 }
