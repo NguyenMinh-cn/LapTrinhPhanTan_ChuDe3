@@ -32,7 +32,7 @@ public class GiaoDienQuanLyChuDe extends JPanel {
         //Tạo panel cho tiêu đề
         JPanel panelMonHoc = new JPanel();
         panelMonHoc.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 20));
-        panelMonHoc.setBackground(new Color(51, 184, 231));
+        panelMonHoc.setBackground(new Color(210, 234, 255));
 
         JLabel lblMonHoc = new JLabel("Chọn môn học:");
         List<MonHoc> dsMonHoc = monHocService.getAll();
@@ -50,7 +50,7 @@ public class GiaoDienQuanLyChuDe extends JPanel {
 
         add(panelMonHoc, BorderLayout.NORTH);
 
-        model = new DefaultTableModel(new Object[]{"Mã chủ đề", "Tên chủ đề", "Sửa", "Xoá"}, 0) {
+        model = new DefaultTableModel(new Object[]{"STT", "Tên chủ đề", "Sửa", "Xoá"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return column >= 2; // chỉ cột "Sửa" và "Xoá" được click
@@ -59,6 +59,12 @@ public class GiaoDienQuanLyChuDe extends JPanel {
 
         table = new JTable(model);
         table.setRowHeight(36);
+
+        table.getColumnModel().getColumn(0).setPreferredWidth(10); // Cột "Mã chủ đề"
+        table.getColumnModel().getColumn(1).setPreferredWidth(450); // Cột "Tên chủ đề"
+        table.getColumnModel().getColumn(2).setPreferredWidth(10);  // Cột "Sửa"
+        table.getColumnModel().getColumn(3).setPreferredWidth(10);  // Cột "Xoá"
+
 
         FontIcon iconEdit = FontIcon.of(BootstrapIcons.PENCIL, 18, Color.BLUE);
         FontIcon iconDelete = FontIcon.of(BootstrapIcons.TRASH, 18, Color.RED);
@@ -88,7 +94,7 @@ public class GiaoDienQuanLyChuDe extends JPanel {
 
         //Tạo scroll cho bảng
         JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBackground(new Color(51, 184, 231));
+        scrollPane.setBackground(new Color(210, 234, 255));
         scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 15));
         add(scrollPane, BorderLayout.CENTER);
 
@@ -101,25 +107,26 @@ public class GiaoDienQuanLyChuDe extends JPanel {
         btnAdd.setIcon(FontIcon.of(BootstrapIcons.PLUS_CIRCLE, 18));
         btnAdd.addActionListener(e -> {
             String tenChuDe = JOptionPane.showInputDialog(this, "Nhập tên chủ đề:");
-            if (validateTenChuDe(tenChuDe)) {
-                try {
-                    if(chuDeService.isDuplicate(tenChuDe.trim(), monHoc.getTenMon())) {
-                         JOptionPane.showMessageDialog(this, "Chủ đề này đã tồn tại!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-                    } else {
-                         ChuDe newChuDe = new ChuDe();
-                         newChuDe.setTenChuDe(tenChuDe.trim());
-                         newChuDe.setMonHoc(monHoc);
-                         chuDeService.save(newChuDe);
-                         model.addRow(new Object[]{newChuDe.getMaChuDe(), newChuDe.getTenChuDe(), "", ""});
+            if(tenChuDe!=null){
+                if (validateTenChuDe(tenChuDe)) {
+                    try {
+                        if(chuDeService.isDuplicate(tenChuDe.trim(), monHoc.getTenMon())) {
+                            JOptionPane.showMessageDialog(this, "Chủ đề này đã tồn tại!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                        } else {
+                            ChuDe newChuDe = new ChuDe();
+                            newChuDe.setTenChuDe(tenChuDe.trim());
+                            newChuDe.setMonHoc(monHoc);
+                            chuDeService.save(newChuDe);
+                            model.addRow(new Object[]{table.getRowCount()+1, newChuDe.getTenChuDe(), "", ""});
+                        }
+                    } catch (RemoteException ex) {
+                        throw new RuntimeException(ex);
                     }
-                } catch (RemoteException ex) {
-                    throw new RuntimeException(ex);
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, "Tên chủ đề không hợp lệ!", "Thông báo", JOptionPane.WARNING_MESSAGE);
                 }
             }
-            else{
-                JOptionPane.showMessageDialog(this, "Tên chủ đề không hợp lệ!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-            }
-
         });
 
         cbMonHoc.addActionListener(e -> {
@@ -134,7 +141,7 @@ public class GiaoDienQuanLyChuDe extends JPanel {
 
         panelButton.setLayout(new FlowLayout(FlowLayout.RIGHT));
         panelButton.add(btnAdd);
-        panelButton.setBackground(new Color(51, 184, 231));
+        panelButton.setBackground(new Color(210, 234, 255));
         panelButton.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 10));
         add(panelButton, BorderLayout.SOUTH);
     }
@@ -143,8 +150,10 @@ public class GiaoDienQuanLyChuDe extends JPanel {
         monHoc = monHocService.findByTenMon(cbMonHoc.getSelectedItem().toString());
         List<ChuDe> dsChuDe = chuDeService.findByTenMonHoc(monHoc.getTenMon());
         model.setRowCount(0); // Xóa dữ liệu cũ
+        int stt = 1;
         for (ChuDe chuDe : dsChuDe) {
-            model.addRow(new Object[]{chuDe.getMaChuDe(), chuDe.getTenChuDe(), "", ""});
+            model.addRow(new Object[]{stt, chuDe.getTenChuDe(), "", ""});
+            stt++;
         }
     }
 
@@ -152,17 +161,19 @@ public class GiaoDienQuanLyChuDe extends JPanel {
         String current = (String) model.getValueAt(row, 1);
         ChuDe chuDe = chuDeService.findByTenMonHocAndTenChuDe(monHoc.getTenMon(), current);
         String updated = JOptionPane.showInputDialog(this, "Sửa tên chủ đề:", current);
-        if (validateTenChuDe(updated) && !updated.trim().isEmpty()) {
-            if( chuDeService.isDuplicate(updated.trim(), monHoc.getTenMon())) {
-                JOptionPane.showMessageDialog(this, "Chủ đề này đã tồn tại!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-            } else{
-                chuDe.setTenChuDe(updated.trim());
-                chuDeService.update(chuDe);
-                model.setValueAt(updated.trim(), row, 1);
+        if (updated != null) {
+            if (validateTenChuDe(updated) && !updated.trim().isEmpty()) {
+                if( chuDeService.isDuplicate(updated.trim(), monHoc.getTenMon())) {
+                    JOptionPane.showMessageDialog(this, "Chủ đề này đã tồn tại!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                } else{
+                    chuDe.setTenChuDe(updated.trim());
+                    chuDeService.update(chuDe);
+                    model.setValueAt(updated.trim(), row, 1);
+                }
             }
-        }
-        else{
-            JOptionPane.showMessageDialog(this, "Tên chủ đề không hợp lệ!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            else{
+                JOptionPane.showMessageDialog(this, "Tên chủ đề không hợp lệ!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            }
         }
     }
 
@@ -181,7 +192,7 @@ public class GiaoDienQuanLyChuDe extends JPanel {
                 if (table.isEditing()) {
                     table.getCellEditor().stopCellEditing();
                 }
-                model.removeRow(row);
+                loadChuDe();
             }
         }
     }

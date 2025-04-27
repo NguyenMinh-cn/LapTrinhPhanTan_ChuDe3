@@ -23,4 +23,13 @@ public class CauHoiDAO extends GenericDAO<CauHoi, Integer>{
                 .getSingleResult();
         return count > 0;
     }
+
+    //Câu hỏi trong bài thi đã diễn ra (đã qua thoiGianBatDau)
+    public boolean inBaiThiDaDienRa(int maCauHoi) {
+        String jpql = "SELECT COUNT(bt) FROM BaiThi bt JOIN bt.danhSachCauHoi ch WHERE ch.id = :maCauHoi AND bt.thoiGianBatDau < CURRENT_TIMESTAMP";
+        Long count = em.createQuery(jpql, Long.class)
+                .setParameter("maCauHoi", maCauHoi)
+                .getSingleResult();
+        return count > 0;
+    }
 }

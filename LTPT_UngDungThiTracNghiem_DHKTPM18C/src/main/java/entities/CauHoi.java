@@ -24,7 +24,7 @@ public class CauHoi implements Serializable {
     @Column(columnDefinition = "varchar(1000)", nullable = false)
     private String noiDung;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> danhSachDapAn = new ArrayList<>();
 
     private String dapAnDung;

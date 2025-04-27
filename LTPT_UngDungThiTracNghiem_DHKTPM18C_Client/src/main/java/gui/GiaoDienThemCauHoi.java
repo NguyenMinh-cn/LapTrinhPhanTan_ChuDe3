@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GiaoDienThemCauHoi extends JPanel {
+
     private JTextArea txtNoiDungCauHoi;
     private JTextField txtDapAnDung, txtDapAnSai1, txtDapAnSai2, txtDapAnSai3;
     private JButton btnLuu, btnHuy;
@@ -26,8 +27,12 @@ public class GiaoDienThemCauHoi extends JPanel {
     private ChuDeService chuDeService = (ChuDeService) Naming.lookup("rmi://localhost:9090/chuDeService");
     private CauHoiService cauHoiService = (CauHoiService) Naming.lookup("rmi://localhost:9090/cauHoiService");
     private MonHocService monHocService = (MonHocService) Naming.lookup("rmi://localhost:9090/monHocService");
+    private JPanel mainPanel;
+    private CauHoi cauHoi;
+    public GiaoDienThemCauHoi(JPanel mainPanel, CauHoi cauHoi) throws MalformedURLException, NotBoundException, RemoteException {
+        this.mainPanel = mainPanel;
+        this.cauHoi = cauHoi;
 
-    public GiaoDienThemCauHoi() throws MalformedURLException, NotBoundException, RemoteException {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
@@ -54,8 +59,8 @@ public class GiaoDienThemCauHoi extends JPanel {
         JPanel panelChuDe = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panelChuDe.add(lblChuDe);
         panelChuDe.add(cbChuDe);
-        panelChuDe.setBackground(new Color(51, 184, 231));
-        panelMonHoc.setBackground(new Color(51, 184, 231));
+        panelChuDe.setBackground(new Color(210, 234, 255));
+        panelMonHoc.setBackground(new Color(210, 234, 255));
 
         panelLuaChon.add(panelMonHoc);
         panelLuaChon.add(panelChuDe);
@@ -88,6 +93,28 @@ public class GiaoDienThemCauHoi extends JPanel {
         txtDapAnSai1 = new JTextField(40);
         txtDapAnSai2 = new JTextField(40);
         txtDapAnSai3 = new JTextField(40);
+
+        if(cauHoi != null) {
+            txtNoiDungCauHoi.setText(cauHoi.getNoiDung());
+            txtDapAnDung.setText(cauHoi.getDapAnDung());
+            //Lấy danh sách câu trả lời sai
+            List<String> dsDapAnSai = new ArrayList<>();
+            for (String dapAn : cauHoi.getDanhSachDapAn()){
+                if (!cauHoi.getDapAnDung().equals(dapAn)) {
+                    dsDapAnSai.add(dapAn);
+                }
+            }
+            txtDapAnSai1.setText(dsDapAnSai.get(0));
+            txtDapAnSai2.setText(dsDapAnSai.get(1));
+            txtDapAnSai3.setText(dsDapAnSai.get(2));
+            if(cauHoi.getChuDe() != null) {
+                cbMonHoc.setSelectedItem(cauHoi.getChuDe().getMonHoc().getTenMon());
+                cbChuDe.setSelectedItem(cauHoi.getChuDe().getTenChuDe());
+            } else {
+                cbMonHoc.setSelectedItem(null);
+                cbChuDe.setSelectedItem(null);
+            }
+        }
 
         String[] labels = {"Đáp án đúng", "Đáp án sai", "Đáp án sai", "Đáp án sai"};
         JTextField[] fields = {txtDapAnDung, txtDapAnSai1, txtDapAnSai2, txtDapAnSai3};
@@ -124,12 +151,12 @@ public class GiaoDienThemCauHoi extends JPanel {
         add(panelButtons, BorderLayout.SOUTH);
 
         // Thêm màu nền cho các panel
-        panelLuaChon.setBackground(new Color(51, 184, 231));
+        panelLuaChon.setBackground(new Color(210, 234, 255));
         panelNoiDung.setBackground(Color.WHITE);
         panelTraLoi.setBackground(Color.WHITE);
-        panelMain.setBackground(new Color(51, 184, 231));
-        panelButtons.setBackground(new Color(51, 184, 231));
-        setBackground(new Color(51, 184, 231));
+        panelMain.setBackground(new Color(210, 234, 255));
+        panelButtons.setBackground(new Color(210, 234, 255));
+        setBackground(new Color(210, 234, 255));
 
         setPreferredSize(new Dimension(1200, 750)); // tăng kích thước tổng thể
 
@@ -137,16 +164,13 @@ public class GiaoDienThemCauHoi extends JPanel {
         btnLuu.addActionListener(e -> {
             try {
                 actionPerformed(e);
+                chuyenGiaoDien();
             } catch (RemoteException ex) {
                 ex.printStackTrace();
             }
         });
         btnHuy.addActionListener(e -> {
-            txtNoiDungCauHoi.setText("");
-            txtDapAnDung.setText("");
-            txtDapAnSai1.setText("");
-            txtDapAnSai2.setText("");
-            txtDapAnSai3.setText("");
+            chuyenGiaoDien();
         });
         cbMonHoc.addActionListener(e -> {
             try {
@@ -180,9 +204,16 @@ public class GiaoDienThemCauHoi extends JPanel {
                 dsDapAn.add(dapAnSai2);
                 dsDapAn.add(dapAnSai3);
 
-                CauHoi cauHoi = new CauHoi(0, noiDung,dsDapAn, dapAnDung, null, chuDe);
-                cauHoiService.save(cauHoi);
+                cauHoi.setChuDe(chuDe);
+                cauHoi.setNoiDung(noiDung);
+                cauHoi.setDapAnDung(dapAnDung);
+                cauHoi.setDanhSachDapAn(dsDapAn);
 
+                if(cauHoi.getMaCauHoi() >= 1){
+                    cauHoiService.update(cauHoi); // Cập nhật câu hỏi nếu đã tồn tại
+                }else {
+                    cauHoiService.save(cauHoi);
+                }
                 JOptionPane.showMessageDialog(this, "Câu hỏi đã được lưu thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             }
         }
@@ -210,19 +241,34 @@ public class GiaoDienThemCauHoi extends JPanel {
         }
     }
 
-    // --- Main để chạy thử ---
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Nhập câu hỏi");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            try {
-                frame.add(new GiaoDienThemCauHoi());
-            } catch (MalformedURLException | NotBoundException | RemoteException e) {
-                e.printStackTrace();
-            }
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-        });
+    private void chuyenGiaoDien(){
+        mainPanel.removeAll();
+        try {
+            mainPanel.add(new GiaoDienNganHangCauHoi(mainPanel)); // Chuyển sang giao diện ThemCauHoi
+        } catch (MalformedURLException ex) {
+            throw new RuntimeException(ex);
+        } catch (NotBoundException ex) {
+            throw new RuntimeException(ex);
+        } catch (RemoteException ex) {
+            throw new RuntimeException(ex);
+        }
+        mainPanel.revalidate();
+        mainPanel.repaint();
     }
+
+    // --- Main để chạy thử ---
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(() -> {
+//            JFrame frame = new JFrame("Nhập câu hỏi");
+//            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//            try {
+//                frame.add(new GiaoDienThemCauHoi(new JPanel()));
+//            } catch (MalformedURLException | NotBoundException | RemoteException e) {
+//                e.printStackTrace();
+//            }
+//            frame.pack();
+//            frame.setLocationRelativeTo(null);
+//            frame.setVisible(true);
+//        });
+//    }
 }

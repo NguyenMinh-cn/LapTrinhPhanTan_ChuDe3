@@ -12,4 +12,15 @@ public class CauHoiServiceImpl extends GenericServiceImpl<CauHoi, Integer> imple
         super(cauHoiDAO);
         this.cauHoiDAO = cauHoiDAO;
     }
+
+    @Override
+    public boolean inBaiThi(int maCauHoi) throws RemoteException {
+        return cauHoiDAO.inBaiThi(maCauHoi);
+    }
+
+    @Override
+    public boolean inBaiThiDaDienRa(int maCauHoi) throws RemoteException {
+        return cauHoiDAO.inBaiThiDaDienRa(maCauHoi);
+    }
+
 }
