@@ -26,4 +26,9 @@ public class BaiThiServiceImpl extends GenericServiceImpl<BaiThi, Integer> imple
         return baiThiDAO.layThongTinChiTietBaiThi(maBaiThi);
     }
 
+    @Override
+    public List<BaiThi> getAllBaiThiForHocSinh(Long maHocSinh) throws RemoteException {
+        return baiThiDAO.getAllBaiThiForHocSinh(maHocSinh);
+    }
+
 }
