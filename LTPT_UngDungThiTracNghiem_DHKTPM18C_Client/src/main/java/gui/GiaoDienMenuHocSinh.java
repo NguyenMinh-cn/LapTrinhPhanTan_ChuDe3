@@ -4,12 +4,9 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import entities.HocSinh;
 
 import javax.swing.*;
-import javax.swing.plaf.FontUIResource;
-import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Locale;
 
 public class GiaoDienMenuHocSinh extends JPanel {
     private HocSinh hocSinh;
@@ -20,7 +17,6 @@ public class GiaoDienMenuHocSinh extends JPanel {
     private JLabel lbTenHocSinh;
     private JLabel lbDangXuat;
     private JLabel lbTaiKhoan;
-    private JLabel lbXemKetQua;
     private JLabel lbDanhSachBaiThi;
     private JPanel pnDangXuat;
 
@@ -55,18 +51,6 @@ public class GiaoDienMenuHocSinh extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 panelNoiDung.removeAll();
                 panelNoiDung.add(new GiaoDienCaiDatTaiKhoan().$$$getRootComponent$$$());
-                panelNoiDung.revalidate();
-                panelNoiDung.repaint();
-            }
-        });
-
-        // Xử lý sự kiện xem kết quả
-        lbXemKetQua.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                panelNoiDung.removeAll();
-                String maPhienLamBai = "PHIEN_001";
-                panelNoiDung.add(new GiaoDienHocSinhXemKetQua(maPhienLamBai, hocSinh).$$$getRootComponent$$$());
                 panelNoiDung.revalidate();
                 panelNoiDung.repaint();
             }
@@ -122,13 +106,6 @@ public class GiaoDienMenuHocSinh extends JPanel {
         lbTaiKhoan.setPreferredSize(new Dimension(200, 30));
         lbTaiKhoan.setText("Tài khoản");
         panel3.add(lbTaiKhoan);
-        lbXemKetQua = new JLabel();
-        lbXemKetQua.setBackground(new Color(-4333314));
-        lbXemKetQua.setHorizontalAlignment(0);
-        lbXemKetQua.setOpaque(true);
-        lbXemKetQua.setPreferredSize(new Dimension(200, 30));
-        lbXemKetQua.setText("Xem kết quả");
-        panel3.add(lbXemKetQua);
         panelNoiDung = new JPanel();
         panelNoiDung.setLayout(new BorderLayout(0, 0));
         panel1.add(panelNoiDung, BorderLayout.CENTER);
