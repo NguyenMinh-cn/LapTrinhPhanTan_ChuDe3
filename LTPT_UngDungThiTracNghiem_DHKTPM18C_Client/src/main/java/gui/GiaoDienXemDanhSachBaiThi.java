@@ -94,13 +94,16 @@ public class GiaoDienXemDanhSachBaiThi extends JPanel {
 
     private void loadDanhSachBaiThi() {
         try {
-            List<BaiThi> danhSachBaiThi = baiThiService.getAllBaiThiForHocSinh(hocSinh.getMaHocSinh());
+            // Chuyển đổi kiểu dữ liệu từ int sang Long
+            Long maHocSinh = Long.valueOf(hocSinh.getMaHocSinh());
+            List<BaiThi> danhSachBaiThi = baiThiService.getAllBaiThiForHocSinh(maHocSinh);
             List<PhienLamBai> danhSachPhien = phienLamBaiService.findByMaHocSinh(hocSinh.getMaHocSinh());
             DefaultTableModel model = (DefaultTableModel) tblBaiThi.getModel();
             model.setRowCount(0);
 
             for (BaiThi baiThi : danhSachBaiThi) {
-                boolean daThi = danhSachPhien.stream().anyMatch(p -> p.getBaiThi().getMaBaiThi() == baiThi.getMaBaiThi());
+                boolean daThi = danhSachPhien.stream()
+                        .anyMatch(p -> p.getBaiThi().getMaBaiThi() == baiThi.getMaBaiThi());
                 String trangThai = daThi ? "Đã thi" : "Chưa thi";
                 Object diem = null;
                 if (daThi) {

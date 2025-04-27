@@ -5,6 +5,7 @@ import entities.CauTraLoi;
 import entities.PhienLamBai;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
+import jakarta.persistence.TypedQuery;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,44 @@ public class PhienLamBaiDAO extends GenericDAO<PhienLamBai, String> {
     public PhienLamBaiDAO(EntityManager em, Class<PhienLamBai> clazz) {
         super(em, clazz);
     }
+    public PhienLamBai layThongTinPhienLamBaiVaCauTraLoi(String maPhienLamBai) {
+        try {
+            String jpql = "SELECT plb FROM PhienLamBai plb " +
+                    "LEFT JOIN FETCH plb.baiThi bt " +
+                    "LEFT JOIN FETCH plb.danhSachCauTraLoi ctl " +
+                    "WHERE plb.maPhien = :maPhienLamBai";
+
+            TypedQuery<PhienLamBai> query = em.createQuery(jpql, PhienLamBai.class);
+            query.setParameter("maPhienLamBai", maPhienLamBai);
+
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+    public List<PhienLamBai> layDanhSachPhienLamBaiVaCauTraLoiTheoBaiThi(int maBaiThi) {
+        try {
+            String jpql = "SELECT DISTINCT plb FROM PhienLamBai plb " +
+                    "LEFT JOIN FETCH plb.baiThi bt " +
+                    "LEFT JOIN FETCH plb.danhSachCauTraLoi ctl " +
+                    "WHERE bt.maBaiThi = :maBaiThi";
+
+            TypedQuery<PhienLamBai> query = em.createQuery(jpql, PhienLamBai.class);
+            query.setParameter("maBaiThi", maBaiThi);
+
+            List<PhienLamBai> danhSach = query.getResultList();
+
+            for (PhienLamBai plb : danhSach) {
+                plb.getDanhSachCauTraLoi().size();
+            }
+
+            return danhSach;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
 
     public PhienLamBai layThongTinChiTietPhienLamBai(String maPhienLamBai) {
         try {

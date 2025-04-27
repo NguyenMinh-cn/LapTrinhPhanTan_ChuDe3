@@ -8,8 +8,14 @@ import java.util.Arrays;
 public class NutCauHoi extends JButton {
     private static NutCauHoi selectedButton = null; // Biến tĩnh để lưu nút đã chọn
     private boolean isSelected = false; // Để theo dõi trạng thái của nút
+    private boolean isAnswered = false; // Để theo dõi trạng thái đã trả lời
     private int soThuTu;
     private CauHoi cauHoi; // Đối tượng CauHoi tương ứng
+
+    // Màu sắc cho các trạng thái
+    private static final Color DEFAULT_COLOR = new Color(255, 194, 209); // Màu hồng nhạt
+    private static final Color SELECTED_COLOR = new Color(255, 143, 171); // Màu hồng đậm
+    private static final Color ANSWERED_COLOR = new Color(144, 238, 144); // Màu xanh lá nhạt
 
     // Constructor nhận vào số thứ tự và đối tượng CauHoi
     public NutCauHoi(int soThuTu, CauHoi cauHoi) {
@@ -20,32 +26,28 @@ public class NutCauHoi extends JButton {
 
     private void initButton() {
         // Thiết lập màu sắc nền và border
-        this.setBackground(new Color(255, 194, 209)); // Màu hồng nhạt
+        this.setBackground(DEFAULT_COLOR); // Màu mặc định
         this.setFont(new Font("Arial", Font.BOLD, 18));
         this.setText(String.valueOf(soThuTu));
         this.setFocusPainted(false);
-        this.setBorder(BorderFactory.createLineBorder(new Color(255, 194, 209), 2)); // Viền xung quanh
+        this.setBorder(BorderFactory.createLineBorder(DEFAULT_COLOR, 2)); // Viền xung quanh
         this.setOpaque(true); // Đảm bảo nền màu không bị trong suốt
         this.setPreferredSize(new Dimension(50, 40)); // Kích thước của nút
         this.setMargin(new Insets(5, 10, 5, 10)); // Định kích thước lề
 
         // Bo tròn nút
-        this.setBorder(BorderFactory.createLineBorder(new Color(255, 194, 209), 2, true));
+        this.setBorder(BorderFactory.createLineBorder(DEFAULT_COLOR, 2, true));
 
         // Thêm hiệu ứng khi nhấn nút
         this.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                setBackground(new Color(255, 194, 209)); // Màu hồng đậm khi nhấn
+                // Không thay đổi màu khi nhấn
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                if (isSelected) {
-                    setBackground(new Color(255, 143, 171)); // Giữ màu hồng đậm khi chọn
-                } else {
-                    setBackground(new Color(255, 194, 209)); // Quay lại màu hồng nhạt
-                }
+                updateButtonColor();
             }
 
             @Override
@@ -63,18 +65,15 @@ public class NutCauHoi extends JButton {
         this.addActionListener(e -> {
             // Nếu có nút đã được chọn trước đó, quay lại màu ban đầu
             if (selectedButton != null) {
-                selectedButton.setBackground(new Color(255, 194, 209)); // Quay lại màu hồng nhạt
                 selectedButton.isSelected = false; // Đặt trạng thái của nút đã chọn về false
+                selectedButton.updateButtonColor(); // Cập nhật màu dựa trên trạng thái
             }
 
             // Cập nhật màu cho nút hiện tại
             isSelected = true;
-            setBackground(new Color(255, 143, 171));
+            updateButtonColor();
 
             selectedButton = this;
-
-            NutCauHoi selectedNutt = this;
-
         });
     }
 
@@ -82,9 +81,41 @@ public class NutCauHoi extends JButton {
     public CauHoi getCauHoi() {
         return cauHoi;
     }
-
+    public int getSoThuTu() {
+        return soThuTu;
+    }
     public void setSoThuTu(int soThuTu) {
         this.soThuTu = soThuTu;
+    }
+
+    /**
+     * Đặt trạng thái đã trả lời cho câu hỏi
+     * @param answered true nếu câu hỏi đã được trả lời, false nếu chưa
+     */
+    public void setAnswered(boolean answered) {
+        this.isAnswered = answered;
+        updateButtonColor();
+    }
+
+    /**
+     * Kiểm tra xem câu hỏi đã được trả lời chưa
+     * @return true nếu đã trả lời, false nếu chưa
+     */
+    public boolean isAnswered() {
+        return isAnswered;
+    }
+
+    /**
+     * Cập nhật màu sắc của nút dựa trên trạng thái
+     */
+    private void updateButtonColor() {
+        if (isSelected) {
+            setBackground(SELECTED_COLOR);
+        } else if (isAnswered) {
+            setBackground(ANSWERED_COLOR);
+        } else {
+            setBackground(DEFAULT_COLOR);
+        }
     }
 
     // Phương thức tĩnh để lấy đối tượng nutCauHoi đã được chọn

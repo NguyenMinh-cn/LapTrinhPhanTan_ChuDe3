@@ -4,10 +4,7 @@ import entities.BaiThi;
 import entities.CauHoi;
 import entities.GiaoVien;
 import entities.Lop;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.NoResultException;
-import jakarta.persistence.Persistence;
+import jakarta.persistence.*;
 import service.BaiThiService;
 import service.LopService;
 
@@ -60,14 +57,42 @@ public class BaiThiDAO extends GenericDAO<BaiThi, Integer>{
             return null;
         }
     }
-
+    public BaiThi layThongTinBaiThiVaCauHoi(int maBaiThi) {
+        try {
+            String jpql = "SELECT DISTINCT bt FROM BaiThi bt " +
+                    "LEFT JOIN FETCH bt.danhSachCauHoi " +
+                    "WHERE bt.maBaiThi = :maBaiThi";
+            TypedQuery<BaiThi> query = em.createQuery(jpql, BaiThi.class);
+            query.setParameter("maBaiThi", maBaiThi);
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            System.out.println("Không tìm thấy bài thi với mã: " + maBaiThi);
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
     public List<BaiThi> getAllBaiThiForHocSinh(Long maHocSinh) {
         try {
-            String jpql = "SELECT DISTINCT b FROM BaiThi b JOIN b.danhSachLop l JOIN HocSinh hs ON hs.lop.maLop = l.maLop " +
+            String jpql = "SELECT DISTINCT b FROM BaiThi b " +
+                    "JOIN FETCH b.danhSachCauHoi " +  // Thêm JOIN FETCH
+                    "JOIN b.danhSachLop l " +
+                    "JOIN HocSinh hs ON hs.lop.maLop = l.maLop " +
                     "WHERE hs.maHocSinh = :maHocSinh";
-            return em.createQuery(jpql, BaiThi.class)
+            
+            List<BaiThi> dsBaiThi = em.createQuery(jpql, BaiThi.class)
                     .setParameter("maHocSinh", maHocSinh)
                     .getResultList();
+
+            // Force initialize các collection cần thiết
+            for (BaiThi baiThi : dsBaiThi) {
+                baiThi.getDanhSachCauHoi().size();
+                baiThi.getMonHoc().getTenMon();
+                baiThi.getGiaoVien().getHoTen();
+            }
+
+            return dsBaiThi;
         } catch (Exception e) {
             e.printStackTrace();
             return List.of();
@@ -75,37 +100,45 @@ public class BaiThiDAO extends GenericDAO<BaiThi, Integer>{
     }
 
     public static void main(String[] args) {
-        // Khởi tạo EntityManagerFactory
+        // Khởi tạo EntityManager
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("mariadb");
         EntityManager em = emf.createEntityManager();
 
         try {
-            // Tạo instance của BaiThiDAO (giả sử BaiThiDAO nhận EntityManager)
-            BaiThiDAO baiThiDAO = new BaiThiDAO(BaiThi.class);
+            // Khởi tạo DAO
+            BaiThiDAO baiThiDAO = new BaiThiDAO(em, BaiThi.class);
 
-            // Gọi phương thức getAllBaiThiForHocSinh với maHocSinh (ví dụ: 1L)
-            Long maHocSinh = 1L; // Thay đổi maHocSinh tùy theo dữ liệu của bạn
-            List<BaiThi> list = baiThiDAO.getAllBaiThiForHocSinh(83L);
+            // Gọi DAO lấy bài thi theo mã
+            int maBaiThi = 9; // <== sửa mã bài thi tùy database bạn đang có
+            BaiThi baiThi = baiThiDAO.layThongTinBaiThiVaCauHoi(maBaiThi);
 
-            // In thông tin các bài thi
-            if (list.isEmpty()) {
-                System.out.println("Không tìm thấy bài thi nào cho học sinh có mã: " + maHocSinh);
-            } else {
-                for (BaiThi baiThi : list) {
-                    System.out.println("Tên bài thi: " + baiThi.getTenBaiThi());
-                    System.out.println("Môn học: " + (baiThi.getMonHoc() != null ? baiThi.getMonHoc().getTenMon() : "Không có"));
-                    System.out.println("Thời gian bắt đầu: " + baiThi.getThoiGianBatDau());
-                    System.out.println("Thời gian kết thúc: " + baiThi.getThoiGianKetThuc());
-                    System.out.println("Thời lượng làm bài: " + baiThi.getThoiLuong() + " phút");
-                    System.out.println("Số câu hỏi: " + (baiThi.getDanhSachCauHoi() != null ? baiThi.getDanhSachCauHoi().size() : 0));
-                    System.out.println("Giáo viên tạo bài thi: " + (baiThi.getGiaoVien() != null ? baiThi.getGiaoVien().getHoTen() : "Không có"));
-                    System.out.println("-----");
+            if (baiThi != null) {
+                System.out.println("=== Thông tin bài thi ===");
+                System.out.println("Tên bài thi: " + baiThi.getTenBaiThi());
+                System.out.println("Môn học: " + (baiThi.getMonHoc() != null ? baiThi.getMonHoc().getTenMon() : "Không có"));
+                System.out.println("Thời lượng: " + baiThi.getThoiLuong() + " phút");
+                System.out.println("Số câu hỏi: " + baiThi.getDanhSachCauHoi().size());
+
+                System.out.println("\n=== Danh sách câu hỏi ===");
+                List<CauHoi> dsCauHoi = baiThi.getDanhSachCauHoi();
+                int stt = 1;
+                for (CauHoi ch : dsCauHoi) {
+                    System.out.println("Câu " + (stt++) + ": " + ch.getNoiDung());
+                    System.out.println("Đáp án:");
+                    List<String> dsDapAn = ch.getDanhSachDapAn();
+                    for (int i = 0; i < dsDapAn.size(); i++) {
+                        System.out.println((char)('A' + i) + ". " + dsDapAn.get(i));
+                    }
+                    System.out.println("Đáp án đúng: " + ch.getDapAnDung());
+                    System.out.println("---");
                 }
+            } else {
+                System.out.println("Không tìm thấy bài thi có mã " + maBaiThi);
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            // Đóng EntityManager và EntityManagerFactory
             em.close();
             emf.close();
         }

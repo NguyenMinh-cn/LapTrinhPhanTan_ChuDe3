@@ -40,7 +40,7 @@
             </properties>
             <border type="none"/>
             <children>
-              <component id="a2b86" class="javax.swing.JLabel">
+              <component id="a2b86" class="javax.swing.JLabel" binding="lbDSBaiThi">
                 <constraints/>
                 <properties>
                   <background color="-4333314"/>
