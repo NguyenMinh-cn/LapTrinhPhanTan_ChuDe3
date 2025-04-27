@@ -1149,12 +1149,11 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
                     ckBSuDungMK.setSelected(false);
                     txtNhapMatKhau.setText("");
                 }
-                for (Lop lop : baiThi.getDanhSachLop()) {
-                    System.out.println(lop.getTenLop());
-                }
-
+                baiThiService = (BaiThiService) Naming.lookup("rmi://localhost:8081/baiThiService");
+                BaiThi baiThi1 = baiThiService.layThongTinChiTietBaiThi(baiThi.getMaBaiThi());
+                List<Lop> lopDaChon = baiThi1.getDanhSachLop();
                 taoJCheckBoxLop();
-                for (Lop lop : baiThi.getDanhSachLop()) {
+                for (Lop lop : lopDaChon) {
                     for (Component comp : pnDSLop.getComponents()) {
                         if (comp instanceof JCheckBox cb) {
                             if (cb.getText().equals(lop.getTenLop())) {
