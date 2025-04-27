@@ -57,7 +57,18 @@ public class BaiThiDAO extends GenericDAO<BaiThi, Integer>{
             return null;
         }
     }
-
+public List<BaiThi> getAllBaiThiForHocSinh(Long maHocSinh) {
+        try {
+            String jpql = "SELECT DISTINCT b FROM BaiThi b JOIN b.danhSachLop l JOIN HocSinh hs ON hs.lop.maLop = l.maLop " +
+                          "WHERE hs.maHocSinh = :maHocSinh";
+            return em.createQuery(jpql, BaiThi.class)
+                    .setParameter("maHocSinh", maHocSinh)
+                    .getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
+        }
+    }
 
     //    public static void main(String[] args) {
 //        BaiThiDAO baiThiDAO = new BaiThiDAO(BaiThi.class);
