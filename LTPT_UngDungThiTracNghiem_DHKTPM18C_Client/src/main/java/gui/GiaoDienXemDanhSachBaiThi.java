@@ -1,91 +1,128 @@
 package gui;
 
+import entities.BaiThi;
 import entities.HocSinh;
 import entities.PhienLamBai;
+import service.BaiThiService;
 import service.PhienLamBaiService;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.rmi.Naming;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class GiaoDienXemDanhSachBaiThi extends JPanel {
     private JPanel panel1;
-    private JTable tblPhienLamBai;
+    private JTable tblBaiThi;
     private JScrollPane scrollPane;
     private HocSinh hocSinh;
+    private BaiThiService baiThiService;
+    private PhienLamBaiService phienLamBaiService;
 
     public GiaoDienXemDanhSachBaiThi(HocSinh hocSinh) {
         this.hocSinh = hocSinh;
+        try {
+            this.baiThiService = (BaiThiService) Naming.lookup("rmi://localhost:8081/baiThiService");
+            this.phienLamBaiService = (PhienLamBaiService) Naming.lookup("rmi://localhost:8081/phienLamBaiService");
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi kết nối server: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         initComponents();
-        loadDanhSachPhienLamBai();
+        loadDanhSachBaiThi();
     }
 
     private void initComponents() {
         panel1 = new JPanel();
-        tblPhienLamBai = new JTable();
+        tblBaiThi = new JTable();
         scrollPane = new JScrollPane();
 
-        // Thiết lập layout
         setLayout(new BorderLayout());
 
-        // Bảng danh sách phiên làm bài
-        tblPhienLamBai.setModel(new DefaultTableModel(
+        tblBaiThi.setModel(new DefaultTableModel(
                 new Object[][]{},
-                new String[]{"Mã phiên", "Mã bài thi", "Thời gian bắt đầu", "Thời gian kết thúc", "Điểm"}
+                new String[]{"Mã bài thi", "Tên bài thi", "Trạng thái", "Điểm"}
         ));
-        scrollPane.setViewportView(tblPhienLamBai);
+        scrollPane.setViewportView(tblBaiThi);
 
-        // Thêm bảng vào panel
         panel1.setLayout(new BorderLayout());
         panel1.add(scrollPane, BorderLayout.CENTER);
 
-        // Thêm panel vào giao diện chính
         add(panel1, BorderLayout.CENTER);
 
-        // Xử lý nhấp đúp để xem chi tiết
-        tblPhienLamBai.addMouseListener(new java.awt.event.MouseAdapter() {
+        // Xử lý nhấp chuột để xem chi tiết
+        tblBaiThi.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 if (evt.getClickCount() == 2) { // Nhấp đúp
-                    int row = tblPhienLamBai.getSelectedRow();
+                    int row = tblBaiThi.getSelectedRow();
                     if (row != -1) {
-                        String maPhien = (String) tblPhienLamBai.getValueAt(row, 0);
-                        // Mở GiaoDienHocSinhXemKetQua và truyền cả HocSinh
-                        JPanel parentPanel = (JPanel) getParent();
-                        parentPanel.removeAll();
-                        parentPanel.add(new GiaoDienHocSinhXemKetQua(maPhien, hocSinh).$$$getRootComponent$$$());
-                        parentPanel.revalidate();
-                        parentPanel.repaint();
+                        Integer maBaiThi = Integer.parseInt((String) tblBaiThi.getValueAt(row, 0));
+                        String trangThai = (String) tblBaiThi.getValueAt(row, 2);
+                        if (trangThai.equals("Đã thi")) {
+                            try {
+                                // Lấy phiên làm bài mới nhất
+                                List<PhienLamBai> danhSachPhien = phienLamBaiService.findByMaHocSinh(hocSinh.getMaHocSinh());
+                                PhienLamBai phienMoiNhat = danhSachPhien.stream()
+                                        .filter(p -> p.getBaiThi().getMaBaiThi() == maBaiThi)
+                                        .max((p1, p2) -> p1.getThoiGianKetThuc().compareTo(p2.getThoiGianKetThuc()))
+                                        .orElse(null);
+                                if (phienMoiNhat != null) {
+                                    // Mở GiaoDienHocSinhXemKetQua trong JFrame riêng
+                                    JFrame frame = new JFrame("Kết quả bài thi: " + maBaiThi);
+                                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                                    frame.add(new GiaoDienHocSinhXemKetQua(phienMoiNhat.getMaPhien(), hocSinh).$$$getRootComponent$$$());
+                                    frame.setSize(800, 600);
+                                    frame.setLocationRelativeTo(null);
+                                    frame.setVisible(true);
+                                } else {
+                                    JOptionPane.showMessageDialog(GiaoDienXemDanhSachBaiThi.this, "Không tìm thấy phiên làm bài.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                JOptionPane.showMessageDialog(GiaoDienXemDanhSachBaiThi.this, "Lỗi khi tải kết quả: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(GiaoDienXemDanhSachBaiThi.this, "Bạn chưa thi bài này.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                        }
                     }
                 }
             }
         });
     }
 
-    private void loadDanhSachPhienLamBai() {
+    private void loadDanhSachBaiThi() {
         try {
-            PhienLamBaiService phienLamBaiService = (PhienLamBaiService) Naming.lookup("rmi://localhost:8081/phienLamBaiService");
+            List<BaiThi> danhSachBaiThi = baiThiService.getAllBaiThiForHocSinh(hocSinh.getMaHocSinh());
             List<PhienLamBai> danhSachPhien = phienLamBaiService.findByMaHocSinh(hocSinh.getMaHocSinh());
+            DefaultTableModel model = (DefaultTableModel) tblBaiThi.getModel();
+            model.setRowCount(0);
 
-            DefaultTableModel model = (DefaultTableModel) tblPhienLamBai.getModel();
-            model.setRowCount(0); // Xóa dữ liệu cũ
-
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-            for (PhienLamBai phien : danhSachPhien) {
-                Object[] thongTinDiem = phienLamBaiService.tinhDiemVaSoCau(phien.getMaPhien());
+            for (BaiThi baiThi : danhSachBaiThi) {
+                boolean daThi = danhSachPhien.stream().anyMatch(p -> p.getBaiThi().getMaBaiThi() == baiThi.getMaBaiThi());
+                String trangThai = daThi ? "Đã thi" : "Chưa thi";
+                Object diem = null;
+                if (daThi) {
+                    PhienLamBai phienMoiNhat = danhSachPhien.stream()
+                            .filter(p -> p.getBaiThi().getMaBaiThi() == baiThi.getMaBaiThi())
+                            .max((p1, p2) -> p1.getThoiGianKetThuc().compareTo(p2.getThoiGianKetThuc()))
+                            .orElse(null);
+                    if (phienMoiNhat != null) {
+                        Object[] thongTinDiem = phienLamBaiService.tinhDiemVaSoCau(phienMoiNhat.getMaPhien());
+                        diem = thongTinDiem[0];
+                    }
+                }
                 model.addRow(new Object[]{
-                        phien.getMaPhien(),
-                        phien.getBaiThi() != null ? phien.getBaiThi().getMaBaiThi() : "",
-                        phien.getThoiGianBatDau() != null ? sdf.format(phien.getThoiGianBatDau()) : "",
-                        phien.getThoiGianKetThuc() != null ? sdf.format(phien.getThoiGianKetThuc()) : "",
-                        thongTinDiem[0] // Điểm số
+                        String.valueOf(baiThi.getMaBaiThi()),
+                        baiThi.getTenBaiThi() != null ? baiThi.getTenBaiThi() : "",
+                        trangThai,
+                        diem != null ? diem : ""
                 });
             }
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Lỗi khi tải danh sách phiên làm bài: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Lỗi khi tải danh sách bài thi: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
 
