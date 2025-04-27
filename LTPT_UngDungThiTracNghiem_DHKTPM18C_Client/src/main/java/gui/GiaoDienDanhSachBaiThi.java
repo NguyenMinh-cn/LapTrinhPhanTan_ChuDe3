@@ -10,10 +10,8 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import entities.*;
-import gui.custom.GiaoDienDapAn;
-import gui.custom.GiaoDienThongTinChiTietBaiThi;
-import gui.custom.PanelThoiGianThi;
-import gui.custom.WrapLayout;
+import gui.custom.*;
+import lombok.SneakyThrows;
 import org.kordamp.ikonli.materialdesign.MaterialDesign;
 import org.kordamp.ikonli.swing.FontIcon;
 import service.BaiThiService;
@@ -39,7 +37,7 @@ import java.util.List;
 
 public class GiaoDienDanhSachBaiThi extends JPanel {
     private static BaiThiService baiThiService;
-    private final PanelThoiGianThi panelThoiGianThi;
+    private PanelThoiGianThi panelThoiGianThi;
     private JPanel panel1;
     private JButton btnTaoDeThi;
     private JPanel pnHienThiCacBaiThi;
@@ -78,11 +76,9 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
     private JButton btnXoaCauHoi;
     private final CardLayout cardLayout;
     private CauHoiService cauHoiService;
-    private final List<CauHoi> danhSachCauHoiDeLuu = new ArrayList<>();
     private final List<Lop> lopDaChon = new ArrayList<>();
     private final GiaoVien giaoVienDangNhap;
     private List<MonHoc> monHocList;
-    private CauHoi cauHoiDangChon = null;
     private JButton btnCauHoiDangChon = null;
 
     //    private List<BaiThi> dsBaiThi;
@@ -102,17 +98,20 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
         cardLayout = (CardLayout) pnCard.getLayout();
 
         taoDSBaiThi();
-        panelThoiGianThi = new PanelThoiGianThi();
-        pnThoiGian.add(panelThoiGianThi.getPanel());
+
         btnTaoDeThi.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 cardLayout.show(pnCard, "Card2");
                 try {
-
+                    txtTenDeThi.setText("");
+                    pnThoiGian.removeAll();
+                    panelThoiGianThi = new PanelThoiGianThi();
+                    pnThoiGian.add(panelThoiGianThi.getPanel());
+                    txtNhapMatKhau.setText("");
                     taoJCheckBoxLop();
                     taoJComboBoxMonHoc();
-
+                    cbBoxThoiLuong.setSelectedItem("");
                 } catch (MalformedURLException ex) {
                     throw new RuntimeException(ex);
                 } catch (NotBoundException ex) {
@@ -237,6 +236,7 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
                 }
 
                 cardLayout.show(pnCard, "Card3");
+                pnDSSoCauHoi.removeAll();
                 pnDSSoCauHoi.setLayout(new WrapLayout(FlowLayout.LEFT, 10, 10));
             }
         });
@@ -246,8 +246,17 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
                 try {
                     baiThiService = (BaiThiService) Naming.lookup("rmi://localhost:8081/baiThiService");
                     cauHoiService = (CauHoiService) Naming.lookup("rmi://localhost:8081/cauHoiService");
+                    Component[] components = pnDSSoCauHoi.getComponents();
+                    List<CauHoi> danhSachCauHoi1 = new ArrayList<>();
 
-                    if (danhSachCauHoiDeLuu == null || danhSachCauHoiDeLuu.isEmpty()) {
+                    // Duyệt qua từng component
+                    for (Component component : components) {
+                        if (component instanceof NutCauHoi) {
+                            NutCauHoi nutCauHoi = (NutCauHoi) component;
+                            danhSachCauHoi1.add(nutCauHoi.getCauHoi());
+                        }
+                    }
+                    if (danhSachCauHoi1 == null || danhSachCauHoi1.isEmpty()) {
                         JOptionPane.showMessageDialog(null, "Không có câu hỏi để lưu.", "Thông báo", JOptionPane.WARNING_MESSAGE);
                         return;
                     }
@@ -277,7 +286,7 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
                     }
 
                     // Bước 2: Lưu các câu hỏi
-                    List<CauHoi> cauHoiDaLuuThanhCong = cauHoiService.luuNhieuVaTraVeMa(danhSachCauHoiDeLuu);
+                    List<CauHoi> cauHoiDaLuuThanhCong = cauHoiService.luuNhieuVaTraVeMa(danhSachCauHoi1);
 
                     if (cauHoiDaLuuThanhCong == null || cauHoiDaLuuThanhCong.isEmpty()) {
                         dialog.dispose();
@@ -311,8 +320,6 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
                         txtTenDeThi.setText("");
                         cbBoxThoiLuong.setSelectedItem("");
                         lopDaChon.clear();
-                        cauHoiDaLuuThanhCong.clear();
-                        danhSachCauHoiDeLuu.clear();
 
                         // Xóa nội dung panel câu hỏi
                         pnDSSoCauHoi.removeAll();
@@ -368,25 +375,24 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
                         JOptionPane.YES_NO_OPTION
                 );
                 if (confirm == JOptionPane.YES_OPTION) {
-                    if (cauHoiDangChon != null && btnCauHoiDangChon != null) {
-                        danhSachCauHoiDeLuu.remove(cauHoiDangChon);
+                    if (btnCauHoiDangChon != null) {
                         pnDSSoCauHoi.remove(btnCauHoiDangChon);
                         pnChiTietNoiDungCauHoi.removeAll();
                         pnChiTietNoiDungCauHoi.repaint();
                         pnChiTietNoiDungCauHoi.revalidate();
-                        cauHoiDangChon = null;
                         btnCauHoiDangChon = null;
                         Component[] components = pnDSSoCauHoi.getComponents();
-                        for (int i = 0; i < components.length; i++) {
-                            if (components[i] instanceof JButton) {
-                                JButton button = (JButton) components[i];
-                                button.setText("Câu " + (i + 1));
+                        int index = 1;
+                        for (Component component : components) {
+                            if (component instanceof NutCauHoi) {
+                                NutCauHoi nut = (NutCauHoi) component;
+                                nut.setSoThuTu(index);
+                                nut.setText(String.valueOf(index));
+                                index++;
                             }
                         }
                         pnDSSoCauHoi.repaint();
                         pnDSSoCauHoi.revalidate();
-                        System.out.println(danhSachCauHoiDeLuu);
-
                     }
                 }
             }
@@ -462,7 +468,6 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
                     pnNoiDungCauHoiVaDapAn.repaint();
                     pnNoiDungCauHoiVaDapAn.revalidate();
                     btnThemCauHoi.setEnabled(true);
-                    System.out.println(danhSachCauHoiDeLuu);
 
             }
         });
@@ -523,16 +528,11 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
 
             // Nếu hợp lệ -> thêm số câu hỏi vào panel danh sách câu hỏi
             int soCau = pnDSSoCauHoi.getComponentCount() + 1;
-            JButton btnCauHoi = new JButton("Câu " + soCau);
-            btnCauHoi.setBackground(new Color(255, 200, 221));
-            btnCauHoi.setFont(new Font("Arial", Font.BOLD, 14));
-            btnCauHoi.setMargin(new Insets(5, 10, 5, 10));
-            danhSachCauHoiDeLuu.add(cauHoi1);
-            System.out.println(danhSachCauHoiDeLuu);
+            NutCauHoi btnCauHoi = new NutCauHoi(soCau, cauHoi1);
             // Xử lý khi nhấn vào nút câu hỏi (xem lại)
             btnCauHoi.addActionListener(viewEvt -> {
 //                JOptionPane.showMessageDialog(null, cauHoi1.toString(), "Chi tiết câu hỏi", JOptionPane.INFORMATION_MESSAGE);
-                cauHoiDangChon = cauHoi1;
+//                cauHoiDangChon = cauHoi1;
                 btnCauHoiDangChon = btnCauHoi;
                 //phần hiện câu hỏi
                 pnChiTietNoiDungCauHoi.removeAll();
@@ -540,15 +540,15 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
 
                 Font font = new Font("Arial", Font.PLAIN, 18);
 
-                String noiDung = "<html><div>" + cauHoi1.getNoiDung().replace("\n", "<br>") + "</div></html>";
+                String noiDung = "<html><div>" + btnCauHoi.getCauHoi().getNoiDung().replace("\n", "<br>") + "</div></html>";
                 System.out.println(noiDung);
                 JLabel lblNoiDung = new JLabel(noiDung);
                 lblNoiDung.setFont(font);
                 pnChiTietNoiDungCauHoi.add(lblNoiDung);
                 pnChiTietNoiDungCauHoi.add(Box.createVerticalStrut(10));
 
-                List<String> danhSachDapAnCuaCauHoiHienTai = cauHoi1.getDanhSachDapAn();
-                String dapAnDungCuaCauHoiHienTai = cauHoi1.getDapAnDung();
+                List<String> danhSachDapAnCuaCauHoiHienTai = btnCauHoi.getCauHoi().getDanhSachDapAn();
+                String dapAnDungCuaCauHoiHienTai = btnCauHoi.getCauHoi().getDapAnDung();
 
                 for (int i = 0; i < danhSachDapAnCuaCauHoiHienTai.size(); i++) {
                     String dapAn = danhSachDapAnCuaCauHoiHienTai.get(i);
@@ -1037,7 +1037,7 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
         lblTenBaiThi.setFont(boldFont);
         lblTenBaiThi.setForeground(new Color(33, 33, 33));
 
-        JLabel lblMonHoc = new JLabel("<html><b>Môn học:</b>" + baiThi.getMonHoc().getTenMon() + "</html>");
+        JLabel lblMonHoc = new JLabel("<html><b>Môn học: </b> " + baiThi.getMonHoc().getTenMon() + "</html>");
         lblMonHoc.setFont(labelFont);
         lblMonHoc.setForeground(new Color(66, 66, 66));
 
@@ -1107,6 +1107,7 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
                 }
             }
         });
+
 // Nút "Chỉnh sửa bài thi"
         JButton btnChinhSua = new JButton("Chỉnh sửa");
         btnChinhSua.setPreferredSize(new Dimension(120, 35));
@@ -1128,6 +1129,137 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
             public void mouseExited(MouseEvent evt) {
                 btnChinhSua.setBackground(new Color(76, 175, 80)); // Màu gốc
             }
+            @SneakyThrows
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                cardLayout.show(pnCard, "Card2");
+                txtTenDeThi.setText(baiThi.getTenBaiThi());
+                cbBoxThoiLuong.setSelectedItem(baiThi.getThoiLuong() + " phút");
+                taoJComboBoxMonHoc();
+                cbBoxMonHoc.setSelectedItem(baiThi.getMonHoc().getTenMon());
+                pnThoiGian.removeAll();
+                panelThoiGianThi = new PanelThoiGianThi();
+                pnThoiGian.add(panelThoiGianThi.getPanel());
+                panelThoiGianThi.setStartDateTime(baiThi.getThoiGianBatDau());
+                panelThoiGianThi.setEndDateTime(baiThi.getThoiGianKetThuc());
+                if (baiThi.getMatKhau() != null) {
+                    ckBSuDungMK.setSelected(true);
+                    txtNhapMatKhau.setText(baiThi.getMatKhau());
+                } else {
+                    ckBSuDungMK.setSelected(false);
+                    txtNhapMatKhau.setText("");
+                }
+                for (Lop lop : baiThi.getDanhSachLop()) {
+                    System.out.println(lop.getTenLop());
+                }
+
+                taoJCheckBoxLop();
+                for (Lop lop : baiThi.getDanhSachLop()) {
+                    for (Component comp : pnDSLop.getComponents()) {
+                        if (comp instanceof JCheckBox cb) {
+                            if (cb.getText().equals(lop.getTenLop())) {
+                                cb.setSelected(true);
+                                break;
+                            }
+                        }
+                    }
+                }
+                pnDSSoCauHoi.removeAll();
+                pnDSSoCauHoi.setLayout(new WrapLayout(FlowLayout.LEFT, 10, 10));
+                List<CauHoi> cauHoiList = new ArrayList<>();
+                try {
+                    cauHoiList = baiThi.getDanhSachCauHoi();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                    JOptionPane.showMessageDialog(null,
+                            "Lỗi khi tải danh sách câu hỏi: " + exception.getMessage(),
+                            "Lỗi",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+                if (cauHoiList != null && !cauHoiList.isEmpty()) {
+                    for (CauHoi cauHoi : cauHoiList) {
+                        NutCauHoi nutCauHoi = new NutCauHoi(cauHoiList.indexOf(cauHoi) + 1, cauHoi);
+                        System.out.println("Câu: " + cauHoi.getNoiDung());
+                        System.out.println("Đáp án: " + cauHoi.getDapAnDung());
+                        System.out.println("Danh sách đáp án: " + cauHoi.getDanhSachDapAn());
+                        pnDSSoCauHoi.add(nutCauHoi);
+                    }
+                    pnDSSoCauHoi.revalidate();
+                    pnDSSoCauHoi.repaint();
+                }
+
+            }
+        });
+        JLabel nutXoaBaiThi = new JLabel();
+        nutXoaBaiThi.setIcon(FontIcon.of(MaterialDesign.MDI_DELETE, 24, new Color(240, 35, 60)));
+        nutXoaBaiThi.setPreferredSize(new Dimension(50, 35));
+        nutXoaBaiThi.setBackground(Color.WHITE);
+        nutXoaBaiThi.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        nutXoaBaiThi.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        nutXoaBaiThi.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseExited(MouseEvent evt) {
+                nutXoaBaiThi.setIcon(FontIcon.of(MaterialDesign.MDI_DELETE, 24, new Color(217, 4, 41)));
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                // Hiệu ứng khi nhấn nút (màu đậm hơn)
+                nutXoaBaiThi.setIcon(FontIcon.of(MaterialDesign.MDI_DELETE, 24, new Color(217, 4, 41)));
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                nutXoaBaiThi.setIcon(FontIcon.of(MaterialDesign.MDI_DELETE, 24, new Color(240, 35, 60)));
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Hiển thị hộp thoại xác nhận xóa bài thi
+                int confirm = JOptionPane.showConfirmDialog(
+                        null,
+                        "Bạn chắc chắn muốn xóa bài thi này?",
+                        "Xác nhận xóa",
+                        JOptionPane.YES_NO_OPTION
+                );
+
+                if (confirm == JOptionPane.YES_OPTION) {
+                    try {
+                        // Xóa bài thi
+                        boolean kq = baiThiService.delete(baiThi.getMaBaiThi());
+                        System.out.println("Bài thi đã bị xóa!" + baiThi.getTenBaiThi());
+
+                        if(kq){
+                            List<BaiThi> dsBaiThi = baiThiService.timDSBaiTHiTheoMaGiaoVien(giaoVienDangNhap.getMaGiaoVien());
+                            // Xóa tất cả các thành phần hiện tại trong panel
+                            pnHienThiCacBaiThi.removeAll();
+                            if (dsBaiThi.isEmpty()) {
+                                // Hiển thị thông báo nếu không có bài thi
+                                JLabel lblThongBao = new JLabel("Không có bài thi nào. Hãy tạo bài thi mới!");
+                                lblThongBao.setFont(new Font("Arial", Font.BOLD, 18));
+                                lblThongBao.setForeground(new Color(100, 100, 100));
+                                pnHienThiCacBaiThi.add(lblThongBao);
+                            } else {
+                                // Hiển thị danh sách bài thi
+                                for (BaiThi baiThi : dsBaiThi) {
+                                    pnHienThiCacBaiThi.add(thanhPhanBaiThi(baiThi));
+                                }
+                            }
+                            // Cập nhật giao diện sau khi thay đổi
+                            pnHienThiCacBaiThi.revalidate();
+                            pnHienThiCacBaiThi.repaint();
+                        }else{
+                            JOptionPane.showMessageDialog(null, "Xóa bài thi thất bại!");
+                        }
+                    } catch (RemoteException ex) {
+                        // Xử lý lỗi RemoteException
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Lỗi khi xóa bài thi. Vui lòng thử lại.");
+                    }
+                }
+
+            }
         });
 
         // Panel chứa nút
@@ -1137,6 +1269,8 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
         btnPanel.add(btnXemTruocBaiThi);
         btnPanel.add(Box.createHorizontalGlue());
         btnPanel.add(btnChinhSua); // Thêm trước hoặc sau tùy bạn muốn vị trí
+        btnPanel.add(Box.createHorizontalGlue());
+        btnPanel.add(nutXoaBaiThi);
         // Thêm vào panel chính
         panel.add(info, BorderLayout.CENTER);
         panel.add(btnPanel, BorderLayout.SOUTH);

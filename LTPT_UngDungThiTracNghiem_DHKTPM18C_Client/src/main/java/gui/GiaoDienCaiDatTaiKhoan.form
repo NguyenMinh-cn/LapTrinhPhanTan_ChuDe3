@@ -10,6 +10,7 @@
       <grid id="93579" binding="panelChucNang" layout-manager="BorderLayout" hgap="0" vgap="0">
         <constraints border-constraint="West"/>
         <properties>
+          <background color="-1"/>
           <maximumSize width="200" height="200"/>
           <preferredSize width="200" height="103"/>
         </properties>
@@ -26,7 +27,9 @@
           </component>
           <grid id="d7a51" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
             <constraints border-constraint="Center"/>
-            <properties/>
+            <properties>
+              <background color="-1"/>
+            </properties>
             <border type="none"/>
             <children>
               <component id="911be" class="javax.swing.JButton" binding="btnTTTK">
@@ -53,13 +56,13 @@
         <properties/>
         <border type="none"/>
         <children>
-          <grid id="f1c35" binding="panelTTTK" layout-manager="GridLayoutManager" row-count="8" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="2" vgap="2">
+          <grid id="f1c35" binding="panelTTTK" layout-manager="GridLayoutManager" row-count="7" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="2" vgap="2">
             <margin top="10" left="10" bottom="10" right="10"/>
             <constraints>
               <card name="Card1"/>
             </constraints>
             <properties>
-              <background color="-12387639"/>
+              <background color="-1"/>
             </properties>
             <border type="none"/>
             <children>
@@ -139,7 +142,7 @@
               </component>
               <component id="2d73c" class="javax.swing.JButton" binding="lưuButton" default-binding="true">
                 <constraints>
-                  <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="Lưu"/>
@@ -172,35 +175,13 @@
               </component>
               <component id="7e6e6" class="javax.swing.JLabel" binding="lbLop">
                 <constraints>
-                  <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="Lớp"/>
                 </properties>
               </component>
               <component id="dad25" class="javax.swing.JTextField" binding="txtLop">
-                <constraints>
-                  <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
-                    <preferred-size width="150" height="-1"/>
-                  </grid>
-                </constraints>
-                <properties>
-                  <disabledTextColor color="-16777216"/>
-                  <editable value="false"/>
-                  <enabled value="false"/>
-                  <selectionColor color="-16777216"/>
-                  <text value="10A2"/>
-                </properties>
-              </component>
-              <component id="46bdf" class="javax.swing.JLabel">
-                <constraints>
-                  <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <text value="Ngày sinh"/>
-                </properties>
-              </component>
-              <component id="ccedf" class="javax.swing.JTextField">
                 <constraints>
                   <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                     <preferred-size width="150" height="-1"/>
@@ -211,7 +192,7 @@
                   <editable value="false"/>
                   <enabled value="false"/>
                   <selectionColor color="-16777216"/>
-                  <text value="1/1/2000"/>
+                  <text value="10A2"/>
                 </properties>
               </component>
             </children>

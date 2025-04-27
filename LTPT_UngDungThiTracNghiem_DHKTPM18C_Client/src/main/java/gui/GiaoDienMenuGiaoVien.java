@@ -1,6 +1,7 @@
 package gui;
 
 import entities.GiaoVien;
+import service.TaiKhoanService;
 
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
@@ -9,6 +10,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.MalformedURLException;
+import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Locale;
@@ -24,8 +26,9 @@ public class GiaoDienMenuGiaoVien {
     private JLabel lbCaiDatTaiKhoan;
     private JLabel lbDangXuat;
     JLabel selectedLabel = null;
+    TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://localhost:8081/taiKhoanService");
+    public GiaoDienMenuGiaoVien(GiaoVien giaoVien) throws MalformedURLException, NotBoundException, RemoteException {
 
-    public GiaoDienMenuGiaoVien(GiaoVien giaoVien) {
         this.giaoVienDangNhap = giaoVien;
         $$$setupUI$$$();
         lbTenGiaoVien.setText(giaoVien.getHoTen());
@@ -33,7 +36,15 @@ public class GiaoDienMenuGiaoVien {
             @Override
             public void mouseClicked(MouseEvent e) {
                 panelNoiDung.removeAll();
-                panelNoiDung.add(new GiaoDienCaiDatTaiKhoan().$$$getRootComponent$$$());
+                try {
+                    panelNoiDung.add(new GiaoDienCaiDatTaiKhoan(taiKhoanService.finByID(giaoVien.getEmail())).$$$getRootComponent$$$());
+                } catch (MalformedURLException ex) {
+                    throw new RuntimeException(ex);
+                } catch (NotBoundException ex) {
+                    throw new RuntimeException(ex);
+                } catch (RemoteException ex) {
+                    throw new RuntimeException(ex);
+                }
                 panelNoiDung.revalidate();
                 panelNoiDung.repaint();
             }
@@ -129,6 +140,7 @@ public class GiaoDienMenuGiaoVien {
             @Override
             public void mouseClicked(MouseEvent e) {
                 panelNoiDung.removeAll();
+
                 try {
                     panelNoiDung.add(new GiaoDienDanhSachBaiThi(giaoVienDangNhap).$$$getRootComponent$$$());
                 } catch (MalformedURLException ex) {
@@ -138,6 +150,7 @@ public class GiaoDienMenuGiaoVien {
                 } catch (RemoteException ex) {
                     throw new RuntimeException(ex);
                 }
+
                 panelNoiDung.revalidate();
                 panelNoiDung.repaint();
             }
@@ -275,14 +288,14 @@ public class GiaoDienMenuGiaoVien {
         return panel1;
     }
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame();
-        frame.setContentPane(new GiaoDienMenuGiaoVien(new GiaoVien(0, "Minh", "abc@gmail,com", "0971770425", null, null)).$$$getRootComponent$$$());
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setLocationRelativeTo(null); // căn giữa màn hình
-        frame.setVisible(true);
-    }
+//    public static void main(String[] args) {
+//        JFrame frame = new JFrame();
+//        frame.setContentPane(new GiaoDienMenuGiaoVien(new GiaoVien(0, "Minh", "abc@gmail,com", "0971770425", null, null)).$$$getRootComponent$$$());
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.pack();
+//        frame.setLocationRelativeTo(null); // căn giữa màn hình
+//        frame.setVisible(true);
+//    }
 
     private void createUIComponents() {
         // TODO: place custom component creation code here

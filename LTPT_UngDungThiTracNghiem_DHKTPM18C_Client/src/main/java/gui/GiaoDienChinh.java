@@ -8,10 +8,13 @@ import service.MonHocService;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 
 public class GiaoDienChinh extends JPanel {
     private JPanel panel1;
-    public GiaoDienChinh(Object taiKhoan) {
+    public GiaoDienChinh(Object taiKhoan) throws MalformedURLException, NotBoundException, RemoteException {
         $$$setupUI$$$();
 
         panel1.setLayout(new BorderLayout());

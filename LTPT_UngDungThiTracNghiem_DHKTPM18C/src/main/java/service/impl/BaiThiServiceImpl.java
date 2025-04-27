@@ -26,4 +26,9 @@ public class BaiThiServiceImpl extends GenericServiceImpl<BaiThi, Integer> imple
         return baiThiDAO.layThongTinChiTietBaiThi(maBaiThi);
     }
 
+    @Override
+    public boolean delete(int maBaiThi) throws RemoteException {
+        return baiThiDAO.delete(maBaiThi);
+    }
+
 }

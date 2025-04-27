@@ -2,6 +2,7 @@ package gui;
 
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import entities.HocSinh;
+import service.TaiKhoanService;
 
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
@@ -9,6 +10,10 @@ import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.Locale;
 
 public class GiaoDienMenuHocSinh extends JPanel {
@@ -23,8 +28,8 @@ public class GiaoDienMenuHocSinh extends JPanel {
     private JLabel lbXemKetQua;
     private JLabel lbDanhSachBaiThi;
     private JPanel pnDangXuat;
-
-    public GiaoDienMenuHocSinh(HocSinh hocSinh) {
+    private TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://localhost:8081/taiKhoanService");
+    public GiaoDienMenuHocSinh(HocSinh hocSinh) throws MalformedURLException, NotBoundException, RemoteException {
         this.hocSinh = hocSinh;
         $$$setupUI$$$();
         lbTenHocSinh.setText(hocSinh.getHoTen());
@@ -54,7 +59,16 @@ public class GiaoDienMenuHocSinh extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 panelNoiDung.removeAll();
-                panelNoiDung.add(new GiaoDienCaiDatTaiKhoan().$$$getRootComponent$$$());
+                try {
+
+                    panelNoiDung.add(new GiaoDienCaiDatTaiKhoan(taiKhoanService.finByID(hocSinh.getEmail())).$$$getRootComponent$$$());
+                } catch (MalformedURLException ex) {
+                    throw new RuntimeException(ex);
+                } catch (NotBoundException ex) {
+                    throw new RuntimeException(ex);
+                } catch (RemoteException ex) {
+                    throw new RuntimeException(ex);
+                }
                 panelNoiDung.revalidate();
                 panelNoiDung.repaint();
             }

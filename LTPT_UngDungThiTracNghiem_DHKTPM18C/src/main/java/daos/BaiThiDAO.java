@@ -20,8 +20,6 @@ public class BaiThiDAO extends GenericDAO<BaiThi, Integer>{
     }
 
     public List<BaiThi> timDSBaiTHiTheoMaGiaoVien(int maGiaoVien) {
-
-
         String jpql = "SELECT DISTINCT bt FROM BaiThi bt " +
                 "JOIN FETCH bt.monHoc mh " +
                 "JOIN FETCH bt.danhSachCauHoi ch " +
