@@ -96,22 +96,25 @@ public class GiaoDienQuanLyChuDe extends JPanel {
         btnAdd.setIcon(FontIcon.of(BootstrapIcons.PLUS_CIRCLE, 18));
         btnAdd.addActionListener(e -> {
             String tenChuDe = JOptionPane.showInputDialog(this, "Nhập tên chủ đề:");
-            if (tenChuDe != null) {
-                ChuDe chuDe = new ChuDe();
-                chuDe.setTenChuDe(tenChuDe);
-                chuDe.setMonHoc(monHoc);
+            if (validateTenChuDe(tenChuDe)) {
                 try {
-                    chuDeService.save(chuDe);
+                    if(chuDeService.isDuplicate(tenChuDe.trim(), monHoc.getTenMon())) {
+                         JOptionPane.showMessageDialog(this, "Chủ đề này đã tồn tại!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                    } else {
+                         ChuDe newChuDe = new ChuDe();
+                         newChuDe.setTenChuDe(tenChuDe.trim());
+                         newChuDe.setMonHoc(monHoc);
+                         chuDeService.save(newChuDe);
+                         model.addRow(new Object[]{newChuDe.getMaChuDe(), newChuDe.getTenChuDe(), "", ""});
+                    }
                 } catch (RemoteException ex) {
                     throw new RuntimeException(ex);
                 }
-                try {
-                    chuDe = chuDeService.findByTenMonHocAndTenChuDe(monHoc.getTenMon(), tenChuDe);
-                } catch (RemoteException ex) {
-                    throw new RuntimeException(ex);
-                }
-                model.addRow(new Object[]{chuDe.getMaChuDe(), chuDe.getTenChuDe(), "", ""});
             }
+            else{
+                JOptionPane.showMessageDialog(this, "Tên chủ đề không hợp lệ!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            }
+
         });
         btnAdd.setBackground(new Color(51, 231, 166));
 
@@ -126,7 +129,7 @@ public class GiaoDienQuanLyChuDe extends JPanel {
         String current = (String) model.getValueAt(row, 1);
         ChuDe chuDe = chuDeService.findByTenMonHocAndTenChuDe(monHoc.getTenMon(), current);
         String updated = JOptionPane.showInputDialog(this, "Sửa tên chủ đề:", current);
-        if (updated != null && !updated.trim().isEmpty()) {
+        if (validateTenChuDe(updated) && !updated.trim().isEmpty()) {
             if( chuDeService.isDuplicate(updated.trim(), monHoc.getTenMon())) {
                 JOptionPane.showMessageDialog(this, "Chủ đề này đã tồn tại!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             } else{
@@ -134,6 +137,9 @@ public class GiaoDienQuanLyChuDe extends JPanel {
                 chuDeService.update(chuDe);
                 model.setValueAt(updated.trim(), row, 1);
             }
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "Tên chủ đề không hợp lệ!", "Thông báo", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -149,9 +155,19 @@ public class GiaoDienQuanLyChuDe extends JPanel {
                 "Bạn có chắc muốn xoá chủ đề này?", "Xác nhận xoá", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
                 chuDeService.delete(chuDe.getMaChuDe());
+                if (table.isEditing()) {
+                    table.getCellEditor().stopCellEditing();
+                }
                 model.removeRow(row);
             }
         }
+    }
+
+    public boolean validateTenChuDe(String tenChuDe) {
+        if (tenChuDe == null || tenChuDe.trim().isEmpty()) {
+            return false;
+        }
+        return tenChuDe.matches("^[\\p{L}\\d\\s,()_-]+$");
     }
 
     public static void main(String[] args) {
