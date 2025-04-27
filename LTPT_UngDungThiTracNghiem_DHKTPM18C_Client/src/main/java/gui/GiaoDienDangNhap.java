@@ -130,11 +130,11 @@ public class GiaoDienDangNhap {
         txtTenDangNhap.setCaretColor(new Color(-16777216));
         Font txtTenDangNhapFont = this.$$$getFont$$$("Consolas", -1, 22, txtTenDangNhap.getFont());
         if (txtTenDangNhapFont != null) txtTenDangNhap.setFont(txtTenDangNhapFont);
-        panel3.add(txtTenDangNhap, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        panel3.add(txtTenDangNhap, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(200, -1), null, 0, false));
         txtMatKhau.setCaretColor(new Color(-16777216));
         Font txtMatKhauFont = this.$$$getFont$$$("Consolas", -1, 22, txtMatKhau.getFont());
         if (txtMatKhauFont != null) txtMatKhau.setFont(txtMatKhauFont);
-        panel3.add(txtMatKhau, new GridConstraints(1, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        panel3.add(txtMatKhau, new GridConstraints(1, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(200, -1), null, 0, false));
         final Spacer spacer1 = new Spacer();
         panel3.add(spacer1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final Spacer spacer2 = new Spacer();
