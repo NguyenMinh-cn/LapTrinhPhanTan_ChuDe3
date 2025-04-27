@@ -108,15 +108,15 @@ public class PhienLamBaiDAO extends GenericDAO<PhienLamBai, String> {
         }
     }
 
-    public List<PhienLamBai> findByMaHocSinh(String maHocSinh) {
-        try {
-            String jpql = "SELECT plb FROM PhienLamBai plb WHERE plb.hocSinh.maHocSinh = :maHocSinh";
-            return em.createQuery(jpql, PhienLamBai.class)
-                    .setParameter("maHocSinh", maHocSinh)
-                    .getResultList();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
+   public List<PhienLamBai> findByMaHocSinh(long maHocSinh) {
+    try {
+        String jpql = "SELECT plb FROM PhienLamBai plb WHERE plb.hocSinh.maHocSinh = :maHocSinh";
+        return em.createQuery(jpql, PhienLamBai.class)
+                .setParameter("maHocSinh", maHocSinh)
+                .getResultList();
+    } catch (Exception e) {
+        e.printStackTrace();
+        return new ArrayList<>();
     }
+}
 }
