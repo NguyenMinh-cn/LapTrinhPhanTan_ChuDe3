@@ -75,12 +75,15 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
     private JPanel pnThongTinBaiThi;
     private JButton btnQuayLai3;
     private JPanel pnTTCT;
-    private CardLayout cardLayout;
+    private JButton btnXoaCauHoi;
+    private final CardLayout cardLayout;
     private CauHoiService cauHoiService;
-    private List<CauHoi> danhSachCauHoiDeLuu = new ArrayList<>();
-    private List<Lop> lopDaChon = new ArrayList<>();
-    private GiaoVien giaoVienDangNhap;
+    private final List<CauHoi> danhSachCauHoiDeLuu = new ArrayList<>();
+    private final List<Lop> lopDaChon = new ArrayList<>();
+    private final GiaoVien giaoVienDangNhap;
     private List<MonHoc> monHocList;
+    private CauHoi cauHoiDangChon = null;
+    private JButton btnCauHoiDangChon = null;
 
     //    private List<BaiThi> dsBaiThi;
     public static String chuyenDinhDangNgayGio(LocalDateTime localDateTime) {
@@ -214,8 +217,7 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
                 // Kiểm tra ít nhất 1 checkbox lớp được chọn
                 boolean coLopDuocChon = false;
                 for (Component comp : pnDSLop.getComponents()) {
-                    if (comp instanceof JCheckBox) {
-                        JCheckBox cb = (JCheckBox) comp;
+                    if (comp instanceof JCheckBox cb) {
                         if (cb.isSelected()) {
                             coLopDuocChon = true;
                             break;
@@ -355,6 +357,50 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
                 cardLayout.show(pnCard, "Card1");
             }
         });
+        btnXoaCauHoi.setIcon(FontIcon.of(MaterialDesign.MDI_DELETE, 16, new Color(193, 18, 31)));
+        btnXoaCauHoi.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int confirm = JOptionPane.showConfirmDialog(
+                        null,
+                        "Bạn có chắc muốn xóa câu hỏi này không?",
+                        "Xóa",
+                        JOptionPane.YES_NO_OPTION
+                );
+                if (confirm == JOptionPane.YES_OPTION) {
+                    if (cauHoiDangChon != null && btnCauHoiDangChon != null) {
+                        danhSachCauHoiDeLuu.remove(cauHoiDangChon);
+                        pnDSSoCauHoi.remove(btnCauHoiDangChon);
+                        pnChiTietNoiDungCauHoi.removeAll();
+                        pnChiTietNoiDungCauHoi.repaint();
+                        pnChiTietNoiDungCauHoi.revalidate();
+                        cauHoiDangChon = null;
+                        btnCauHoiDangChon = null;
+                        Component[] components = pnDSSoCauHoi.getComponents();
+                        for (int i = 0; i < components.length; i++) {
+                            if (components[i] instanceof JButton) {
+                                JButton button = (JButton) components[i];
+                                button.setText("Câu " + (i + 1));
+                            }
+                        }
+                        pnDSSoCauHoi.repaint();
+                        pnDSSoCauHoi.revalidate();
+                        System.out.println(danhSachCauHoiDeLuu);
+
+                    }
+                }
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+            }
+        });
     }
 
     private void taoPhanThemCauHoi() {
@@ -398,7 +444,7 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
 
         // Tạo panel dưới cùng để chứa nút "Thêm đáp án" và "Lưu đáp án", "Xóa câu hỏi"
         JPanel bottomPanel = new JPanel();
-        JButton btnXoaCauHoi = new JButton("Hủy câu hỏi");
+        JButton btnXoaCauHoi = new JButton("Hủy thêm câu hỏi");
         btnXoaCauHoi.setFont(new Font("Arial", Font.PLAIN, 18));
         btnXoaCauHoi.setBackground(new Color(135, 206, 235)); // Light blue
         btnXoaCauHoi.setForeground(Color.BLACK);
@@ -412,11 +458,12 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
             );
 
             if (confirm == JOptionPane.YES_OPTION) {
-//                danhSachCauHoiDeLuu;
-                pnNoiDungCauHoiVaDapAn.removeAll();
-                pnNoiDungCauHoiVaDapAn.repaint();
-                pnNoiDungCauHoiVaDapAn.revalidate();
-                btnThemCauHoi.setEnabled(true);
+                    pnNoiDungCauHoiVaDapAn.removeAll();
+                    pnNoiDungCauHoiVaDapAn.repaint();
+                    pnNoiDungCauHoiVaDapAn.revalidate();
+                    btnThemCauHoi.setEnabled(true);
+                    System.out.println(danhSachCauHoiDeLuu);
+
             }
         });
 
@@ -485,6 +532,8 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
             // Xử lý khi nhấn vào nút câu hỏi (xem lại)
             btnCauHoi.addActionListener(viewEvt -> {
 //                JOptionPane.showMessageDialog(null, cauHoi1.toString(), "Chi tiết câu hỏi", JOptionPane.INFORMATION_MESSAGE);
+                cauHoiDangChon = cauHoi1;
+                btnCauHoiDangChon = btnCauHoi;
                 //phần hiện câu hỏi
                 pnChiTietNoiDungCauHoi.removeAll();
                 pnChiTietNoiDungCauHoi.setLayout(new BoxLayout(pnChiTietNoiDungCauHoi, BoxLayout.Y_AXIS));
@@ -512,6 +561,7 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
                 pnChiTietNoiDungCauHoi.revalidate();
                 pnChiTietNoiDungCauHoi.repaint();
                 //phần chỉnh sửa nội dung
+
             });
             pnDSSoCauHoi.add(btnCauHoi);
             pnDSSoCauHoi.revalidate();
@@ -554,7 +604,6 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
             capNhatSoThuTu.run();
         };
 
-        // Thêm 3 đáp án đầu tiên
         for (int i = 0; i < 4; i++) {
             themDapAn.run();
         }
@@ -820,13 +869,22 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
         btnThemCHTuNganHangCH = new JButton();
         btnThemCHTuNganHangCH.setBackground(new Color(-16611119));
         btnThemCHTuNganHangCH.setFocusPainted(false);
-        btnThemCHTuNganHangCH.setFocusable(true);
+        btnThemCHTuNganHangCH.setFocusable(false);
         Font btnThemCHTuNganHangCHFont = this.$$$getFont$$$("Arial", Font.PLAIN, 18, btnThemCHTuNganHangCH.getFont());
         if (btnThemCHTuNganHangCHFont != null) btnThemCHTuNganHangCH.setFont(btnThemCHTuNganHangCHFont);
         btnThemCHTuNganHangCH.setForeground(new Color(-1));
         btnThemCHTuNganHangCH.setMargin(new Insets(5, 5, 5, 5));
         btnThemCHTuNganHangCH.setText("Thêm câu hỏi từ ngân hàng đề thi");
         panel10.add(btnThemCHTuNganHangCH);
+        final Spacer spacer6 = new Spacer();
+        panel10.add(spacer6);
+        btnXoaCauHoi = new JButton();
+        btnXoaCauHoi.setBackground(new Color(-727322));
+        Font btnXoaCauHoiFont = this.$$$getFont$$$("Arial", Font.PLAIN, 18, btnXoaCauHoi.getFont());
+        if (btnXoaCauHoiFont != null) btnXoaCauHoi.setFont(btnXoaCauHoiFont);
+        btnXoaCauHoi.setForeground(new Color(-4124129));
+        btnXoaCauHoi.setText("Xóa câu hỏi");
+        panel10.add(btnXoaCauHoi);
         pnChiTietNoiDungCauHoi = new JPanel();
         pnChiTietNoiDungCauHoi.setLayout(new BorderLayout(0, 0));
         pnChiTietNoiDungCauHoi.setBackground(new Color(-1));
@@ -854,8 +912,8 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
         btnHuongDan.setMargin(new Insets(5, 5, 5, 5));
         btnHuongDan.setText("Hướng dẫn");
         panel11.add(btnHuongDan, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final Spacer spacer6 = new Spacer();
-        panel11.add(spacer6, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final Spacer spacer7 = new Spacer();
+        panel11.add(spacer7, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         pnThongTinBaiThi = new JPanel();
         pnThongTinBaiThi.setLayout(new BorderLayout(0, 0));
         pnCard.add(pnThongTinBaiThi, "Card4");
@@ -872,8 +930,8 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
         btnQuayLai3.setMargin(new Insets(10, 10, 10, 10));
         btnQuayLai3.setText("Quay lại");
         panel12.add(btnQuayLai3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final Spacer spacer7 = new Spacer();
-        panel12.add(spacer7, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final Spacer spacer8 = new Spacer();
+        panel12.add(spacer8, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         pnTTCT = new JPanel();
         pnTTCT.setLayout(new BorderLayout(0, 0));
         pnThongTinBaiThi.add(pnTTCT, BorderLayout.CENTER);
@@ -1222,6 +1280,7 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
         frame.setSize(1000, 600);
         GiaoVienService giaoVienService = (GiaoVienService) Naming.lookup("rmi://localhost:8081/giaoVienService");
         GiaoVien giaoVien = giaoVienService.finByID(2);
+
         frame.setContentPane(new GiaoDienDanhSachBaiThi(giaoVien).$$$getRootComponent$$$());
         frame.setLocationRelativeTo(null); // căn giữa
         frame.setVisible(true);
