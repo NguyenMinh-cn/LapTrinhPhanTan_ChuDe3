@@ -121,6 +121,22 @@ public class PanelThoiGianThi {
     public LocalDateTime getEndDateTime() {
         return dtpEnd.getDateTimeStrict();
     }
+    public void setStartDateTime(LocalDateTime dateTime) {
+        if (dateTime != null) {
+            // Set the start date using the DatePicker component
+            dtpStart.getDatePicker().setDate(dateTime.toLocalDate());
+            dtpStart.getTimePicker().setTime(dateTime.toLocalTime());
+        }
+    }
+
+    public void setEndDateTime(LocalDateTime dateTime) {
+        if (dateTime != null) {
+            // Set the end date using the DatePicker component
+            dtpEnd.getDatePicker().setDate(dateTime.toLocalDate());
+            dtpEnd.getTimePicker().setTime(dateTime.toLocalTime());
+        }
+    }
+
 
 
 

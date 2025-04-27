@@ -27,6 +27,11 @@ public class BaiThiServiceImpl extends GenericServiceImpl<BaiThi, Integer> imple
     }
 
     @Override
+    public boolean delete(int maBaiThi) throws RemoteException {
+        return baiThiDAO.delete(maBaiThi);
+    }
+
+    @Override
     public List<BaiThi> getAllBaiThiForHocSinh(Long maHocSinh) throws RemoteException {
         return baiThiDAO.getAllBaiThiForHocSinh(maHocSinh);
     }
