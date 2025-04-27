@@ -36,5 +36,4 @@ public class BaiThiServiceImpl extends GenericServiceImpl<BaiThi, Integer> imple
         return baiThiDAO.getAllBaiThiForHocSinh(maHocSinh);
     }
 
-
 }
