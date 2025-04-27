@@ -21,8 +21,8 @@ public class HocSinh implements Serializable {
     @Id
     @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "maHocSinh", unique = true, nullable = false)
-    private long maHocSinh;
+    @Column(name = "maHocSinh", length = 15)
+    private String maHocSinh;
 
     @Column(columnDefinition = "varchar(60)", nullable = false)
     private String hoTen;
