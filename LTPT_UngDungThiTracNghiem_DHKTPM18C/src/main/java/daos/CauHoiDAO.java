@@ -126,4 +126,11 @@ public List<CauHoi> timCauHoiTheoMaBaiThi(int maBaiThi) {
         String jpql = "SELECT ch FROM CauHoi ch WHERE ch.chuDe IS NOT NULL";
         return em.createQuery(jpql, CauHoi.class).getResultList();
     }
+
+    public List<CauHoi> findByMon(String tenMon) {
+        String jpql = "SELECT ch FROM CauHoi ch WHERE ch.chuDe.monHoc.tenMon = :tenMon";
+        return em.createQuery(jpql, CauHoi.class)
+                .setParameter("tenMon", tenMon)
+                .getResultList();
+    }
 }

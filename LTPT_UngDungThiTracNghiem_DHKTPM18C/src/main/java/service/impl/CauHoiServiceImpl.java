@@ -47,4 +47,8 @@ public class CauHoiServiceImpl extends GenericServiceImpl<CauHoi, Integer> imple
         return cauHoiDAO.getCauHoiCoChuDe();
     }
 
+    @Override
+    public List<CauHoi> findByMon(String tenMon) throws RemoteException {
+        return cauHoiDAO.findByMon(tenMon);
+    }
 }

@@ -26,9 +26,9 @@ public class GiaoDienThemCauHoi extends JPanel {
     private JButton btnLuu, btnHuy;
     private JComboBox<String> cbMonHoc, cbChuDe;
 
-    private ChuDeService chuDeService = (ChuDeService) Naming.lookup("rmi://192.168.1.13:9090/chuDeService");
-    private CauHoiService cauHoiService = (CauHoiService) Naming.lookup("rmi://192.168.1.13:9090/cauHoiService");
-    private MonHocService monHocService = (MonHocService) Naming.lookup("rmi://192.168.1.13:9090/monHocService");
+    private ChuDeService chuDeService = (ChuDeService) Naming.lookup("rmi://192.168.1.13:8081/chuDeService");
+    private CauHoiService cauHoiService = (CauHoiService) Naming.lookup("rmi://192.168.1.13:8081/cauHoiService");
+    private MonHocService monHocService = (MonHocService) Naming.lookup("rmi://192.168.1.13:8081/monHocService");
     private JPanel mainPanel;
     private CauHoi cauHoi;
     public GiaoDienThemCauHoi(JPanel mainPanel, CauHoi cauHoi) throws MalformedURLException, NotBoundException, RemoteException {

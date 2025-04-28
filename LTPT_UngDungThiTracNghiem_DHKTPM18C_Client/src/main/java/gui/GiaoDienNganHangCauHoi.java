@@ -1,9 +1,12 @@
 package gui;
 import entities.CauHoi;
+import entities.MonHoc;
+import gui.custom.ButtonEditor;
 import gui.custom.ButtonRenderer;
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.swing.FontIcon;
 import service.CauHoiService;
+import service.MonHocService;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -16,14 +19,15 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.List;
-import gui.custom.ButtonEditor;
 
 public class GiaoDienNganHangCauHoi extends JPanel {
     private JPanel mainPanel; // Panel cha chứa các màn hình con
     private CauHoiService cauHoiService = (CauHoiService) Naming.lookup("rmi://192.168.1.13:8081/cauHoiService");
+    private MonHocService monHocService = (MonHocService) Naming.lookup("rmi://192.168.1.13:8081/monHocService");
     private JTable table;
     private DefaultTableModel model;
     private List<CauHoi> listCauHoi;
+    private JComboBox<String> comboBoxMonHoc;
 
     public GiaoDienNganHangCauHoi(JPanel mainPanel) throws MalformedURLException, NotBoundException, RemoteException {
         this.mainPanel = mainPanel;
@@ -34,16 +38,42 @@ public class GiaoDienNganHangCauHoi extends JPanel {
         setLayout(new BorderLayout());
 
         // Toolbar
-        JPanel toolbar = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        // Toolbar
+        JPanel toolbar = new JPanel(new BorderLayout());
         toolbar.setBackground(new Color(210, 234, 255));
         toolbar.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Panel trái: ComboBox chọn môn học
+        JPanel panelTrai = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panelTrai.setBackground(new Color(210, 234, 255));
+
+        comboBoxMonHoc = new JComboBox<>();
+        comboBoxMonHoc.setPreferredSize(new Dimension(350, 30));
+        comboBoxMonHoc.addItem("Tất cả"); // option mặc định
+
+        List<MonHoc> danhSachMonHoc = monHocService.getAll();
+        for (MonHoc mh : danhSachMonHoc) {
+            comboBoxMonHoc.addItem(mh.getTenMon());
+        }
+
+        panelTrai.add(new JLabel("Môn học: "));
+        panelTrai.add(comboBoxMonHoc);
+
+        // Panel phải: Nút Thêm câu hỏi
+        JPanel panelPhai = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panelPhai.setBackground(new Color(210, 234, 255));
 
         JButton btnThemCauHoi = new JButton("Thêm câu hỏi");
         btnThemCauHoi.setBackground(new Color(4, 117, 196));
         btnThemCauHoi.setForeground(Color.WHITE);
+        panelPhai.add(btnThemCauHoi);
 
-        toolbar.add(btnThemCauHoi);
+        // Add panel trái và phải vào toolbar
+        toolbar.add(panelTrai, BorderLayout.WEST);
+        toolbar.add(panelPhai, BorderLayout.EAST);
+
         add(toolbar, BorderLayout.NORTH);
+
 
         model = new DefaultTableModel(new Object[]{"STT", "Mã Câu Hỏi", "Nội dung", "Đáp án đúng", "Môn học", "Chủ đề", "Sửa", "Xoá"}, 0) {
             @Override
@@ -127,6 +157,23 @@ public class GiaoDienNganHangCauHoi extends JPanel {
                 mainPanel.repaint();
             }
         });
+
+        comboBoxMonHoc.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    String monHocChon = (String) comboBoxMonHoc.getSelectedItem();
+                    if (monHocChon.equals("Tất cả")) {
+                        loadCauHoi();
+                    } else {
+                        loadCauHoiTheoMon(monHocChon);
+                    }
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
     }
 
     private void suaCauHoi(int row) throws RemoteException, MalformedURLException, NotBoundException {
@@ -160,6 +207,17 @@ public class GiaoDienNganHangCauHoi extends JPanel {
     private void loadCauHoi() throws RemoteException {
         listCauHoi = cauHoiService.getCauHoiCoChuDe();
         model.setRowCount(0); // Xóa dữ liệu cũ
+        int stt = 1;
+        for (CauHoi ch : listCauHoi) {
+            model.addRow(new Object[]{stt, ch.getMaCauHoi(), ch.getNoiDung(), ch.getDapAnDung(), ch.getChuDe().getMonHoc().getTenMon(), ch.getChuDe().getTenChuDe()});
+            stt++;
+        }
+    }
+
+    private void loadCauHoiTheoMon(String tenMonHoc) throws RemoteException {
+        listCauHoi = cauHoiService.findByMon(tenMonHoc);
+        model.setRowCount(0); // Xoá bảng cũ
+
         int stt = 1;
         for (CauHoi ch : listCauHoi) {
             model.addRow(new Object[]{stt, ch.getMaCauHoi(), ch.getNoiDung(), ch.getDapAnDung(), ch.getChuDe().getMonHoc().getTenMon(), ch.getChuDe().getTenChuDe()});

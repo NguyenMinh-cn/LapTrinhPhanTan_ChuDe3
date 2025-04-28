@@ -13,4 +13,5 @@ public interface CauHoiService extends GenericService<CauHoi, Integer>{
     boolean inBaiThi(int maCauHoi) throws RemoteException;
     boolean inBaiThiDaDienRa(int maCauHoi) throws RemoteException;
     List<CauHoi> getCauHoiCoChuDe() throws RemoteException;
+    public List<CauHoi> findByMon(String tenMon) throws RemoteException;
 }
