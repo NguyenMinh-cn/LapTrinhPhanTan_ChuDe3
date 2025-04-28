@@ -1,17 +1,18 @@
 package gui.custom;
 
-import entities.BaiThi;
-import entities.CauHoi;
-import entities.Lop;
-import entities.PhienLamBai;
+import daos.PhienLamBaiDAO;
+import entities.*;
 import org.kordamp.ikonli.materialdesign.MaterialDesign;
 import org.kordamp.ikonli.swing.FontIcon;
 import service.BaiThiService;
 import service.CauHoiService;
+import service.PhienLamBaiService;
 
-import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.*;
 import java.awt.*;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -19,7 +20,9 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Giao diện hiển thị thông tin chi tiết của một bài thi
@@ -30,6 +33,7 @@ public class GiaoDienThongTinChiTietBaiThi extends JPanel {
     private CauHoiService cauHoiService = (CauHoiService) Naming.lookup("rmi://" + ipAddress + ":8081/cauHoiService");
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm, dd/MM/yyyy");
     private BaiThiService baiThiService = (BaiThiService) Naming.lookup("rmi://" + ipAddress + ":8081/baiThiService");
+    private PhienLamBaiService phienLamBaiService = (PhienLamBaiService) Naming.lookup("rmi://" + ipAddress + ":8081/phienLamBaiService");
 
     public GiaoDienThongTinChiTietBaiThi(BaiThi baiThi) throws MalformedURLException, NotBoundException, RemoteException {
         // Kiểm tra nếu baiThi là null
@@ -278,81 +282,228 @@ public class GiaoDienThongTinChiTietBaiThi extends JPanel {
         panel.add(label);
         panel.add(Box.createRigidArea(new Dimension(0, 5)));
     }
-
     private JPanel createLuotLamBaiPanel() {
+        // Tạo panel chính để chứa bảng, sử dụng BorderLayout để căn chỉnh dễ dàng
         JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(new EmptyBorder(20, 20, 20, 20));
-        panel.setBackground(Color.WHITE);
+        panel.setLayout(new BorderLayout());
+        panel.setBorder(new EmptyBorder(20, 20, 20, 20)); // Thêm khoảng cách viền 20px
+        panel.setBackground(Color.WHITE); // Nền trắng cho panel
 
-        // Kiểm tra nếu baiThi là null
+        // Kiểm tra nếu bài thi (baiThi) bị null
         if (baiThi == null) {
+            // Hiển thị thông báo lỗi nếu không có bài thi
             JLabel lblError = new JLabel("Không thể hiển thị thông tin lượt làm bài.", JLabel.CENTER);
-            lblError.setFont(new Font("Arial", Font.BOLD, 16));
-            lblError.setForeground(Color.RED);
-            panel.add(lblError);
+            lblError.setFont(new Font("Arial", Font.BOLD, 16)); // Font chữ Arial, đậm, cỡ 16
+            lblError.setForeground(Color.RED); // Chữ màu đỏ
+            panel.add(lblError, BorderLayout.CENTER); // Đặt thông báo ở giữa panel
             return panel;
         }
 
         try {
-            // Hiển thị thông tin lượt làm bài (có thể thêm code ở đây sau này)
-            JLabel lblInfo = new JLabel("Chức năng này đang được phát triển.", JLabel.CENTER);
-            lblInfo.setFont(new Font("Arial", Font.ITALIC, 16));
-            lblInfo.setAlignmentX(Component.CENTER_ALIGNMENT);
-            panel.add(lblInfo);
+            // Lấy danh sách lượt làm bài của bài thi qua PhienLamBaiService
+            List<PhienLamBai> phienLamBaiList = phienLamBaiService.layDanhSachPhienLamBaiVaCauTraLoiTheoBaiThi(baiThi.getMaBaiThi());
+
+            // Kiểm tra nếu danh sách lượt làm bài rỗng hoặc null
+            if (phienLamBaiList == null || phienLamBaiList.isEmpty()) {
+                // Hiển thị thông báo nếu chưa có lượt làm bài nào
+                JLabel lblNoData = new JLabel("Chưa có lượt làm bài nào.", JLabel.CENTER);
+                lblNoData.setFont(new Font("Arial", Font.ITALIC, 20)); // Font Arial, nghiêng, cỡ 20
+                lblNoData.setForeground(new Color(108, 117, 125)); // Màu xám nhạt
+                panel.add(lblNoData, BorderLayout.CENTER); // Đặt thông báo ở giữa
+                return panel;
+            }
+
+            // Nhóm các lượt làm bài theo mã học sinh để tính số lần làm bài
+            Map<Long, List<PhienLamBai>> attemptsByStudent = new HashMap<>();
+            for (PhienLamBai plb : phienLamBaiList) {
+                if (plb.getHocSinh() != null) {
+                    // Lấy mã học sinh từ đối tượng PhienLamBai
+                    long maHocSinh = plb.getHocSinh().getMaHocSinh();
+                    // Thêm lượt làm bài vào danh sách của học sinh, nếu chưa có thì tạo mới
+                    attemptsByStudent.computeIfAbsent(maHocSinh, k -> new ArrayList<>()).add(plb);
+                }
+            }
+
+            // Chuẩn bị dữ liệu cho bảng
+            List<Object[]> tableData = new ArrayList<>();
+            for (Map.Entry<Long, List<PhienLamBai>> entry : attemptsByStudent.entrySet()) {
+                // Lấy danh sách lượt làm bài của một học sinh
+                List<PhienLamBai> studentAttempts = entry.getValue();
+                // Lấy thông tin học sinh từ lượt làm bài đầu tiên
+                HocSinh hocSinh = studentAttempts.get(0).getHocSinh();
+                // Lấy tên học sinh, nếu null thì hiển thị "Không xác định"
+                String studentName = hocSinh.getHoTen() != null ? hocSinh.getHoTen() : "Không xác định";
+
+                // Tính số lần làm bài của học sinh
+                int attemptCount = studentAttempts.size();
+
+                // Thêm từng lượt làm bài vào dữ liệu bảng
+                for (int i = 0; i < studentAttempts.size(); i++) {
+                    PhienLamBai plb = studentAttempts.get(i);
+                    // Lấy điểm từ PhienLamBai
+                    double score = plb.getDiem();
+
+                    // Thêm một hàng dữ liệu vào bảng
+                    tableData.add(new Object[]{
+                            studentName, // Tên học sinh
+                            (i + 1), // Số thứ tự lượt làm (1, 2, ...)
+                            String.format("%.2f", score), // Điểm, định dạng 2 chữ số thập phân
+                            plb.getThoiGianBatDau() != null ? plb.getThoiGianBatDau().format(formatter) : "Không có", // Thời gian bắt đầu
+                            plb.getThoiGianKetThuc() != null ? plb.getThoiGianKetThuc().format(formatter) : "Không có", // Thời gian kết thúc
+                            attemptCount // Số lần làm bài
+                    });
+                }
+            }
+
+            // Định nghĩa các cột của bảng
+            String[] columnNames = {
+                    "Học Sinh",
+                    "Lượt Làm",
+                    "Điểm",
+                    "Thời Gian Bắt Đầu",
+                    "Thời Gian Kết Thúc",
+                    "Số Lần Làm"
+            };
+
+            // Tạo mô hình bảng với dữ liệu và tiêu đề cột
+            DefaultTableModel tableModel = new DefaultTableModel(tableData.toArray(new Object[0][]), columnNames) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false; // Không cho phép chỉnh sửa bảng
+                }
+            };
+
+            // Tạo bảng JTable
+            JTable table = new JTable(tableModel);
+            table.setBackground(Color.WHITE);
+            table.setFont(new Font("Arial", Font.PLAIN, 20)); // Font Arial, thường, cỡ 20
+            table.setRowHeight(30); // Chiều cao hàng 30px cho dễ đọc
+
+            table.setGridColor(new Color(200, 200, 200)); // Đường viền bảng màu xám nhạt
+            table.setShowGrid(true); // Hiển thị đường viền bảng
+            table.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer() {
+                {
+                    setOpaque(true);
+                    setBackground(new Color(33, 150, 243));
+                    setForeground(Color.WHITE);
+                    setFont(new Font("Arial", Font.BOLD, 20));
+                    setHorizontalAlignment(CENTER);
+                }
+            });
+            // Căn giữa tất cả các cột
+            DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+            centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+            for (int i = 0; i < table.getColumnCount(); i++) {
+                table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+            }
+
+            // Điều chỉnh chiều rộng cột cho phù hợp
+            table.getColumnModel().getColumn(0).setPreferredWidth(200); // Cột Tên Học Sinh
+            table.getColumnModel().getColumn(1).setPreferredWidth(100); // Cột Lượt Làm
+            table.getColumnModel().getColumn(2).setPreferredWidth(80);  // Cột Điểm
+            table.getColumnModel().getColumn(3).setPreferredWidth(200); // Cột Thời Gian Bắt Đầu
+            table.getColumnModel().getColumn(4).setPreferredWidth(200); // Cột Thời Gian Kết Thúc
+            table.getColumnModel().getColumn(5).setPreferredWidth(100); // Cột Số Lần Làm
+
+            // Đặt bảng vào thanh cuộn để hỗ trợ nhiều dữ liệu
+            JScrollPane scrollPane = new JScrollPane(table);
+            scrollPane.setBorder(BorderFactory.createTitledBorder(
+                    BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
+                    "Danh Sách Lượt Làm Bài", // Tiêu đề của bảng
+                    TitledBorder.LEFT, // Căn trái
+                    TitledBorder.TOP, // Đặt ở trên
+                    new Font("Arial", Font.BOLD, 18), // Font tiêu đề Arial, đậm, cỡ 18
+                    new Color(33, 150, 243) // Màu xanh cho tiêu đề
+            ));
+            scrollPane.setBackground(Color.WHITE);
+            // Thêm thanh cuộn vào panel chính
+            panel.add(scrollPane, BorderLayout.CENTER);
+            panel.setBackground(Color.WHITE);
         } catch (Exception e) {
+            // Xử lý lỗi nếu có, ví dụ: lỗi RMI hoặc kết nối
             e.printStackTrace();
             JLabel lblError = new JLabel("Lỗi khi hiển thị thông tin lượt làm bài: " + e.getMessage(), JLabel.CENTER);
-            lblError.setFont(new Font("Arial", Font.BOLD, 16));
-            lblError.setForeground(Color.RED);
-            panel.add(lblError);
+            lblError.setFont(new Font("Arial", Font.BOLD, 20)); // Font Arial, đậm, cỡ 20
+            lblError.setForeground(Color.RED); // Chữ màu đỏ
+            panel.add(lblError, BorderLayout.CENTER);
         }
-
+        panel.setBackground(Color.WHITE);
         return panel;
     }
-
-//    public static void main(String[] args) {
-//        try {
-//            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-//        } catch (Exception e) {
-//            e.printStackTrace();
+//    private JPanel createLuotLamBaiPanel() {
+//        JPanel panel = new JPanel();
+//        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+//        panel.setBorder(new EmptyBorder(20, 20, 20, 20));
+//        panel.setBackground(Color.WHITE);
+//
+//        // Kiểm tra nếu baiThi là null
+//        if (baiThi == null) {
+//            JLabel lblError = new JLabel("Không thể hiển thị thông tin lượt làm bài.", JLabel.CENTER);
+//            lblError.setFont(new Font("Arial", Font.BOLD, 16));
+//            lblError.setForeground(Color.RED);
+//            panel.add(lblError);
+//            return panel;
 //        }
 //
 //        try {
-//            BaiThiService baiThiService = (BaiThiService) Naming.lookup("rmi://192.168.1.13:8081/baiThiService");
-//            BaiThi baiThi1 = baiThiService.layThongTinChiTietBaiThi(10);
-//
-//            if (baiThi1 == null) {
-//                JOptionPane.showMessageDialog(null,
-//                    "Không tìm thấy bài thi với mã 9.",
-//                    "Lỗi", JOptionPane.ERROR_MESSAGE);
-//                return;
-//            }
-//
-//            final BaiThi finalBaiThi = baiThi1; // Create final copy for lambda
-//
-//            SwingUtilities.invokeLater(() -> {
-//                JFrame frame = new JFrame("Chi tiết bài thi");
-//                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//                frame.setSize(800, 700);
-//                frame.setLocationRelativeTo(null);
-//
-//                try {
-//                    frame.setContentPane(new GiaoDienThongTinChiTietBaiThi(finalBaiThi));
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                    JOptionPane.showMessageDialog(frame,
-//                        "Lỗi khi tạo giao diện: " + e.getMessage(),
-//                        "Lỗi", JOptionPane.ERROR_MESSAGE);
-//                }
-//
-//                frame.setVisible(true);
-//            });
+//            // Hiển thị thông tin lượt làm bài (có thể thêm code ở đây sau này)
+//            JLabel lblInfo = new JLabel("Chức năng này đang được phát triển.", JLabel.CENTER);
+//            lblInfo.setFont(new Font("Arial", Font.ITALIC, 16));
+//            lblInfo.setAlignmentX(Component.CENTER_ALIGNMENT);
+//            panel.add(lblInfo);
 //        } catch (Exception e) {
 //            e.printStackTrace();
-//            JOptionPane.showMessageDialog(null,
-//                "Lỗi khi kết nối đến server hoặc lấy thông tin bài thi: " + e.getMessage(),
-//                "Lỗi", JOptionPane.ERROR_MESSAGE);
+//            JLabel lblError = new JLabel("Lỗi khi hiển thị thông tin lượt làm bài: " + e.getMessage(), JLabel.CENTER);
+//            lblError.setFont(new Font("Arial", Font.BOLD, 16));
+//            lblError.setForeground(Color.RED);
+//            panel.add(lblError);
 //        }
+//
+//        return panel;
 //    }
+
+    public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            BaiThiService baiThiService = (BaiThiService) Naming.lookup("rmi://localhost:8081/baiThiService");
+            BaiThi baiThi1 = baiThiService.layThongTinBaiThiVaCauHoi(3);
+
+            if (baiThi1 == null) {
+                JOptionPane.showMessageDialog(null,
+                    "Không tìm thấy bài thi với mã 3.",
+                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            final BaiThi finalBaiThi = baiThi1; // Create final copy for lambda
+
+            SwingUtilities.invokeLater(() -> {
+                JFrame frame = new JFrame("Chi tiết bài thi");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setSize(800, 700);
+                frame.setLocationRelativeTo(null);
+
+                try {
+                    frame.setContentPane(new GiaoDienThongTinChiTietBaiThi(finalBaiThi));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(frame,
+                        "Lỗi khi tạo giao diện: " + e.getMessage(),
+                        "Lỗi", JOptionPane.ERROR_MESSAGE);
+                }
+
+                frame.setVisible(true);
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                "Lỗi khi kết nối đến server hoặc lấy thông tin bài thi: " + e.getMessage(),
+                "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 }
