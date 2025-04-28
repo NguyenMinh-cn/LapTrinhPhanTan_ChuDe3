@@ -78,20 +78,6 @@
                   <text value="Danh sách đề thi"/>
                 </properties>
               </component>
-              <component id="c13de" class="javax.swing.JLabel" binding="lbLopHocTap">
-                <constraints/>
-                <properties>
-                  <alignmentX value="0.2"/>
-                  <background color="-3543049"/>
-                  <font name="Arial" size="20" style="0"/>
-                  <foreground color="-16777216"/>
-                  <horizontalAlignment value="2"/>
-                  <horizontalTextPosition value="0"/>
-                  <opaque value="true"/>
-                  <preferredSize width="200" height="30"/>
-                  <text value="Lớp học tập"/>
-                </properties>
-              </component>
               <component id="e881" class="javax.swing.JLabel" binding="lbCaiDatTaiKhoan">
                 <constraints/>
                 <properties>

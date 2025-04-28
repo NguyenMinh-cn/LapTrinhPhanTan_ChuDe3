@@ -24,7 +24,6 @@ public class GiaoDienMenuGiaoVien {
     private JLabel lbTenGiaoVien;
     private JLabel lbNganHangCauHoi;
     private JLabel lbDSDeThi;
-    private JLabel lbLopHocTap;
     private JLabel lbCaiDatTaiKhoan;
     private JLabel lbDangXuat;
     private JLabel selectedLabel = null;
@@ -134,7 +133,6 @@ public class GiaoDienMenuGiaoVien {
 
         lbNganHangCauHoi.addMouseListener(listener);
         lbDSDeThi.addMouseListener(listener);
-        lbLopHocTap.addMouseListener(listener);
         lbCaiDatTaiKhoan.addMouseListener(listener);
         lbDSDeThi.addMouseListener(new MouseAdapter() {
             @Override
@@ -265,18 +263,6 @@ public class GiaoDienMenuGiaoVien {
         lbDSDeThi.setPreferredSize(new Dimension(200, 30));
         lbDSDeThi.setText("Danh sách đề thi");
         panel3.add(lbDSDeThi);
-        lbLopHocTap = new JLabel();
-        lbLopHocTap.setAlignmentX(0.2f);
-        lbLopHocTap.setBackground(new Color(-3543049));
-        Font lbLopHocTapFont = this.$$$getFont$$$("Arial", Font.PLAIN, 20, lbLopHocTap.getFont());
-        if (lbLopHocTapFont != null) lbLopHocTap.setFont(lbLopHocTapFont);
-        lbLopHocTap.setForeground(new Color(-16777216));
-        lbLopHocTap.setHorizontalAlignment(2);
-        lbLopHocTap.setHorizontalTextPosition(0);
-        lbLopHocTap.setOpaque(true);
-        lbLopHocTap.setPreferredSize(new Dimension(200, 30));
-        lbLopHocTap.setText("Lớp học tập");
-        panel3.add(lbLopHocTap);
         lbCaiDatTaiKhoan = new JLabel();
         lbCaiDatTaiKhoan.setAlignmentX(0.2f);
         lbCaiDatTaiKhoan.setBackground(new Color(-3543049));

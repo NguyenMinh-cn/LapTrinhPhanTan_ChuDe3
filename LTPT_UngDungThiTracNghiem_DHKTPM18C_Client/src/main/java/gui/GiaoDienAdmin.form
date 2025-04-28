@@ -61,14 +61,6 @@
                   <text value="   Lớp học"/>
                 </properties>
               </component>
-              <component id="92c0b" class="javax.swing.JLabel" binding="chucNangMonHoc">
-                <constraints/>
-                <properties>
-                  <font name="Arial" size="20" style="0"/>
-                  <preferredSize width="200" height="19"/>
-                  <text value="   Môn học"/>
-                </properties>
-              </component>
             </children>
           </grid>
         </children>

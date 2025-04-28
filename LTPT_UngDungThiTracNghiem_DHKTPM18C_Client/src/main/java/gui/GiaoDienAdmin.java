@@ -20,7 +20,6 @@ public class GiaoDienAdmin {
     private JPanel pnNoiDung;
     private JLabel chucNangTK;
     private JLabel chucNangLopHoc;
-    private JLabel chucNangMonHoc;
     private JLabel lbDangXuat;
     private JLabel selectedLabel;
 
@@ -65,7 +64,6 @@ public class GiaoDienAdmin {
         };
         chucNangTK.addMouseListener(listener);
         chucNangLopHoc.addMouseListener(listener);
-        chucNangMonHoc.addMouseListener(listener);
         lbDangXuat.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -207,12 +205,6 @@ public class GiaoDienAdmin {
         chucNangLopHoc.setPreferredSize(new Dimension(200, 19));
         chucNangLopHoc.setText("   Lớp học");
         panel3.add(chucNangLopHoc);
-        chucNangMonHoc = new JLabel();
-        Font chucNangMonHocFont = this.$$$getFont$$$("Arial", Font.PLAIN, 20, chucNangMonHoc.getFont());
-        if (chucNangMonHocFont != null) chucNangMonHoc.setFont(chucNangMonHocFont);
-        chucNangMonHoc.setPreferredSize(new Dimension(200, 19));
-        chucNangMonHoc.setText("   Môn học");
-        panel3.add(chucNangMonHoc);
         pnNoiDung = new JPanel();
         pnNoiDung.setLayout(new BorderLayout(0, 0));
         pnNoiDung.setBackground(new Color(-1));
