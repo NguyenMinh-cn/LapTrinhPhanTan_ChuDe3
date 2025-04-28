@@ -33,4 +33,18 @@ public class CauHoiServiceImpl extends GenericServiceImpl<CauHoi, Integer> imple
     public List<CauHoi> luuNhieuVaTraVeMa(List<CauHoi> danhSachCauHoi) throws RemoteException{
         return cauHoiDAO.luuNhieuVaTraVeMa(danhSachCauHoi);
     }
+    public boolean inBaiThi(int maCauHoi) throws RemoteException {
+        return cauHoiDAO.inBaiThi(maCauHoi);
+    }
+
+    @Override
+    public boolean inBaiThiDaDienRa(int maCauHoi) throws RemoteException {
+        return cauHoiDAO.inBaiThiDaDienRa(maCauHoi);
+    }
+
+    @Override
+    public List<CauHoi> getCauHoiCoChuDe() throws RemoteException {
+        return cauHoiDAO.getCauHoiCoChuDe();
+    }
+
 }

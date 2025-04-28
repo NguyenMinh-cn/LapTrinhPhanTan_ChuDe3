@@ -16,6 +16,10 @@ public class MonHocServiceImpl extends GenericServiceImpl<MonHoc, Integer> imple
         this.monHocDAO = monHocDAO;
     }
 
+    @Override
+    public MonHoc findByTenMon(String tenMon) throws RemoteException {
+        return monHocDAO.findByTenMon(tenMon);
+    }
 
     @Override
     public boolean update(MonHoc monHoc) throws RemoteException {
