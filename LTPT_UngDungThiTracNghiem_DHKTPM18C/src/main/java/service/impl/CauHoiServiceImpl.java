@@ -5,6 +5,7 @@ import entities.CauHoi;
 import service.CauHoiService;
 
 import java.rmi.RemoteException;
+import java.util.List;
 
 public class CauHoiServiceImpl extends GenericServiceImpl<CauHoi, Integer> implements CauHoiService {
     private CauHoiDAO cauHoiDAO;
@@ -21,6 +22,11 @@ public class CauHoiServiceImpl extends GenericServiceImpl<CauHoi, Integer> imple
     @Override
     public boolean inBaiThiDaDienRa(int maCauHoi) throws RemoteException {
         return cauHoiDAO.inBaiThiDaDienRa(maCauHoi);
+    }
+
+    @Override
+    public List<CauHoi> getCauHoiCoChuDe() throws RemoteException {
+        return cauHoiDAO.getCauHoiCoChuDe();
     }
 
 }

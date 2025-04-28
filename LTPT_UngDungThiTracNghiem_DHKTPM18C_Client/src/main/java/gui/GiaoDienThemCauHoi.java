@@ -34,6 +34,10 @@ public class GiaoDienThemCauHoi extends JPanel {
         this.mainPanel = mainPanel;
         this.cauHoi = cauHoi;
 
+        if (this.cauHoi == null) {
+            this.cauHoi = new CauHoi(); // Tạo mới nếu không truyền vào
+        }
+
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
@@ -198,7 +202,6 @@ public class GiaoDienThemCauHoi extends JPanel {
                 String selectedChuDe = cbChuDe.getSelectedItem().toString();
                 String selectedMonHoc = cbMonHoc.getSelectedItem().toString();
                 ChuDe chuDe = chuDeService.findByTenMonHocAndTenChuDe(selectedMonHoc, selectedChuDe);
-
 
                 List<String> dsDapAn = new ArrayList<>();
                 dsDapAn.add(dapAnDung);

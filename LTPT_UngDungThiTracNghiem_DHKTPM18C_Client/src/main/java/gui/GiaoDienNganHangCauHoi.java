@@ -43,10 +43,10 @@ public class GiaoDienNganHangCauHoi extends JPanel {
         toolbar.add(btnThemCauHoi);
         add(toolbar, BorderLayout.NORTH);
 
-        model = new DefaultTableModel(new Object[]{"STT", "Nội dung", "Đáp án đúng", "Môn học", "Chủ đề", "Sửa", "Xoá"}, 0) {
+        model = new DefaultTableModel(new Object[]{"STT", "Mã Câu Hỏi", "Nội dung", "Đáp án đúng", "Môn học", "Chủ đề", "Sửa", "Xoá"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column >= 5; // chỉ cột "Sửa" và "Xoá" được click
+                return column >= 6; // Sửa, Xoá mới được click
             }
         };
 
@@ -54,18 +54,22 @@ public class GiaoDienNganHangCauHoi extends JPanel {
         table.setRowHeight(36);
 
         table.getColumnModel().getColumn(0).setPreferredWidth(2); //Cột STT
-        table.getColumnModel().getColumn(1).setPreferredWidth(400); // Cột "Nội dung"
-        table.getColumnModel().getColumn(2).setPreferredWidth(150); // Cột "Đáp án đúng"
-        table.getColumnModel().getColumn(3).setPreferredWidth(50); // Cột "Môn học"
-        table.getColumnModel().getColumn(4).setPreferredWidth(50); // Cột "Chủ đề"
-        table.getColumnModel().getColumn(5).setPreferredWidth(5); // Cột "Sửa"
-        table.getColumnModel().getColumn(6).setPreferredWidth(5); // Cột "Xoá"
+        // Ẩn cột Mã Câu Hỏi
+        table.getColumnModel().getColumn(1).setMinWidth(0);
+        table.getColumnModel().getColumn(1).setMaxWidth(0);
+        table.getColumnModel().getColumn(1).setWidth(0);
+        table.getColumnModel().getColumn(2).setPreferredWidth(400); // Cột "Nội dung"
+        table.getColumnModel().getColumn(3).setPreferredWidth(150); // Cột "Đáp án đúng"
+        table.getColumnModel().getColumn(4).setPreferredWidth(50); // Cột "Môn học"
+        table.getColumnModel().getColumn(5).setPreferredWidth(50); // Cột "Chủ đề"
+        table.getColumnModel().getColumn(6).setPreferredWidth(5); // Cột "Sửa"
+        table.getColumnModel().getColumn(7).setPreferredWidth(5); // Cột "Xoá"
 
         // Áp dụng render cho phép xuống dòng trong ô
-        table.getColumnModel().getColumn(1).setCellRenderer(new MultiLineTableCellRenderer());
         table.getColumnModel().getColumn(2).setCellRenderer(new MultiLineTableCellRenderer());
         table.getColumnModel().getColumn(3).setCellRenderer(new MultiLineTableCellRenderer());
         table.getColumnModel().getColumn(4).setCellRenderer(new MultiLineTableCellRenderer());
+        table.getColumnModel().getColumn(5).setCellRenderer(new MultiLineTableCellRenderer());
 
         FontIcon iconEdit = FontIcon.of(BootstrapIcons.PENCIL, 18, Color.BLUE);
         FontIcon iconDelete = FontIcon.of(BootstrapIcons.TRASH, 18, Color.RED);
@@ -102,14 +106,6 @@ public class GiaoDienNganHangCauHoi extends JPanel {
         // Load dữ liệu vào bảng
         loadCauHoi();
         adjustRowHeights(table);
-//        List<CauHoi> listCauHoi = cauHoiService.getAll();
-//        for (CauHoi ch : listCauHoi) {
-//            if(ch.getChuDe() != null){
-//                model.addRow(new Object[]{ch.getMaCauHoi(), ch.getNoiDung(), ch.getDapAnDung(), ch.getChuDe().getMonHoc().getTenMon(), ch.getChuDe().getTenChuDe()});
-//            }else{
-//                model.addRow(new Object[]{ch.getMaCauHoi(), ch.getNoiDung(), ch.getDapAnDung(), "Chưa có môn học", "Chưa có chủ đề"});
-//            }
-//        }
 
         // Sự kiện nút Thêm câu hỏi
         btnThemCauHoi.addActionListener(new ActionListener() {
@@ -132,8 +128,9 @@ public class GiaoDienNganHangCauHoi extends JPanel {
     }
 
     private void suaCauHoi(int row) throws RemoteException, MalformedURLException, NotBoundException {
-        int stt = (int) model.getValueAt(row, 0);
-        CauHoi cauHoi = cauHoiService.finByID((int) listCauHoi.get(stt-1).getMaCauHoi());
+        long maCauHoi = (long) model.getValueAt(row, 1); // lấy từ cột 1: Mã Câu Hỏi
+        int maCauHoiInt = (int) maCauHoi;
+        CauHoi cauHoi = cauHoiService.finByID(maCauHoiInt);
         mainPanel.removeAll();
         mainPanel.add(new GiaoDienThemCauHoi(mainPanel, cauHoi));
         mainPanel.revalidate();
@@ -141,39 +138,36 @@ public class GiaoDienNganHangCauHoi extends JPanel {
     }
 
     private void xoaCauHoi(int row) throws RemoteException {
-        long maCauHoi = (long) model.getValueAt(row, 1);
-        int maCaCauHoiInt = (int) maCauHoi;
+        if (table.isEditing()) {
+            table.getCellEditor().stopCellEditing();
+        }
+        long maCauHoi = (long) model.getValueAt(row, 1); // lấy từ cột 1: Mã Câu Hỏi
+        int maCauHoiInt = (int) maCauHoi;
         int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xoá câu hỏi này không?", "Xoá câu hỏi", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
-            if(cauHoiService.inBaiThiDaDienRa(maCaCauHoiInt)){
-                JOptionPane.showMessageDialog(this, "Câu hỏi này đã được sử dụng trong bài thi đã diễn ra, không thể xoá!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            if(cauHoiService.inBaiThi(maCauHoiInt)){
+                JOptionPane.showMessageDialog(this, "Câu hỏi này đã được sử dụng trong bài thi, không thể xoá!", "Thông báo", JOptionPane.WARNING_MESSAGE);
             }else {
-                cauHoiService.delete(maCaCauHoiInt);
+                cauHoiService.delete(maCauHoiInt);
                 loadCauHoi();
-                adjustRowHeights(table);
                 JOptionPane.showMessageDialog(this, "Xoá câu hỏi thành công!");
             }
         }
     }
 
     private void loadCauHoi() throws RemoteException {
-        listCauHoi = cauHoiService.getAll();
+        listCauHoi = cauHoiService.getCauHoiCoChuDe();
         model.setRowCount(0); // Xóa dữ liệu cũ
         int stt = 1;
         for (CauHoi ch : listCauHoi) {
-            if(ch.getChuDe() != null){
-                model.addRow(new Object[]{stt, ch.getNoiDung(), ch.getDapAnDung(), ch.getChuDe().getMonHoc().getTenMon(), ch.getChuDe().getTenChuDe()});
-                stt++;
-            }else{
-                model.addRow(new Object[]{stt, ch.getNoiDung(), ch.getDapAnDung(), "Chưa có môn học", "Chưa có chủ đề"});
-                stt++;
-            }
+            model.addRow(new Object[]{stt, ch.getMaCauHoi(), ch.getNoiDung(), ch.getDapAnDung(), ch.getChuDe().getMonHoc().getTenMon(), ch.getChuDe().getTenChuDe()});
+            stt++;
         }
     }
 
     private void adjustRowHeights(JTable table) {
         for (int row = 0; row < table.getRowCount(); row++) {
-            int maxHeight = table.getRowHeight();
+            int maxHeight = table.getRowHeight(row);
 
             for (int column = 0; column < table.getColumnCount(); column++) {
                 TableCellRenderer cellRenderer = table.getCellRenderer(row, column);

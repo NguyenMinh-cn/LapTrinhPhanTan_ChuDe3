@@ -17,12 +17,13 @@ public class CauHoiDAO extends GenericDAO<CauHoi, Integer>{
 
     //Kiểm tra câu hỏi có trong bài thi (BaiThi) hay không
     public boolean inBaiThi(int maCauHoi) {
-        String jpql = "SELECT COUNT(bt) FROM BaiThi bt WHERE :maCauHoi MEMBER OF bt.danhSachCauHoi";
+        String jpql = "SELECT COUNT(bt) FROM BaiThi bt JOIN bt.danhSachCauHoi ch WHERE ch.maCauHoi = :maCauHoi";
         Long count = em.createQuery(jpql, Long.class)
                 .setParameter("maCauHoi", maCauHoi)
                 .getSingleResult();
         return count > 0;
     }
+
 
     //Câu hỏi trong bài thi đã diễn ra (đã qua thoiGianBatDau)
     public boolean inBaiThiDaDienRa(int maCauHoi) {
@@ -31,5 +32,11 @@ public class CauHoiDAO extends GenericDAO<CauHoi, Integer>{
                 .setParameter("maCauHoi", maCauHoi)
                 .getSingleResult();
         return count > 0;
+    }
+
+    //Lấy danh sách câu hỏi có chủ đề chủ đề (chủ đề không null)
+    public List<CauHoi> getCauHoiCoChuDe() {
+        String jpql = "SELECT ch FROM CauHoi ch WHERE ch.chuDe IS NOT NULL";
+        return em.createQuery(jpql, CauHoi.class).getResultList();
     }
 }
