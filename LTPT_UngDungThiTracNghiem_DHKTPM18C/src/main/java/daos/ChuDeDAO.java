@@ -3,6 +3,7 @@ package daos;
 import entities.ChuDe;
 import entities.MonHoc;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import util.JPAUtil;
 
 import java.rmi.RemoteException;
@@ -26,11 +27,15 @@ public class ChuDeDAO extends GenericDAO<ChuDe, Integer> {
 
     //tìm theo tên môn học và tên chủ đề
     public ChuDe findByTenMonHocAndTenChuDe(String tenMon, String tenChuDe) {
-        String jpql = "SELECT cd FROM ChuDe cd WHERE cd.monHoc.tenMon = :tenMon AND cd.tenChuDe = :tenChuDe";
-        return em.createQuery(jpql, ChuDe.class)
-                .setParameter("tenMon", tenMon)
-                .setParameter("tenChuDe", tenChuDe)
-                .getSingleResult();
+        try{
+            String jpql = "SELECT cd FROM ChuDe cd WHERE cd.monHoc.tenMon = :tenMon AND cd.tenChuDe = :tenChuDe";
+            return em.createQuery(jpql, ChuDe.class)
+                    .setParameter("tenMon", tenMon)
+                    .setParameter("tenChuDe", tenChuDe)
+                    .getSingleResult();
+        }catch (NoResultException e) {
+            return null; // Không tìm thấy, return null
+        }
     }
 
     //Kiểm tra chủ đề có chứa câu hỏi hay không

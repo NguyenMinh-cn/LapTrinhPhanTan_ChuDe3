@@ -21,6 +21,7 @@ public class GiaoDienNganHangCauHoi extends JPanel {
     private CauHoiService cauHoiService = (CauHoiService) Naming.lookup("rmi://localhost:9090/cauHoiService");
     private JTable table;
     private DefaultTableModel model;
+    private List<CauHoi> listCauHoi;
 
     public GiaoDienNganHangCauHoi(JPanel mainPanel) throws MalformedURLException, NotBoundException, RemoteException {
         this.mainPanel = mainPanel;
@@ -42,7 +43,7 @@ public class GiaoDienNganHangCauHoi extends JPanel {
         toolbar.add(btnThemCauHoi);
         add(toolbar, BorderLayout.NORTH);
 
-        model = new DefaultTableModel(new Object[]{"STT", "Mã", "Nội dung", "Đáp án đúng", "Môn học", "Chủ đề", "Sửa", "Xoá"}, 0) {
+        model = new DefaultTableModel(new Object[]{"STT", "Nội dung", "Đáp án đúng", "Môn học", "Chủ đề", "Sửa", "Xoá"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return column >= 5; // chỉ cột "Sửa" và "Xoá" được click
@@ -53,19 +54,18 @@ public class GiaoDienNganHangCauHoi extends JPanel {
         table.setRowHeight(36);
 
         table.getColumnModel().getColumn(0).setPreferredWidth(2); //Cột STT
-        table.getColumnModel().getColumn(1).setPreferredWidth(2); //// Cột "Mã câu hỏi"
-        table.getColumnModel().getColumn(2).setPreferredWidth(400); // Cột "Nội dung"
-        table.getColumnModel().getColumn(3).setPreferredWidth(150); // Cột "Đáp án đúng"
-        table.getColumnModel().getColumn(4).setPreferredWidth(50); // Cột "Môn học"
-        table.getColumnModel().getColumn(5).setPreferredWidth(50); // Cột "Chủ đề"
-        table.getColumnModel().getColumn(6).setPreferredWidth(5); // Cột "Sửa"
-        table.getColumnModel().getColumn(7).setPreferredWidth(5); // Cột "Xoá"
+        table.getColumnModel().getColumn(1).setPreferredWidth(400); // Cột "Nội dung"
+        table.getColumnModel().getColumn(2).setPreferredWidth(150); // Cột "Đáp án đúng"
+        table.getColumnModel().getColumn(3).setPreferredWidth(50); // Cột "Môn học"
+        table.getColumnModel().getColumn(4).setPreferredWidth(50); // Cột "Chủ đề"
+        table.getColumnModel().getColumn(5).setPreferredWidth(5); // Cột "Sửa"
+        table.getColumnModel().getColumn(6).setPreferredWidth(5); // Cột "Xoá"
 
         // Áp dụng render cho phép xuống dòng trong ô
+        table.getColumnModel().getColumn(1).setCellRenderer(new MultiLineTableCellRenderer());
         table.getColumnModel().getColumn(2).setCellRenderer(new MultiLineTableCellRenderer());
         table.getColumnModel().getColumn(3).setCellRenderer(new MultiLineTableCellRenderer());
         table.getColumnModel().getColumn(4).setCellRenderer(new MultiLineTableCellRenderer());
-        table.getColumnModel().getColumn(5).setCellRenderer(new MultiLineTableCellRenderer());
 
         FontIcon iconEdit = FontIcon.of(BootstrapIcons.PENCIL, 18, Color.BLUE);
         FontIcon iconDelete = FontIcon.of(BootstrapIcons.TRASH, 18, Color.RED);
@@ -132,9 +132,8 @@ public class GiaoDienNganHangCauHoi extends JPanel {
     }
 
     private void suaCauHoi(int row) throws RemoteException, MalformedURLException, NotBoundException {
-        long maCauHoi = (long) model.getValueAt(row, 1);
-        int maCaCauHoiInt = (int) maCauHoi;
-        CauHoi cauHoi = cauHoiService.finByID(maCaCauHoiInt);
+        int stt = (int) model.getValueAt(row, 0);
+        CauHoi cauHoi = cauHoiService.finByID((int) listCauHoi.get(stt-1).getMaCauHoi());
         mainPanel.removeAll();
         mainPanel.add(new GiaoDienThemCauHoi(mainPanel, cauHoi));
         mainPanel.revalidate();
@@ -158,15 +157,15 @@ public class GiaoDienNganHangCauHoi extends JPanel {
     }
 
     private void loadCauHoi() throws RemoteException {
-        List<CauHoi> listCauHoi = cauHoiService.getAll();
+        listCauHoi = cauHoiService.getAll();
         model.setRowCount(0); // Xóa dữ liệu cũ
         int stt = 1;
         for (CauHoi ch : listCauHoi) {
             if(ch.getChuDe() != null){
-                model.addRow(new Object[]{stt, ch.getMaCauHoi(), ch.getNoiDung(), ch.getDapAnDung(), ch.getChuDe().getMonHoc().getTenMon(), ch.getChuDe().getTenChuDe()});
+                model.addRow(new Object[]{stt, ch.getNoiDung(), ch.getDapAnDung(), ch.getChuDe().getMonHoc().getTenMon(), ch.getChuDe().getTenChuDe()});
                 stt++;
             }else{
-                model.addRow(new Object[]{stt, ch.getMaCauHoi(), ch.getNoiDung(), ch.getDapAnDung(), "Chưa có môn học", "Chưa có chủ đề"});
+                model.addRow(new Object[]{stt, ch.getNoiDung(), ch.getDapAnDung(), "Chưa có môn học", "Chưa có chủ đề"});
                 stt++;
             }
         }

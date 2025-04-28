@@ -17,6 +17,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class GiaoDienThemCauHoi extends JPanel {
 
@@ -107,13 +108,14 @@ public class GiaoDienThemCauHoi extends JPanel {
             txtDapAnSai1.setText(dsDapAnSai.get(0));
             txtDapAnSai2.setText(dsDapAnSai.get(1));
             txtDapAnSai3.setText(dsDapAnSai.get(2));
-            if(cauHoi.getChuDe() != null) {
+//            if(cauHoi.getChuDe() != null) {
                 cbMonHoc.setSelectedItem(cauHoi.getChuDe().getMonHoc().getTenMon());
+                loadChuDe();
                 cbChuDe.setSelectedItem(cauHoi.getChuDe().getTenChuDe());
-            } else {
-                cbMonHoc.setSelectedItem(null);
-                cbChuDe.setSelectedItem(null);
-            }
+//            } else {
+//                cbMonHoc.setSelectedItem(null);
+//                cbChuDe.setSelectedItem(null);
+//            }
         }
 
         String[] labels = {"Đáp án đúng", "Đáp án sai", "Đáp án sai", "Đáp án sai"};
@@ -195,8 +197,8 @@ public class GiaoDienThemCauHoi extends JPanel {
             } else {
                 String selectedChuDe = cbChuDe.getSelectedItem().toString();
                 String selectedMonHoc = cbMonHoc.getSelectedItem().toString();
-
                 ChuDe chuDe = chuDeService.findByTenMonHocAndTenChuDe(selectedMonHoc, selectedChuDe);
+
 
                 List<String> dsDapAn = new ArrayList<>();
                 dsDapAn.add(dapAnDung);
