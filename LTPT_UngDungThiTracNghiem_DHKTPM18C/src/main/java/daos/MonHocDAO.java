@@ -6,6 +6,8 @@ import jakarta.persistence.EntityTransaction;
 
 import java.util.List;
 
+import java.rmi.RemoteException;
+
 public class MonHocDAO extends GenericDAO<MonHoc, Integer> {
 
     public MonHocDAO(Class<MonHoc> clazz) {
@@ -15,6 +17,7 @@ public class MonHocDAO extends GenericDAO<MonHoc, Integer> {
     public MonHocDAO(EntityManager em, Class<MonHoc> clazz) {
         super(em, clazz);
     }
+
 
 //    public boolean save(MonHoc monHoc) {
 //        EntityTransaction transaction = em.getTransaction();
@@ -31,28 +34,7 @@ public class MonHocDAO extends GenericDAO<MonHoc, Integer> {
 //            return false;
 //        }
 //    }
-    public boolean save(MonHoc monHoc){
-        EntityTransaction tr = em.getTransaction();
-        try{
-            tr.begin();
-            em.persist(monHoc);
-            tr.commit();
-            return true;
-        }catch (Exception ex){
-            if(tr.isActive())
-                tr.rollback();
-            throw new RuntimeException(ex.getMessage(), ex);
-        }
-    }
 
-    public List<MonHoc> getAllMonHoc() {
-        try {
-            return em.createQuery("SELECT m FROM MonHoc m", MonHoc.class).getResultList();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
     public boolean update(MonHoc monHoc) {
         EntityTransaction transaction = em.getTransaction();
@@ -90,13 +72,20 @@ public class MonHocDAO extends GenericDAO<MonHoc, Integer> {
             return false;
         }
     }
-
-    public MonHoc findById(int maMon) {
+    public List<MonHoc> getAllMonHoc() {
         try {
-            return em.find(MonHoc.class, maMon);
+            return em.createQuery("SELECT m FROM MonHoc m", MonHoc.class).getResultList();
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
+
+    public MonHoc findByTenMon(String tenMon) throws RemoteException {
+        String jpql = "SELECT mh FROM MonHoc mh WHERE mh.tenMon = :tenMon";
+        return em.createQuery(jpql, MonHoc.class)
+                .setParameter("tenMon", tenMon)
+                .getSingleResult();
+    }
+
 }

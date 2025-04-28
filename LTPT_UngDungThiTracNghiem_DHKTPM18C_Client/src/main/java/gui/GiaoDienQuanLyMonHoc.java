@@ -31,32 +31,30 @@ public class GiaoDienQuanLyMonHoc extends JPanel {
 
         // Thêm môn học
         btnThem.addActionListener(e -> {
-            String maMon = txtMaMon.getText().trim();
             String tenMon = txtTenMon.getText().trim();
 
-            if (!maMon.isEmpty() && !tenMon.isEmpty()) {
+            if (!tenMon.isEmpty()) {
                 try {
+                    // Chỉ cần đặt tên môn học
                     MonHoc monHoc = new MonHoc();
-                    monHoc.setMaMon(Integer.parseInt(maMon));
-                    monHoc.setTenMon(tenMon);
+                    monHoc.setTenMon(tenMon); // Chỉ đặt tên môn học
 
                     if (monHocService.save(monHoc)) {
-                        tableModel.addRow(new Object[]{maMon, tenMon});
-                        txtMaMon.setText("");
-                        txtTenMon.setText("");
+                        // Sau khi lưu thành công, mã môn học sẽ tự động sinh ra trong cơ sở dữ liệu
+                        tableModel.addRow(new Object[]{monHoc.getMaMon(), tenMon});
+                        txtTenMon.setText("");  // Xóa tên môn học sau khi thêm
                         JOptionPane.showMessageDialog(this, "Thêm môn học thành công!");
                     } else {
                         JOptionPane.showMessageDialog(this, "Không thể thêm môn học.");
                     }
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(this, "Mã môn phải là số nguyên.");
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, "Lỗi khi thêm môn học: " + ex.getMessage());
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập tên môn học!");
             }
         });
+
 
         // Chỉnh sửa môn học
         btnChinhSua.addActionListener(e -> {
@@ -123,19 +121,19 @@ public class GiaoDienQuanLyMonHoc extends JPanel {
         JPanel panelMaMon = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panelMaMon.add(new JLabel("Mã môn:"));
         JTextField txtEditMaMon = new JTextField(maMon);
-        txtEditMaMon.setPreferredSize(new Dimension(200, 30));
+        txtEditMaMon.setPreferredSize(new Dimension(250, 40));  // Tăng kích thước
         panelMaMon.add(txtEditMaMon);
         contentPanel.add(panelMaMon);
 
         JPanel panelTenMon = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panelTenMon.add(new JLabel("Tên môn:"));
         JTextField txtEditTenMon = new JTextField(tenMon);
-        txtEditTenMon.setPreferredSize(new Dimension(200, 30));
+        txtEditTenMon.setPreferredSize(new Dimension(250, 40));  // Tăng kích thước
         panelTenMon.add(txtEditTenMon);
         contentPanel.add(panelTenMon);
 
         JButton btnSave = new JButton("Lưu");
-        btnSave.setPreferredSize(new Dimension(80, 30));
+        btnSave.setPreferredSize(new Dimension(120, 35));  // Tăng kích thước nút
         btnSave.addActionListener(e -> {
             String newMaMon = txtEditMaMon.getText().trim();
             String newTenMon = txtEditTenMon.getText().trim();
@@ -148,7 +146,6 @@ public class GiaoDienQuanLyMonHoc extends JPanel {
                     updatedMonHoc.setTenMon(newTenMon);
 
                     if (monHocService.update(updatedMonHoc)) {
-                        // ✅ Cập nhật cả mã môn và tên môn trên bảng
                         tableModel.setValueAt(newMaMonInt, row, 0);
                         tableModel.setValueAt(newTenMon, row, 1);
                         JOptionPane.showMessageDialog(editDialog, "Cập nhật thành công!");
@@ -170,7 +167,7 @@ public class GiaoDienQuanLyMonHoc extends JPanel {
         contentPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         editDialog.add(contentPanel);
-        editDialog.setSize(350, 200);
+        editDialog.setSize(350, 250);  // Tăng kích thước cho dialog
         editDialog.setLocationRelativeTo(null);
         editDialog.setVisible(true);
     }
@@ -178,18 +175,42 @@ public class GiaoDienQuanLyMonHoc extends JPanel {
     private void taoGiaoDien() {
         panel1 = new JPanel(new BorderLayout(10, 10));
         panel1.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        panel1.setBackground(Color.WHITE);  // Set white background for the main panel
 
-        JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
+        JPanel inputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 15));  // Điều chỉnh khoảng cách
+        inputPanel.setBackground(Color.WHITE);  // Set white background for input panel
 
         JLabel lblMaMon = new JLabel("Mã môn:");
-        txtMaMon = new JTextField(10);
+        lblMaMon.setFont(new Font("Arial", Font.BOLD, 16));
+        txtMaMon = new JTextField(20);  // Tăng kích thước JTextField
+        txtMaMon.setFont(new Font("Arial", Font.PLAIN, 14));
+        txtMaMon.setPreferredSize(new Dimension(20, 30));
+        txtMaMon.setBackground(Color.WHITE);  // White background for text fields
 
         JLabel lblTenMon = new JLabel("Tên môn:");
-        txtTenMon = new JTextField(15);
+        lblTenMon.setFont(new Font("Arial", Font.BOLD, 16));
+        txtTenMon = new JTextField(20);  // Tăng kích thước JTextField
+        txtTenMon.setFont(new Font("Arial", Font.PLAIN, 14));
+        txtTenMon.setPreferredSize(new Dimension(20, 30));
+        txtTenMon.setBackground(Color.WHITE);  // White background for text fields
 
         btnThem = new JButton("Thêm");
+        btnThem.setFont(new Font("Arial", Font.PLAIN, 16));
+        btnThem.setPreferredSize(new Dimension(130, 45));  // Tăng kích thước nút
+        btnThem.setBackground(new Color(0, 128, 0));  // Green
+        btnThem.setForeground(Color.WHITE);
+
         btnChinhSua = new JButton("Chỉnh sửa");
+        btnChinhSua.setFont(new Font("Arial", Font.PLAIN, 16));
+        btnChinhSua.setPreferredSize(new Dimension(130, 45));  // Tăng kích thước nút
+        btnChinhSua.setBackground(new Color(255, 165, 0));  // Orange
+        btnChinhSua.setForeground(Color.WHITE);
+
         btnXoa = new JButton("Xóa");
+        btnXoa.setFont(new Font("Arial", Font.PLAIN, 16));
+        btnXoa.setPreferredSize(new Dimension(130, 45));  // Tăng kích thước nút
+        btnXoa.setBackground(new Color(255, 0, 0));  // Red
+        btnXoa.setForeground(Color.WHITE);
 
         inputPanel.add(lblMaMon);
         inputPanel.add(txtMaMon);
@@ -201,14 +222,19 @@ public class GiaoDienQuanLyMonHoc extends JPanel {
 
         JPanel tablePanel = new JPanel(new BorderLayout());
         tablePanel.setBorder(BorderFactory.createTitledBorder("Danh sách môn học"));
-        tblMonHoc.setRowHeight(25);
+        tablePanel.setBackground(Color.WHITE);  // White background for the table panel
+        tblMonHoc.setRowHeight(30);
+        tblMonHoc.setFont(new Font("Arial", Font.PLAIN, 14));
         JScrollPane scrollPane = new JScrollPane(tblMonHoc);
         tablePanel.add(scrollPane, BorderLayout.CENTER);
 
         panel1.add(inputPanel, BorderLayout.NORTH);
         panel1.add(tablePanel, BorderLayout.CENTER);
 
-        setPreferredSize(new Dimension(750, 500));
+        setPreferredSize(new Dimension(1250, 750));
+        inputPanel.setPreferredSize(new Dimension(1200, 180));
+        tblMonHoc.setPreferredScrollableViewportSize(new Dimension(1000, 600));  // Điều chỉnh kích thước bảng
+
         add(panel1);
     }
 
@@ -228,7 +254,7 @@ public class GiaoDienQuanLyMonHoc extends JPanel {
 
             JFrame frame = new JFrame("Quản lý môn học");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(800, 600);
+            frame.setSize(1250, 750);
             frame.setLocationRelativeTo(null);
             frame.add(new GiaoDienQuanLyMonHoc(monHocService));
             frame.setVisible(true);

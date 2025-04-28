@@ -8,5 +8,5 @@ import java.rmi.RemoteException;
 
 public interface TaiKhoanService extends GenericService<TaiKhoan, String> {
     public Object dangNhap(String tenDangNhap, String matKhau) throws RemoteException;
-
+    boolean delete(String email) throws RemoteException;
 }

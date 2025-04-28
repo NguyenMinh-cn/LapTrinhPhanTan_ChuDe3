@@ -5,9 +5,8 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -26,10 +25,11 @@ public class Lop implements Serializable {
     @Column(nullable = false)
     private String tenLop;
 
+    // One-to-many relationship with HocSinh
     @OneToMany(mappedBy = "lop")
     private List<HocSinh> danhSachHocSinh = new ArrayList<>();
 
-    //18/4
+    // Many-to-many relationship with BaiThi
     @ManyToMany(mappedBy = "danhSachLop")
     private List<BaiThi> danhSachBaiThi = new ArrayList<>();
 
@@ -43,4 +43,3 @@ public class Lop implements Serializable {
                 '}';
     }
 }
-

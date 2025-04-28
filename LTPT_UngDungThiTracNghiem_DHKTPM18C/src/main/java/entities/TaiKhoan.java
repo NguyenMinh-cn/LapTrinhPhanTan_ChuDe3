@@ -27,6 +27,30 @@ public class TaiKhoan implements Serializable {
     @Column(columnDefinition = "varchar(100)", nullable = false)
     private String matKhau;
 
+    public String getTenDangNhap() {
+        return tenDangNhap;
+    }
+
+    public void setTenDangNhap(String tenDangNhap) {
+        this.tenDangNhap = tenDangNhap;
+    }
+
+    public String getLoaiTaiKhoan() {
+        return loaiTaiKhoan;
+    }
+
+    public void setLoaiTaiKhoan(String loaiTaiKhoan) {
+        this.loaiTaiKhoan = loaiTaiKhoan;
+    }
+
+    public String getMatKhau() {
+        return matKhau;
+    }
+
+    public void setMatKhau(String matKhau) {
+        this.matKhau = matKhau;
+    }
+
     @Override
     public String toString() {
         return "TaiKhoan{" +

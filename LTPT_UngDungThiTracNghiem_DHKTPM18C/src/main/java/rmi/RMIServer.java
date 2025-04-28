@@ -1,21 +1,9 @@
 package rmi;
 
-import daos.GiaoVienDAO;
-import daos.HocSinhDAO;
-import daos.MonHocDAO;
-import daos.TaiKhoanDAO;
-import entities.GiaoVien;
-import entities.HocSinh;
-import entities.MonHoc;
-import entities.TaiKhoan;
-import service.GiaoVienService;
-import service.HocSinhService;
-import service.MonHocService;
-import service.TaiKhoanService;
-import service.impl.GiaoVienServiceImpl;
-import service.impl.HocSinhServiceImpl;
-import service.impl.MonHocServiceImpl;
-import service.impl.TaiKhoanServiceImpl;
+import daos.*;
+import entities.*;
+import service.*;
+import service.impl.*;
 
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
@@ -34,6 +22,7 @@ public class RMIServer {
             System.out.println("Lỗi khi khởi tạo dịch vụ RMI: " + e.getMessage());
         }
 
+
 //        MonHocDAO monHocDAO = new MonHocDAO(MonHoc.class);
 //        MonHocService monHocService = new MonHocServiceImpl(monHocDAO);
 //        Naming.rebind("rmi://localhost:8081/monHocService", monHocService);
@@ -46,9 +35,13 @@ public class RMIServer {
         HocSinhService hocSinhService = new HocSinhServiceImpl(hocSinhDAO);
         Naming.rebind("rmi://localhost:8081/hocSinhService", hocSinhService);
 
+        LopDAO lopDAO = new LopDAO(Lop.class);
+        LopService lopService = new LopServiceImpl(lopDAO);
+        Naming.rebind("rmi://localhost:8081/lopService", lopService);
+
         GiaoVienDAO giaoVienDAO = new GiaoVienDAO(GiaoVien.class);
         GiaoVienService giaoVienService = new GiaoVienServiceImpl(giaoVienDAO);
-        Naming.rebind("rmi://localhost:8081/giaoVienService", giaoVienService);
+        Naming.rebind("rmi://localhost:8081/lopService", giaoVienService);
 
         System.out.println("RMI Server is running...");
     }

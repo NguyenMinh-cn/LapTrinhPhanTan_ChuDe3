@@ -34,6 +34,25 @@ public class HocSinhDAO extends GenericDAO<HocSinh, Integer> {
             return null;
         }
     }
+    public boolean disableAccount(String email) {
+        // Tạo câu truy vấn JPQL để tìm học sinh theo email
+        String jpql = "UPDATE HocSinh hs SET hs.taiKhoan.active = false WHERE hs.email = :email";
+
+        try {
+            // Thực hiện câu truy vấn cập nhật, thay đổi trạng thái tài khoản
+            int updatedCount = em.createQuery(jpql)
+                    .setParameter("email", email)
+                    .executeUpdate();
+
+            // Kiểm tra số dòng bị ảnh hưởng (nếu có học sinh được cập nhật)
+            return updatedCount > 0; // Trả về true nếu có dòng được cập nhật
+        } catch (Exception e) {
+            // In ra lỗi nếu có ngoại lệ
+            e.printStackTrace();
+            return false; // Trả về false nếu có lỗi xảy ra
+        }
+    }
+
 
 
 }

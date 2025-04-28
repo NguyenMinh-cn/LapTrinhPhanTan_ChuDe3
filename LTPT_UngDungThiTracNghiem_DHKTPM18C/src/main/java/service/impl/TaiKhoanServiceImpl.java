@@ -32,4 +32,16 @@ public class TaiKhoanServiceImpl extends GenericServiceImpl<TaiKhoan, String> im
         }
         return null; // Trả về null nếu đăng nhập không thành công
     }
+
+
+    @Override
+    public boolean delete(String email) throws RemoteException {
+        return taiKhoanDAO.delete(email); // Gọi phương thức từ DAO
+    }
+
+
+    public boolean update(TaiKhoan taiKhoan) throws RemoteException {
+        return taiKhoanDAO.update(taiKhoan); // Gọi phương thức từ DAO
+    }
+
 }

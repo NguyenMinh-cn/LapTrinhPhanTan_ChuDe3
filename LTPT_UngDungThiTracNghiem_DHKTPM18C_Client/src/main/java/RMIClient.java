@@ -2,11 +2,8 @@ import entities.GiaoVien;
 import entities.HocSinh;
 import entities.MonHoc;
 import entities.TaiKhoan;
-import service.MonHocService;
+import service.*;
 import service.HocSinhService;
-import service.GiaoVienService;
-import service.HocSinhService;
-import service.TaiKhoanService;
 
 import java.rmi.Naming;
 
@@ -18,6 +15,7 @@ public class RMIClient {
         TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://localhost:8081/taiKhoanService");
         HocSinhService hocSinhService = (HocSinhService) Naming.lookup("rmi://localhost:8081/hocSinhService");
         GiaoVienService giaoVienService = (GiaoVienService) Naming.lookup("rmi://localhost:8081/giaoVienService");
+        LopService lopService = (LopService) Naming.lookup("rmi://localhost:8081/lopService");
         try {
             MonHocService monHocService = (MonHocService) Naming.lookup("rmi://localhost:8081/monHocService");
             System.out.println("Kết nối thành công tới monHocService");

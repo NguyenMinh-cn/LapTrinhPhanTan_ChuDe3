@@ -43,4 +43,7 @@ public class TaiKhoanDAO extends GenericDAO<TaiKhoan, String> {
         }
         return null; // Trả về null nếu đăng nhập không thành công
     }
+
+
+
 }
