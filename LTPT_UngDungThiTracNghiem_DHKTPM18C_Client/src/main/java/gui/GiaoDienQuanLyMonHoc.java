@@ -34,26 +34,30 @@ public class GiaoDienQuanLyMonHoc extends JPanel {
 
         // Thêm môn học
         btnThem.addActionListener(e -> {
+            String maMon = txtMaMon.getText().trim();
             String tenMon = txtTenMon.getText().trim();
 
-            if (!tenMon.isEmpty()) {
+            if (!maMon.isEmpty() && !tenMon.isEmpty()) {
                 try {
                     MonHoc monHoc = new MonHoc();
+                    monHoc.setMaMon(Integer.parseInt(maMon));
                     monHoc.setTenMon(tenMon);
 
                     if (monHocService.save(monHoc)) {
-
-                        tableModel.addRow(new Object[]{monHoc.getMaMon(), tenMon});
-                        txtTenMon.setText("");  // Xóa trường tên môn
+                        tableModel.addRow(new Object[]{maMon, tenMon});
+                        txtMaMon.setText("");
+                        txtTenMon.setText("");
                         JOptionPane.showMessageDialog(this, "Thêm môn học thành công!");
                     } else {
                         JOptionPane.showMessageDialog(this, "Không thể thêm môn học.");
                     }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "Mã môn phải là số nguyên.");
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, "Lỗi khi thêm môn học: " + ex.getMessage());
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "Vui lòng nhập tên môn!");
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin!");
             }
         });
 
@@ -71,48 +75,36 @@ public class GiaoDienQuanLyMonHoc extends JPanel {
 
         // Xóa môn học
         btnXoa.addActionListener(e -> {
-//            int selectedRow = tblMonHoc.getSelectedRow();
-//            if (selectedRow != -1) {
-//                String maMonStr = tableModel.getValueAt(selectedRow, 0).toString();
-//                try {
-//                    int maMon = Integer.parseInt(maMonStr);
-//
-//                    int confirm = JOptionPane.showConfirmDialog(this,
-//                            "Bạn có chắc chắn muốn xóa môn học có mã " + maMon + "?",
-//                            "Xóa môn học", JOptionPane.YES_NO_OPTION);
-//
-//                    if (confirm == JOptionPane.YES_OPTION) {
-//                        try {
-//                            MonHoc monHoc = new MonHoc();
-//                            monHoc.setMaMon(maMon);
-//
-//                            if (monHocService.d(monHoc.getMaMon())) {
-//
-//                                int rowCount = tableModel.getRowCount();
-//                                for (int i = selectedRow + 1; i < rowCount; i++) {
-//                                    int updatedMaMon = Integer.parseInt(tableModel.getValueAt(i, 0).toString()) - 1;
-//                                    tableModel.setValueAt(updatedMaMon, i, 0);
-//                                }
-//
-//                                // Xóa dòng trong bảng
-//                                tableModel.removeRow(selectedRow);
-//                                JOptionPane.showMessageDialog(this, "Xóa môn học thành công!");
-//                            } else {
-//                                JOptionPane.showMessageDialog(this, "Không thể xóa môn học.");
-//                            }
-//                        } catch (Exception ex) {
-//                            JOptionPane.showMessageDialog(this, "Lỗi khi xóa môn học: " + ex.getMessage());
-//                        }
-//                    }
-//                } catch (NumberFormatException ex) {
-//                    JOptionPane.showMessageDialog(this, "Mã môn không hợp lệ.");
-//                }
-//            } else {
-//                JOptionPane.showMessageDialog(this, "Chọn một môn học để xóa.");
-//            }
+
+            int selectedRow = tblMonHoc.getSelectedRow();
+            if (selectedRow != -1) {
+                String maMonStr = tableModel.getValueAt(selectedRow, 0).toString();
+                try {
+                    int maMon = Integer.parseInt(maMonStr);
+
+                    int confirm = JOptionPane.showConfirmDialog(this,
+                            "Bạn có chắc chắn muốn xóa môn học có mã " + maMon + "?",
+                            "Xóa môn học", JOptionPane.YES_NO_OPTION);
+
+                    if (confirm == JOptionPane.YES_OPTION) {
+                        try {
+                            if (monHocService.delete(maMon)) {
+                                tableModel.removeRow(selectedRow);
+                                JOptionPane.showMessageDialog(this, "Xóa môn học thành công!");
+                            } else {
+                                JOptionPane.showMessageDialog(this, "Không thể xóa môn học.");
+                            }
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(this, "Lỗi khi xóa môn học: " + ex.getMessage());
+                        }
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "Mã môn không hợp lệ.");
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Chọn một môn học để xóa.");
+            }
         });
-
-
     }
 
     private void loadAllMonHoc() {
@@ -136,7 +128,6 @@ public class GiaoDienQuanLyMonHoc extends JPanel {
         panelMaMon.add(new JLabel("Mã môn:"));
         JTextField txtEditMaMon = new JTextField(maMon);
         txtEditMaMon.setPreferredSize(new Dimension(200, 30));
-        txtEditMaMon.setEnabled(true); //Cho/Không cho phép sửa mã môn
         panelMaMon.add(txtEditMaMon);
         contentPanel.add(panelMaMon);
 
@@ -161,6 +152,8 @@ public class GiaoDienQuanLyMonHoc extends JPanel {
                     updatedMonHoc.setTenMon(newTenMon);
 
                     if (monHocService.update(updatedMonHoc)) {
+                        // ✅ Cập nhật cả mã môn và tên môn trên bảng
+                        tableModel.setValueAt(newMaMonInt, row, 0);
                         tableModel.setValueAt(newTenMon, row, 1);
                         JOptionPane.showMessageDialog(editDialog, "Cập nhật thành công!");
                         editDialog.dispose();
@@ -200,7 +193,7 @@ public class GiaoDienQuanLyMonHoc extends JPanel {
 
         btnThem = new JButton("Thêm");
         btnChinhSua = new JButton("Chỉnh sửa");
-        btnXoa = new JButton("Xóa");  // Khai báo nút xóa
+        btnXoa = new JButton("Xóa");
 
         inputPanel.add(lblMaMon);
         inputPanel.add(txtMaMon);
@@ -208,7 +201,7 @@ public class GiaoDienQuanLyMonHoc extends JPanel {
         inputPanel.add(txtTenMon);
         inputPanel.add(btnThem);
         inputPanel.add(btnChinhSua);
-        inputPanel.add(btnXoa);  // Thêm nút Xóa vào giao diện
+        inputPanel.add(btnXoa);
 
         JPanel tablePanel = new JPanel(new BorderLayout());
         tablePanel.setBorder(BorderFactory.createTitledBorder("Danh sách môn học"));
