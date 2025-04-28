@@ -34,7 +34,7 @@ public class GiaoVien implements Serializable {
     @Column(columnDefinition = "varchar(10)", nullable = false)
     private String soDienThoai;
 
-    @OneToMany(mappedBy = "giaoVien") // Tham chiếu thuộc tính giaoVien trong BaiThi
+    @OneToMany(mappedBy = "giaoVien" ,cascade = CascadeType.ALL, orphanRemoval = true) // Tham chiếu thuộc tính giaoVien trong BaiThi
     private List<BaiThi> danhSachBaiThi = new ArrayList<BaiThi>();
 
     @OneToOne(cascade = CascadeType.ALL)
