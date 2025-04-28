@@ -13,4 +13,9 @@ public class LopServiceImpl extends GenericServiceImpl<Lop, Integer> implements 
         super(lopDAO);
         this.lopDAO = lopDAO;
     }
+
+    @Override
+    public Lop findByTenLop(String tenLop) throws RemoteException {
+        return lopDAO.findByTenLop(tenLop);
+    }
 }

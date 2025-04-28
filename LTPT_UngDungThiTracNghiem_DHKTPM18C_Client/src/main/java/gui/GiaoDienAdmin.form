@@ -21,7 +21,7 @@
               <horizontalAlignment value="0"/>
               <opaque value="true"/>
               <preferredSize width="96" height="70"/>
-              <text value="Tên giáo viên"/>
+              <text value="Admin"/>
             </properties>
           </component>
           <component id="de299" class="javax.swing.JLabel" binding="lbDangXuat">

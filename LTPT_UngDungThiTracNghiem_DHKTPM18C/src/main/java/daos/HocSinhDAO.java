@@ -7,6 +7,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionBuilder;
 import org.hibernate.query.Query;
 
+import java.util.List;
+
 
 public class HocSinhDAO extends GenericDAO<HocSinh, Long> {
 
@@ -34,6 +36,18 @@ public class HocSinhDAO extends GenericDAO<HocSinh, Long> {
             return null;
         }
     }
+    public List<HocSinh> findHocSinhChuaCoLop() {
+        String jpql = "SELECT hs FROM HocSinh hs " +
+                "LEFT JOIN FETCH hs.taiKhoan " +
+                "WHERE hs.lop IS NULL";
 
+        try {
+            TypedQuery<HocSinh> query = em.createQuery(jpql, HocSinh.class);
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 }

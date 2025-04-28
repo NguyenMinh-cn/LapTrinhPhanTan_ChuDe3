@@ -247,8 +247,6 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-
-
                     Component[] components = pnDSSoCauHoi.getComponents();
                     List<CauHoi> danhSachCauHoi1 = new ArrayList<>();
 
@@ -316,11 +314,16 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
                     }
                     // Bước 4: Lưu bài thi
                     boolean baiThiDaLuu = baiThiService.save(baiThi);
-
                     // Đóng dialog thông báo
                     dialog.dispose();
 
                     if (baiThiDaLuu) {
+                        try {
+                            baiThiService.thongBaoBaiThiMoi(baiThi);
+                        } catch (RemoteException ex) {
+                            JOptionPane.showMessageDialog(null, "Lưu bài thi thành công nhưng không thể gửi thông báo: " + ex.getMessage(), "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                            ex.printStackTrace();
+                        }
                         // Hiển thị thông báo thành công
                         JOptionPane.showMessageDialog(null, "Lưu bài thi thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
 
@@ -1148,19 +1151,19 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
                             "Lỗi", JOptionPane.ERROR_MESSAGE);
                 }
                 try {
-                    System.out.println("Mã bài thi: " + baiThi.getMaBaiThi());
-                    System.out.println("Tên bài thi: " + baiThi.getTenBaiThi());
-                    System.out.println("Môn học: " + (baiThi.getMonHoc() != null ? baiThi.getMonHoc().getTenMon() : "Không có"));
-                    System.out.println("Thời lượng: " + baiThi.getThoiLuong() + " phút");
-                    System.out.println("Số câu hỏi: " + baiThi.getDanhSachCauHoi().size());
-                    System.out.println("Số lần được phép làm: " + baiThi.getSoLanDuocPhepLamBai());
+//                    System.out.println("Mã bài thi: " + baiThi.getMaBaiThi());
+//                    System.out.println("Tên bài thi: " + baiThi.getTenBaiThi());
+//                    System.out.println("Môn học: " + (baiThi.getMonHoc() != null ? baiThi.getMonHoc().getTenMon() : "Không có"));
+//                    System.out.println("Thời lượng: " + baiThi.getThoiLuong() + " phút");
+//                    System.out.println("Số câu hỏi: " + baiThi.getDanhSachCauHoi().size());
+//                    System.out.println("Số lần được phép làm: " + baiThi.getSoLanDuocPhepLamBai());
                     List<Lop> danhSachLop = baiThiService.timLopTheoBaiThi(baiThi.getMaBaiThi());
-                    System.out.println("Số lớp liên quan tới bài thi " + baiThi.getMaBaiThi() + ": " + danhSachLop.size());
-                    for (Lop lop : danhSachLop) {
-                        System.out.println("Lớp: " + lop.getTenLop()); // In tên lớp (giả sử Lop có phương thức getTenLop)
-                    }
+//                    System.out.println("Số lớp liên quan tới bài thi " + baiThi.getMaBaiThi() + ": " + danhSachLop.size());
+//                    for (Lop lop : danhSachLop) {
+//                        System.out.println("Lớp: " + lop.getTenLop()); // In tên lớp (giả sử Lop có phương thức getTenLop)
+//                    }
                     baiThi.setDanhSachLop(danhSachLop);
-                    System.out.println("Số lớp: " + baiThi.getDanhSachLop().size());
+//                    System.out.println("Số lớp: " + baiThi.getDanhSachLop().size());
 
                     // Kiểm tra nếu bt là null trước khi sử dụng
                     if (baiThi == null) {
@@ -1302,8 +1305,8 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
 
                 if (confirm == JOptionPane.YES_OPTION) {
                     try {
-                        // Xóa bài thi
-                        boolean kq = baiThiService.delete(baiThi.getMaBaiThi());
+                        System.out.println("Bài thi đang bị xóa!" + baiThi.getMaBaiThi());
+                        boolean kq = baiThiService.xoaBaiThiKhongCoPhienLamBaiTheoMaJPQL(baiThi.getMaBaiThi());
                         System.out.println("Bài thi đã bị xóa!" + baiThi.getTenBaiThi());
 
                         if (kq) {
@@ -1326,15 +1329,14 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
                             pnHienThiCacBaiThi.revalidate();
                             pnHienThiCacBaiThi.repaint();
                         } else {
-                            JOptionPane.showMessageDialog(null, "Xóa bài thi thất bại!");
+                            JOptionPane.showMessageDialog(null, "Xóa bài thi thất bại vì đã có học sinh làm bài");
                         }
                     } catch (RemoteException ex) {
-                        // Xử lý lỗi RemoteException
                         ex.printStackTrace();
                         JOptionPane.showMessageDialog(null, "Lỗi khi xóa bài thi. Vui lòng thử lại.");
+                        return;
                     }
                 }
-
             }
         });
 
@@ -1344,7 +1346,7 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
         btnPanel.setOpaque(false);
         btnPanel.add(btnXemTruocBaiThi);
         btnPanel.add(Box.createHorizontalGlue());
-        btnPanel.add(btnChinhSua); // Thêm trước hoặc sau tùy bạn muốn vị trí
+//        btnPanel.add(btnChinhSua); // Thêm trước hoặc sau tùy bạn muốn vị trí
         btnPanel.add(Box.createHorizontalGlue());
         btnPanel.add(nutXoaBaiThi);
         // Thêm vào panel chính

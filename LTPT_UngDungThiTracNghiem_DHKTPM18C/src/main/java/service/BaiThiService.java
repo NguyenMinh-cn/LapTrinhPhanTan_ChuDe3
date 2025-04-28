@@ -14,4 +14,8 @@ public interface BaiThiService extends GenericService<BaiThi, Integer>{
     List<BaiThi> getAllBaiThiForHocSinh(Long maHocSinh) throws RemoteException;
     BaiThi layThongTinBaiThiVaCauHoi(int maBaiThi) throws RemoteException;
     List<Lop> timLopTheoBaiThi(int maBaiThi) throws RemoteException;
+    boolean xoaBaiThiKhongCoPhienLamBaiTheoMaJPQL(int maBaiThi) throws RemoteException;
+    void thongBaoBaiThiMoi(BaiThi baiThi) throws RemoteException;
+    void dangKyClientNhanThongBao(BaiThiCallback callback) throws RemoteException;
+    void huyDangKyClientNhanThongBao(BaiThiCallback callback) throws RemoteException;
 }

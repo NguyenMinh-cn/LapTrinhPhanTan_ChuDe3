@@ -131,6 +131,23 @@ public class GiaoDienAdmin {
                 pnNoiDung.revalidate();
             }
         });
+        chucNangLopHoc.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                pnNoiDung.removeAll();
+                try {
+                    pnNoiDung.add(new GiaoDienQuanLyLopHoc(), BorderLayout.CENTER);
+                } catch (MalformedURLException ex) {
+                    throw new RuntimeException(ex);
+                } catch (NotBoundException ex) {
+                    throw new RuntimeException(ex);
+                } catch (RemoteException ex) {
+                    throw new RuntimeException(ex);
+                }
+                pnNoiDung.repaint();
+                pnNoiDung.revalidate();
+            }
+        });
     }
 //
 //    {
@@ -161,7 +178,7 @@ public class GiaoDienAdmin {
         label1.setHorizontalAlignment(0);
         label1.setOpaque(true);
         label1.setPreferredSize(new Dimension(96, 70));
-        label1.setText("Tên giáo viên");
+        label1.setText("Admin");
         panel2.add(label1, BorderLayout.NORTH);
         lbDangXuat = new JLabel();
         lbDangXuat.setBackground(new Color(-3543049));
