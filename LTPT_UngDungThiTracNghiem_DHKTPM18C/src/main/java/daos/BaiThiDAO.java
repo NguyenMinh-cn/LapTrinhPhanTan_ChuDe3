@@ -118,7 +118,7 @@ public class BaiThiDAO extends GenericDAO<BaiThi, Integer>{
                 System.out.println("Môn học: " + (baiThi.getMonHoc() != null ? baiThi.getMonHoc().getTenMon() : "Không có"));
                 System.out.println("Thời lượng: " + baiThi.getThoiLuong() + " phút");
                 System.out.println("Số câu hỏi: " + baiThi.getDanhSachCauHoi().size());
-
+                System.out.println("Số lần được phép làm: " + baiThi.getSoLanDuocPhepLamBai());
                 System.out.println("\n=== Danh sách câu hỏi ===");
                 List<CauHoi> dsCauHoi = baiThi.getDanhSachCauHoi();
                 int stt = 1;

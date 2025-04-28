@@ -18,10 +18,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -44,12 +41,13 @@ public class GiaoDienLamBaiThi extends JPanel {
     private JLabel txtSoCH;
     private JPanel pnKetQua;
     private JPanel pnKetQuaLamBai;
-    private JButton làmBàiThiButton;
+    private JButton btnLamBaiThi;
     private JButton button1;
+    private JLabel txtSoLanDuocPhepLamBai;
     private HocSinh hocSinh;
     private BaiThiService baiThiService = (BaiThiService) Naming.lookup("rmi://localhost:8081/baiThiService");
     private BaiThi baiThiDangChon;
-
+    private PhienLamBaiService phienLamBaiService = (PhienLamBaiService) Naming.lookup("rmi://localhost:8081/phienLamBaiService");
     public static String chuyenDinhDangNgayGio(LocalDateTime localDateTime) {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm, dd/MM/yyyy");
@@ -74,12 +72,59 @@ public class GiaoDienLamBaiThi extends JPanel {
                 cardLayout.show(panel1, "Card1");
             }
         });
-        làmBàiThiButton.addActionListener(new ActionListener() {
+        btnLamBaiThi.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                List<PhienLamBai> phienLamBaiList = null;
+                try {
+                    phienLamBaiList = phienLamBaiService.layDanhSachPhienLamBaiVaCauTraLoiTheoBaiThi(baiThiDangChon.getMaBaiThi());
+                } catch (RemoteException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+                long soLanLamBai = phienLamBaiList.stream()
+                        .filter(plb -> plb.getHocSinh().getMaHocSinh() == hocSinh.getMaHocSinh())
+                        .count();
+
+                System.out.println(soLanLamBai);
+                System.out.println(baiThiDangChon.getSoLanDuocPhepLamBai());
+                if (soLanLamBai >= baiThiDangChon.getSoLanDuocPhepLamBai()) {
+                    JOptionPane.showMessageDialog(null, "Đã hết lượt làm bài thi.", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                if (baiThiDangChon.getThoiGianBatDau().isAfter(LocalDateTime.now())) {
+                    JOptionPane.showMessageDialog(null, "Bài thi chưa được mở. Vui lòng thử lại sau.", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                    return;
+                } else if (baiThiDangChon.getThoiGianKetThuc().isBefore(LocalDateTime.now())) {
+                    JOptionPane.showMessageDialog(null, "Bài thi đã kết thúc.", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                    return;
+
+                }else if (baiThiDangChon.getMatKhau() != null) {
+                    String matKhau = JOptionPane.showInputDialog(null, "Nhập mật khẩu bài thi:", "Mật khẩu", JOptionPane.PLAIN_MESSAGE);
+                    if (matKhau == null || !matKhau.equals(baiThiDangChon.getMatKhau())) {
+                        JOptionPane.showMessageDialog(null, "Mật khẩu không chính xác. Vui lòng thử lại.", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                }
+
                 GiaoDienThi giaoDienThi = null;
                 try {
-                    giaoDienThi = new GiaoDienThi(baiThiDangChon,hocSinh);
+                    giaoDienThi = new GiaoDienThi(baiThiDangChon, hocSinh);
+
+                    // Thêm WindowListener để phát hiện khi cửa sổ đóng
+                    final GiaoDienThi finalGiaoDienThi = giaoDienThi;
+                    finalGiaoDienThi.addWindowListener(new WindowAdapter() {
+                        @Override
+                        public void windowClosed(WindowEvent windowEvent) {
+                            // Cập nhật lại dữ liệu trong pnKetQuaLamBai
+                            loadKetQuaLamBai(baiThiDangChon);
+                        }
+                    });
+
+                    // Hiển thị giao diện thi
+                    finalGiaoDienThi.taoGiaoDienThi();
+
                 } catch (MalformedURLException ex) {
                     throw new RuntimeException(ex);
                 } catch (NotBoundException ex) {
@@ -87,7 +132,6 @@ public class GiaoDienLamBaiThi extends JPanel {
                 } catch (RemoteException ex) {
                     throw new RuntimeException(ex);
                 }
-                giaoDienThi.taoGiaoDienThi();
             }
         });
     }
@@ -101,7 +145,7 @@ public class GiaoDienLamBaiThi extends JPanel {
             List<BaiThi> dsBaiThi = baiThiService.getAllBaiThiForHocSinh(hocSinh.getMaHocSinh());
 
             if (dsBaiThi.isEmpty()) {
-                JLabel lblThongBao = new JLabel("Không có bài thi nào. Hãy tạo bài thi mới!");
+                JLabel lblThongBao = new JLabel("Hiện tại không có bài thi nào");
                 lblThongBao.setFont(new Font("Arial", Font.BOLD, 18));
                 lblThongBao.setForeground(new Color(100, 100, 100));
                 contentPanel.add(lblThongBao);
@@ -161,9 +205,9 @@ public class GiaoDienLamBaiThi extends JPanel {
         pnTTCTBaiThi.setLayout(new BorderLayout(0, 0));
         panel1.add(pnTTCTBaiThi, "Card2");
         final JPanel panel3 = new JPanel();
-        panel3.setLayout(new GridLayoutManager(6, 1, new Insets(20, 30, 10, 10), -1, -1));
+        panel3.setLayout(new GridLayoutManager(8, 2, new Insets(20, 30, 10, 10), -1, -1));
         panel3.setBackground(new Color(-1247233));
-        panel3.setPreferredSize(new Dimension(568, 180));
+        panel3.setPreferredSize(new Dimension(568, 250));
         pnTTCTBaiThi.add(panel3, BorderLayout.NORTH);
         txtTenBaiThi = new JLabel();
         txtTenBaiThi.setBackground(new Color(-2954497));
@@ -173,35 +217,35 @@ public class GiaoDienLamBaiThi extends JPanel {
         txtTenBaiThi.setHorizontalAlignment(2);
         txtTenBaiThi.setHorizontalTextPosition(2);
         txtTenBaiThi.setText("Thường kỳ Neo4j - Cypher - DHKTPM18C - Nhóm 2");
-        panel3.add(txtTenBaiThi, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(524, 35), null, 0, false));
+        panel3.add(txtTenBaiThi, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(524, 35), null, 0, false));
         txtMo = new JLabel();
         txtMo.setBackground(new Color(-2954497));
         Font txtMoFont = this.$$$getFont$$$("Arial", Font.PLAIN, 15, txtMo.getFont());
         if (txtMoFont != null) txtMo.setFont(txtMoFont);
         txtMo.setText("Opened: Tuesday, 11 March 2025, 5:20 PM");
-        panel3.add(txtMo, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(txtMo, new GridConstraints(2, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         txtDong = new JLabel();
         txtDong.setBackground(new Color(-2954497));
         Font txtDongFont = this.$$$getFont$$$("Arial", Font.PLAIN, 15, txtDong.getFont());
         if (txtDongFont != null) txtDong.setFont(txtDongFont);
         txtDong.setText("Closed: Tuesday, 11 March 2025, 6:00 PM");
-        panel3.add(txtDong, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(txtDong, new GridConstraints(3, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         txtThoiLuong = new JLabel();
         txtThoiLuong.setBackground(new Color(-2954497));
         Font txtThoiLuongFont = this.$$$getFont$$$("Arial", Font.PLAIN, 15, txtThoiLuong.getFont());
         if (txtThoiLuongFont != null) txtThoiLuong.setFont(txtThoiLuongFont);
         txtThoiLuong.setText("Thời gian làm bài: 40 phút");
-        panel3.add(txtThoiLuong, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(txtThoiLuong, new GridConstraints(4, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         txtSoCH = new JLabel();
         txtSoCH.setBackground(new Color(-2954497));
         Font txtSoCHFont = this.$$$getFont$$$("Arial", Font.PLAIN, 15, txtSoCH.getFont());
         if (txtSoCHFont != null) txtSoCH.setFont(txtSoCHFont);
         txtSoCH.setText("Số câu hỏi");
-        panel3.add(txtSoCH, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel3.add(txtSoCH, new GridConstraints(5, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel4 = new JPanel();
         panel4.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
         panel4.setBackground(new Color(-1247233));
-        panel3.add(panel4, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panel3.add(panel4, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         button1 = new JButton();
         button1.setBackground(new Color(-14057287));
         button1.setContentAreaFilled(false);
@@ -212,6 +256,14 @@ public class GiaoDienLamBaiThi extends JPanel {
         panel4.add(button1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
         panel4.add(spacer1, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        txtSoLanDuocPhepLamBai = new JLabel();
+        txtSoLanDuocPhepLamBai.setBackground(new Color(-2954497));
+        Font txtSoLanDuocPhepLamBaiFont = this.$$$getFont$$$("Arial", Font.PLAIN, 15, txtSoLanDuocPhepLamBai.getFont());
+        if (txtSoLanDuocPhepLamBaiFont != null) txtSoLanDuocPhepLamBai.setFont(txtSoLanDuocPhepLamBaiFont);
+        txtSoLanDuocPhepLamBai.setText("Số lần được phép làm bài:");
+        panel3.add(txtSoLanDuocPhepLamBai, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer2 = new Spacer();
+        panel3.add(spacer2, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         pnKetQua = new JPanel();
         pnKetQua.setLayout(new BorderLayout(0, 0));
         pnKetQua.setBackground(new Color(-1));
@@ -223,28 +275,30 @@ public class GiaoDienLamBaiThi extends JPanel {
         pnKetQuaLamBai.setBackground(new Color(-1));
         pnKetQua.add(pnKetQuaLamBai, BorderLayout.CENTER);
         final JPanel panel5 = new JPanel();
-        panel5.setLayout(new GridLayoutManager(1, 3, new Insets(0, 0, 0, 0), -1, -1));
+        panel5.setLayout(new GridLayoutManager(1, 3, new Insets(0, 0, 20, 0), -1, -1));
         panel5.setBackground(new Color(-1));
         pnKetQua.add(panel5, BorderLayout.NORTH);
         final JLabel label2 = new JLabel();
+        Font label2Font = this.$$$getFont$$$("Arial", Font.PLAIN, 18, label2.getFont());
+        if (label2Font != null) label2.setFont(label2Font);
         label2.setText("Số lần làm bài");
-        panel5.add(label2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final Spacer spacer2 = new Spacer();
-        panel5.add(spacer2, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
-        làmBàiThiButton = new JButton();
-        làmBàiThiButton.setBackground(new Color(-16745473));
-        làmBàiThiButton.setContentAreaFilled(false);
-        làmBàiThiButton.setDefaultCapable(true);
-        làmBàiThiButton.setFocusPainted(false);
-        làmBàiThiButton.setFocusTraversalPolicyProvider(false);
-        làmBàiThiButton.setFocusable(false);
-        Font làmBàiThiButtonFont = this.$$$getFont$$$("Arial", Font.BOLD, 18, làmBàiThiButton.getFont());
-        if (làmBàiThiButtonFont != null) làmBàiThiButton.setFont(làmBàiThiButtonFont);
-        làmBàiThiButton.setForeground(new Color(-1));
-        làmBàiThiButton.setOpaque(true);
-        làmBàiThiButton.setRolloverEnabled(true);
-        làmBàiThiButton.setText("Làm bài thi");
-        panel5.add(làmBàiThiButton, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel5.add(label2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(98, 41), null, 0, false));
+        final Spacer spacer3 = new Spacer();
+        panel5.add(spacer3, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, new Dimension(14, 41), null, 0, false));
+        btnLamBaiThi = new JButton();
+        btnLamBaiThi.setBackground(new Color(-16745473));
+        btnLamBaiThi.setContentAreaFilled(false);
+        btnLamBaiThi.setDefaultCapable(true);
+        btnLamBaiThi.setFocusPainted(false);
+        btnLamBaiThi.setFocusTraversalPolicyProvider(false);
+        btnLamBaiThi.setFocusable(false);
+        Font btnLamBaiThiFont = this.$$$getFont$$$("Arial", Font.BOLD, 18, btnLamBaiThi.getFont());
+        if (btnLamBaiThiFont != null) btnLamBaiThi.setFont(btnLamBaiThiFont);
+        btnLamBaiThi.setForeground(new Color(-1));
+        btnLamBaiThi.setOpaque(true);
+        btnLamBaiThi.setRolloverEnabled(true);
+        btnLamBaiThi.setText("Làm bài thi");
+        panel5.add(btnLamBaiThi, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(140, 41), null, 0, false));
     }
 
     /**
@@ -274,6 +328,53 @@ public class GiaoDienLamBaiThi extends JPanel {
      */
     public JComponent $$$getRootComponent$$$() {
         return panel1;
+    }
+
+    /**
+     * Phương thức để tải kết quả làm bài của học sinh cho một bài thi cụ thể
+     *
+     * @param baiThi Bài thi cần tải kết quả
+     */
+    public void loadKetQuaLamBai(BaiThi baiThi) {
+        try {
+
+
+            // Lấy danh sách phiên làm bài của bài thi
+            List<PhienLamBai> phienLamBaiList = phienLamBaiService.layDanhSachPhienLamBaiVaCauTraLoiTheoBaiThi(baiThi.getMaBaiThi());
+
+            // Xóa tất cả các thành phần cũ trong panel
+            pnKetQuaLamBai.removeAll();
+            pnKetQuaLamBai.setLayout(new BoxLayout(pnKetQuaLamBai, BoxLayout.Y_AXIS));
+
+            // Lọc và hiển thị các phiên làm bài của học sinh hiện tại
+            boolean coPhienLamBai = false;
+            for (PhienLamBai phienLamBai : phienLamBaiList) {
+                if (phienLamBai.getHocSinh().getMaHocSinh() == hocSinh.getMaHocSinh()) {
+                    System.out.println("Tìm thấy phiên làm bài: " + phienLamBai.getMaPhien());
+                    pnKetQuaLamBai.add(new PanelKQLamBai(phienLamBai));
+                    coPhienLamBai = true;
+                }
+            }
+
+            // Nếu không có phiên làm bài nào, hiển thị thông báo
+            if (!coPhienLamBai) {
+                JLabel lblThongBao = new JLabel("Chưa có lần làm bài nào");
+                lblThongBao.setFont(new Font("Arial", Font.ITALIC, 16));
+                lblThongBao.setForeground(new Color(108, 117, 125));
+                lblThongBao.setAlignmentX(Component.CENTER_ALIGNMENT);
+                pnKetQuaLamBai.add(lblThongBao);
+            }
+
+            // Cập nhật giao diện
+            pnKetQuaLamBai.revalidate();
+            pnKetQuaLamBai.repaint();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "Lỗi khi tải kết quả làm bài: " + e.getMessage(),
+                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public JPanel thanhPhanBaiThi(BaiThi baiThi) {
@@ -381,30 +482,9 @@ public class GiaoDienLamBaiThi extends JPanel {
                 txtDong.setText("Thời gian đóng đề: " + chuyenDinhDangNgayGio(baiThi.getThoiGianKetThuc()));
                 txtThoiLuong.setText("Thời gian làm bài: " + baiThi.getThoiLuong() + " phút");
                 txtSoCH.setText("Số câu hỏi: " + soCauHoi + " câu");
-                try {
-                    PhienLamBaiService phienLamBaiService = (PhienLamBaiService) Naming.lookup("rmi://localhost:8081/phienLamBaiService");
-
-                    List<PhienLamBai> phienLamBaiList = phienLamBaiService.layDanhSachPhienLamBaiVaCauTraLoiTheoBaiThi(baiThi.getMaBaiThi());
-                    pnKetQuaLamBai.setLayout(new WrapLayout(FlowLayout.LEFT, 10, 10));
-                    pnKetQuaLamBai.removeAll();
-                    for (PhienLamBai phienLamBai : phienLamBaiList) {
-                        if (phienLamBai.getHocSinh().getMaHocSinh() == hocSinh.getMaHocSinh()) {
-                            System.out.println(phienLamBai.getMaPhien());
-                            pnKetQuaLamBai.add(new PanelKQLamBai(phienLamBai));
-
-                        }
-                    }
-                    pnKetQuaLamBai.revalidate();
-                    pnKetQuaLamBai.repaint();
-
-                } catch (NotBoundException ex) {
-                    throw new RuntimeException(ex);
-                } catch (MalformedURLException ex) {
-                    throw new RuntimeException(ex);
-                } catch (RemoteException ex) {
-                    throw new RuntimeException(ex);
-                }
-
+                txtSoLanDuocPhepLamBai.setText("Số lần được phép làm: " + baiThi.getSoLanDuocPhepLamBai() + " lần");
+                // Tải kết quả làm bài của học sinh
+                loadKetQuaLamBai(baiThi);
             }
         });
 

@@ -60,7 +60,7 @@ public class GiaoDienDangNhap {
             frame.setContentPane(new GiaoDienChinh(ketQua).$$$getRootComponent$$$());
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.pack();
-            frame.setSize(1000, 1000);
+            frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
             frame.setLocationRelativeTo(null); // căn giữa
             frame.setVisible(true);
 
