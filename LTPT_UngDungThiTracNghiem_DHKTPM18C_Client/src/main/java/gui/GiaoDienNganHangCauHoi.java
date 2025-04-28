@@ -1,5 +1,6 @@
 package gui;
 import entities.CauHoi;
+import gui.custom.ButtonRenderer;
 import org.kordamp.ikonli.bootstrapicons.BootstrapIcons;
 import org.kordamp.ikonli.swing.FontIcon;
 import service.CauHoiService;
@@ -15,10 +16,11 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.List;
+import gui.custom.ButtonEditor;
 
 public class GiaoDienNganHangCauHoi extends JPanel {
     private JPanel mainPanel; // Panel cha chứa các màn hình con
-    private CauHoiService cauHoiService = (CauHoiService) Naming.lookup("rmi://localhost:9090/cauHoiService");
+    private CauHoiService cauHoiService = (CauHoiService) Naming.lookup("rmi://192.168.1.13:8081/cauHoiService");
     private JTable table;
     private DefaultTableModel model;
     private List<CauHoi> listCauHoi;

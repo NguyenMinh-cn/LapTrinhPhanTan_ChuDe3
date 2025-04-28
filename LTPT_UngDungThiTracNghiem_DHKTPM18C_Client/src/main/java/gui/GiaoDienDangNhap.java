@@ -24,7 +24,7 @@ public class GiaoDienDangNhap {
     private JPasswordField txtMatKhau;
     private JButton btnDangNhap;
 
-    private TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://localhost:8081/taiKhoanService");;
+    private TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://192.168.1.13:8081/taiKhoanService");;
 
     public GiaoDienDangNhap() throws MalformedURLException, NotBoundException, RemoteException {
         try {

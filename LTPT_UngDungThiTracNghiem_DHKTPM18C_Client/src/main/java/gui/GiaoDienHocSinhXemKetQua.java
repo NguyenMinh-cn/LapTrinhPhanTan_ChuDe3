@@ -94,7 +94,7 @@ public class GiaoDienHocSinhXemKetQua extends JPanel {
 
     private void loadKetQua() {
         try {
-            PhienLamBaiService phienLamBaiService = (PhienLamBaiService) Naming.lookup("rmi://localhost:8081/phienLamBaiService");
+            PhienLamBaiService phienLamBaiService = (PhienLamBaiService) Naming.lookup("rmi://192.168.1.13:8081/phienLamBaiService");
 
             // Lấy chi tiết kết quả
             List<Object[]> chiTietKetQua = phienLamBaiService.layKetQuaChiTietPhienLamBai(maPhienLamBai);

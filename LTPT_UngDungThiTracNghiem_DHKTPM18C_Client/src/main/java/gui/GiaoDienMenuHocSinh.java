@@ -28,7 +28,7 @@ public class GiaoDienMenuHocSinh extends JPanel {
     private JLabel lbDSBaiThi;
     private JLabel lbDanhSachBaiThi;
     private JPanel pnDangXuat;
-    private TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://localhost:8081/taiKhoanService");
+    private TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://192.168.1.13:8081/taiKhoanService");
     private JLabel selectedLabel = null;
 
     public GiaoDienMenuHocSinh(HocSinh hocSinh) throws MalformedURLException, NotBoundException, RemoteException {

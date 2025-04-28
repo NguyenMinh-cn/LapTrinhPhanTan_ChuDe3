@@ -224,7 +224,7 @@ public class GiaoDienQuanLyMonHoc extends JPanel {
         SwingUtilities.invokeLater(() -> {
             MonHocService monHocService = null;
             try {
-                monHocService = (MonHocService) Naming.lookup("rmi://localhost:8081/monHocService");
+                monHocService = (MonHocService) Naming.lookup("rmi://192.168.1.13:8081/monHocService");
             } catch (NotBoundException e) {
                 throw new RuntimeException(e);
             } catch (MalformedURLException e) {

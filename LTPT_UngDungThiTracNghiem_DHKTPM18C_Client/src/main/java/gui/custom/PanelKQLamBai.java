@@ -131,7 +131,7 @@ public class PanelKQLamBai extends JPanel {
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(900, 300);
 
-            PhienLamBaiService phienLamBaiService = (PhienLamBaiService) Naming.lookup("rmi://localhost:8081/phienLamBaiService");
+            PhienLamBaiService phienLamBaiService = (PhienLamBaiService) Naming.lookup("rmi://192.168.1.13:8081/phienLamBaiService");
 
             String maPhien = "2025042801031689";
             PhienLamBai phienLamBai1 = phienLamBaiService.layThongTinPhienLamBaiVaCauTraLoi(maPhien);

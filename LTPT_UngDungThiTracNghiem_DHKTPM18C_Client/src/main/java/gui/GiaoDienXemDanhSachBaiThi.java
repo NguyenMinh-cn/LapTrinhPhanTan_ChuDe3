@@ -23,8 +23,8 @@ public class GiaoDienXemDanhSachBaiThi extends JPanel {
     public GiaoDienXemDanhSachBaiThi(HocSinh hocSinh) {
         this.hocSinh = hocSinh;
         try {
-            this.baiThiService = (BaiThiService) Naming.lookup("rmi://localhost:8081/baiThiService");
-            this.phienLamBaiService = (PhienLamBaiService) Naming.lookup("rmi://localhost:8081/phienLamBaiService");
+            this.baiThiService = (BaiThiService) Naming.lookup("rmi://192.168.1.13:8081/baiThiService");
+            this.phienLamBaiService = (PhienLamBaiService) Naming.lookup("rmi://192.168.1.13:8081/phienLamBaiService");
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Lỗi kết nối server: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);

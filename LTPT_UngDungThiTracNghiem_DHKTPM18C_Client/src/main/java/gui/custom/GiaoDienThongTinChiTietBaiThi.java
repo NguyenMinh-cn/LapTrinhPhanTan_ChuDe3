@@ -28,7 +28,7 @@ public class GiaoDienThongTinChiTietBaiThi extends JPanel {
     private BaiThi baiThi;
     private CauHoiService cauHoiService;
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm, dd/MM/yyyy");
-    private BaiThiService baiThiService = (BaiThiService) Naming.lookup("rmi://localhost:8081/baiThiService");
+    private BaiThiService baiThiService = (BaiThiService) Naming.lookup("rmi://192.168.1.13:8081/baiThiService");
 
     public GiaoDienThongTinChiTietBaiThi(BaiThi baiThi) throws MalformedURLException, NotBoundException, RemoteException {
         // Kiểm tra nếu baiThi là null
@@ -68,7 +68,7 @@ public class GiaoDienThongTinChiTietBaiThi extends JPanel {
         }
 
         try {
-            this.cauHoiService = (CauHoiService) Naming.lookup("rmi://localhost:8081/cauHoiService");
+            this.cauHoiService = (CauHoiService) Naming.lookup("rmi://192.168.1.13:8081/cauHoiService");
             initUI();
         } catch (Exception e) {
             e.printStackTrace();
@@ -319,7 +319,7 @@ public class GiaoDienThongTinChiTietBaiThi extends JPanel {
         }
 
         try {
-            BaiThiService baiThiService = (BaiThiService) Naming.lookup("rmi://localhost:8081/baiThiService");
+            BaiThiService baiThiService = (BaiThiService) Naming.lookup("rmi://192.168.1.13:8081/baiThiService");
             BaiThi baiThi1 = baiThiService.layThongTinChiTietBaiThi(10);
 
             if (baiThi1 == null) {

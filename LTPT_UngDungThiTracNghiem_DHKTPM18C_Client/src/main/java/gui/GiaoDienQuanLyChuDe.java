@@ -21,8 +21,8 @@ public class GiaoDienQuanLyChuDe extends JPanel {
     private JTable table;
     private DefaultTableModel model;
     private int maMon;
-    private MonHocService monHocService = (MonHocService) Naming.lookup("rmi://localhost:8081/monHocService");
-    private ChuDeService chuDeService = (ChuDeService) Naming.lookup("rmi://localhost:8081/chuDeService");
+    private MonHocService monHocService = (MonHocService) Naming.lookup("rmi://192.168.1.13:8081/monHocService");
+    private ChuDeService chuDeService = (ChuDeService) Naming.lookup("rmi://192.168.1.13:8081/chuDeService");
     private MonHoc monHoc;
     private JComboBox<String> cbMonHoc;
 

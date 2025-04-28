@@ -27,7 +27,7 @@ public class GiaoDienThi extends JFrame {
     private int thoiGianConLai;
     private BaiThi baiThi;
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm, dd/MM/yyyy");
-    private PhienLamBaiService phienLamBaiService = (PhienLamBaiService) Naming.lookup("rmi://localhost:8081/phienLamBaiService");
+    private PhienLamBaiService phienLamBaiService = (PhienLamBaiService) Naming.lookup("rmi://192.168.1.13:8081/phienLamBaiService");
 
     private PhienLamBai phienLamBai;
     private HocSinh hocSinh;
@@ -389,7 +389,7 @@ public class GiaoDienThi extends JFrame {
 
     public static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException {
         try {
-            BaiThiService baiThiService = (BaiThiService) Naming.lookup("rmi://localhost:8081/baiThiService");
+            BaiThiService baiThiService = (BaiThiService) Naming.lookup("rmi://192.168.1.13:8081/baiThiService");
             // Sử dụng layThongTinBaiThiVaCauHoi thay vì layThongTinChiTietBaiThi để đảm bảo các collection được load
             BaiThi baiThi = baiThiService.layThongTinBaiThiVaCauHoi(9);
             if (baiThi != null) {

@@ -54,9 +54,9 @@ public class GiaoDienCaiDatTaiKhoan extends JPanel {
     private JButton btnM3;
     private JButton btnM2;
     private JButton btnM1;
-    private GiaoVienService giaoVienService = (GiaoVienService) Naming.lookup("rmi://localhost:8081/giaoVienService");
-    private HocSinhService hocSinhService = (HocSinhService) Naming.lookup("rmi://localhost:8081/hocSinhService");
-    private TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://localhost:8081/taiKhoanService");
+    private GiaoVienService giaoVienService = (GiaoVienService) Naming.lookup("rmi://192.168.1.13:8081/giaoVienService");
+    private HocSinhService hocSinhService = (HocSinhService) Naming.lookup("rmi://192.168.1.13:8081/hocSinhService");
+    private TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://192.168.1.13:8081/taiKhoanService");
     public GiaoDienCaiDatTaiKhoan(TaiKhoan taiKhoan) throws MalformedURLException, NotBoundException, RemoteException {
 
         $$$setupUI$$$();
@@ -514,7 +514,7 @@ public class GiaoDienCaiDatTaiKhoan extends JPanel {
     public static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException {
         // Khởi tạo giao diện
         JFrame frame = new JFrame("Giao diện cài đặt");
-        TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://localhost:8081/taiKhoanService");
+        TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://192.168.1.13:8081/taiKhoanService");
         frame.setContentPane(new GiaoDienCaiDatTaiKhoan(taiKhoanService.finByID("buidungmai@gmail.com")).$$$getRootComponent$$$());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();

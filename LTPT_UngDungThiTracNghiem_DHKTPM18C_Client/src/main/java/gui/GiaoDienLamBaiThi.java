@@ -45,9 +45,9 @@ public class GiaoDienLamBaiThi extends JPanel {
     private JButton button1;
     private JLabel txtSoLanDuocPhepLamBai;
     private HocSinh hocSinh;
-    private BaiThiService baiThiService = (BaiThiService) Naming.lookup("rmi://localhost:8081/baiThiService");
+    private BaiThiService baiThiService = (BaiThiService) Naming.lookup("rmi://192.168.1.13:8081/baiThiService");
     private BaiThi baiThiDangChon;
-    private PhienLamBaiService phienLamBaiService = (PhienLamBaiService) Naming.lookup("rmi://localhost:8081/phienLamBaiService");
+    private PhienLamBaiService phienLamBaiService = (PhienLamBaiService) Naming.lookup("rmi://192.168.1.13:8081/phienLamBaiService");
     public static String chuyenDinhDangNgayGio(LocalDateTime localDateTime) {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm, dd/MM/yyyy");
@@ -507,7 +507,7 @@ public class GiaoDienLamBaiThi extends JPanel {
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setSize(1200, 800);
                 frame.setLocationRelativeTo(null);
-                HocSinhService hocSinhService = (HocSinhService) Naming.lookup("rmi://localhost:8081/hocSinhService");
+                HocSinhService hocSinhService = (HocSinhService) Naming.lookup("rmi://192.168.1.13:8081/hocSinhService");
                 // Tạo instance của GiaoDienLamBaiThi
                 GiaoDienLamBaiThi giaoDienLamBaiThi = new GiaoDienLamBaiThi(hocSinhService.finByID(84L));
 
