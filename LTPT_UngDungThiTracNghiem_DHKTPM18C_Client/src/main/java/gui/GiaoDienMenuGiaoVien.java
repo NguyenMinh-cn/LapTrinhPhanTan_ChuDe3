@@ -1,6 +1,7 @@
 package gui;
 
 import entities.GiaoVien;
+import lombok.SneakyThrows;
 import service.TaiKhoanService;
 
 import javax.swing.*;
@@ -50,6 +51,7 @@ public class GiaoDienMenuGiaoVien {
             }
         });
         lbDangXuat.addMouseListener(new MouseAdapter() {
+            @SneakyThrows
             @Override
             public void mouseClicked(MouseEvent e) {
                 int confirm = JOptionPane.showConfirmDialog(null,

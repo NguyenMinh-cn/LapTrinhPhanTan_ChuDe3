@@ -36,7 +36,7 @@ import java.util.List;
 
 
 public class GiaoDienDanhSachBaiThi extends JPanel {
-    private static BaiThiService baiThiService;
+    private BaiThiService baiThiService = (BaiThiService) Naming.lookup("rmi://localhost:8081/baiThiService");
     private PanelThoiGianThi panelThoiGianThi;
     private JPanel panel1;
     private JButton btnTaoDeThi;
@@ -76,7 +76,7 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
     private JButton btnXoaCauHoi;
     private JComboBox cbBoxSoLanLamKiemTra;
     private final CardLayout cardLayout;
-    private CauHoiService cauHoiService;
+    private CauHoiService cauHoiService = (CauHoiService) Naming.lookup("rmi://localhost:8081/cauHoiService");
     private final List<Lop> lopDaChon = new ArrayList<>();
     private final GiaoVien giaoVienDangNhap;
     private List<MonHoc> monHocList;
@@ -245,8 +245,8 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    baiThiService = (BaiThiService) Naming.lookup("rmi://localhost:8081/baiThiService");
-                    cauHoiService = (CauHoiService) Naming.lookup("rmi://localhost:8081/cauHoiService");
+
+
                     Component[] components = pnDSSoCauHoi.getComponents();
                     List<CauHoi> danhSachCauHoi1 = new ArrayList<>();
 
@@ -348,15 +348,6 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
                     } else {
                         JOptionPane.showMessageDialog(null, "Lưu bài thi thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                     }
-                } catch (NotBoundException ex) {
-                    JOptionPane.showMessageDialog(null, "Lỗi kết nối: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-                    ex.printStackTrace();
-                } catch (MalformedURLException ex) {
-                    JOptionPane.showMessageDialog(null, "Lỗi URL: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-                    ex.printStackTrace();
-                } catch (RemoteException ex) {
-                    JOptionPane.showMessageDialog(null, "Lỗi kết nối từ xa: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-                    ex.printStackTrace();
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Lỗi không xác định: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
                     ex.printStackTrace();
@@ -1000,7 +991,6 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
             pnHienThiCacBaiThi.setLayout(new WrapLayout(FlowLayout.LEFT, 10, 10));
 
             // Thêm các phần tử vào pnHienThiCacBaiThi
-            baiThiService = (BaiThiService) Naming.lookup("rmi://localhost:8081/baiThiService");
             List<BaiThi> dsBaiThi = baiThiService.timDSBaiTHiTheoMaGiaoVien(giaoVienDangNhap.getMaGiaoVien());
 
             if (dsBaiThi.isEmpty()) {
@@ -1012,6 +1002,15 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
             } else {
                 // Hiển thị danh sách bài thi
                 for (BaiThi baiThi : dsBaiThi) {
+                    System.out.println("Tên bài thi: " + baiThi.getTenBaiThi());
+                    System.out.println("Môn học: " + (baiThi.getMonHoc() != null ? baiThi.getMonHoc().getTenMon() : "Không có"));
+                    System.out.println("Thời lượng: " + baiThi.getThoiLuong() + " phút");
+                    System.out.println("Số câu hỏi: " + baiThi.getDanhSachCauHoi().size());
+                    System.out.println("Số lần được phép làm: " + baiThi.getSoLanDuocPhepLamBai());
+
+//                    for (Lop lop : baiThi.getDanhSachLop()) {
+//                        System.out.println("Lớp: " + lop.getTenLop()); // In tên lớp (giả sử Lop có phương thức getTenLop)
+//                    }
                     pnHienThiCacBaiThi.add(thanhPhanBaiThi(baiThi));
                 }
             }
@@ -1126,14 +1125,55 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 cardLayout.show(pnCard, "Card4");
                 pnTTCT.removeAll();
+
+                if (baiThi == null) {
+                    JOptionPane.showMessageDialog(GiaoDienDanhSachBaiThi.this,
+                        "Không thể hiển thị thông tin chi tiết bài thi vì bài thi không tồn tại.",
+                        "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
                 try {
+                    if (baiThiService != null) {
+                        System.out.println("Kết nối thành công đến BaiThiService");
+                    }
+
+                    BaiThi bt = baiThiService.layThongTinChiTietBaiThi(baiThi.getMaBaiThi());
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(GiaoDienDanhSachBaiThi.this,
+                            "Lỗi kết nối đến server: " + ex.getMessage(),
+                            "Lỗi", JOptionPane.ERROR_MESSAGE);
+                }
+                try {
+                    System.out.println("Mã bài thi: " + baiThi.getMaBaiThi());
+                    System.out.println("Tên bài thi: " + baiThi.getTenBaiThi());
+                    System.out.println("Môn học: " + (baiThi.getMonHoc() != null ? baiThi.getMonHoc().getTenMon() : "Không có"));
+                    System.out.println("Thời lượng: " + baiThi.getThoiLuong() + " phút");
+                    System.out.println("Số câu hỏi: " + baiThi.getDanhSachCauHoi().size());
+                    System.out.println("Số lần được phép làm: " + baiThi.getSoLanDuocPhepLamBai());
+                    List<Lop> danhSachLop = baiThiService.timLopTheoBaiThi(baiThi.getMaBaiThi());
+                    System.out.println("Số lớp liên quan tới bài thi " + baiThi.getMaBaiThi() + ": " + danhSachLop.size());
+                    for (Lop lop : danhSachLop) {
+                        System.out.println("Lớp: " + lop.getTenLop()); // In tên lớp (giả sử Lop có phương thức getTenLop)
+                    }
+                    baiThi.setDanhSachLop(danhSachLop);
+                    System.out.println("Số lớp: " + baiThi.getDanhSachLop().size());
+
+                    // Kiểm tra nếu bt là null trước khi sử dụng
+                    if (baiThi == null) {
+                        JOptionPane.showMessageDialog(GiaoDienDanhSachBaiThi.this,
+                            "Không thể lấy thông tin chi tiết bài thi từ server11111.",
+                            "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    // Hiển thị thông tin chi tiết bài thi
                     pnTTCT.add(new GiaoDienThongTinChiTietBaiThi(baiThi));
-                } catch (MalformedURLException ex) {
-                    throw new RuntimeException(ex);
-                } catch (NotBoundException ex) {
-                    throw new RuntimeException(ex);
-                } catch (RemoteException ex) {
-                    throw new RuntimeException(ex);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(GiaoDienDanhSachBaiThi.this,
+                        "Lỗi khi lấy thông tin chi tiết bài thi: " + ex.getMessage(),
+                        "Lỗi", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -1180,9 +1220,13 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
                     ckBSuDungMK.setSelected(false);
                     txtNhapMatKhau.setText("");
                 }
-                baiThiService = (BaiThiService) Naming.lookup("rmi://localhost:8081/baiThiService");
-                BaiThi baiThi1 = baiThiService.layThongTinChiTietBaiThi(baiThi.getMaBaiThi());
-                List<Lop> lopDaChon = baiThi1.getDanhSachLop();
+                List<Lop> danhSachLop = baiThiService.timLopTheoBaiThi(baiThi.getMaBaiThi());
+                int sttLop = 1;
+                for (Lop lop : danhSachLop) {
+                    System.out.println("Lớp " + sttLop++ + ": " + lop.getTenLop()); // Giả sử Lop có phương thức getTenLop()
+                }
+                baiThi.setDanhSachLop(danhSachLop);
+                List<Lop> lopDaChon = baiThi.getDanhSachLop();
                 taoJCheckBoxLop();
                 for (Lop lop : lopDaChon) {
                     for (Component comp : pnDSLop.getComponents()) {
@@ -1443,7 +1487,7 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 600);
         GiaoVienService giaoVienService = (GiaoVienService) Naming.lookup("rmi://localhost:8081/giaoVienService");
-        GiaoVien giaoVien = giaoVienService.finByID(2);
+        GiaoVien giaoVien = giaoVienService.finByID(8);
 
         frame.setContentPane(new GiaoDienDanhSachBaiThi(giaoVien).$$$getRootComponent$$$());
         frame.setLocationRelativeTo(null); // căn giữa

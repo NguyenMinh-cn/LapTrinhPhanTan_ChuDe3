@@ -36,17 +36,15 @@ public class BaiThiDAO extends GenericDAO<BaiThi, Integer>{
             String jpql = "SELECT DISTINCT bt FROM BaiThi bt " +
                     "LEFT JOIN FETCH bt.monHoc " +
                     "LEFT JOIN FETCH bt.giaoVien " +
-                    "LEFT JOIN FETCH bt.danhSachCauHoi " +   // chỉ fetch danhSachCauHoi
+                    "LEFT JOIN FETCH bt.danhSachCauHoi " +
                     "LEFT JOIN FETCH bt.danhSachLop " +
                     "WHERE bt.maBaiThi = :maBaiThi";
 
             BaiThi baiThi = em.createQuery(jpql, BaiThi.class)
                     .setParameter("maBaiThi", maBaiThi)
                     .getSingleResult();
-
-            // Sau đó ép Hibernate tự động load các collection còn lại
-            baiThi.getDanhSachPhienLamBaiCuaBaiThi().size(); // ép load
-            baiThi.getDanhSachLop().size();                  // ép load nốt nếu cần
+            baiThi.getDanhSachPhienLamBaiCuaBaiThi().size();
+            baiThi.getDanhSachLop().size();
 
             return baiThi;
         } catch (NoResultException e) {
@@ -76,7 +74,7 @@ public class BaiThiDAO extends GenericDAO<BaiThi, Integer>{
     public List<BaiThi> getAllBaiThiForHocSinh(Long maHocSinh) {
         try {
             String jpql = "SELECT DISTINCT b FROM BaiThi b " +
-                    "JOIN FETCH b.danhSachCauHoi " +  // Thêm JOIN FETCH
+                    "JOIN FETCH b.danhSachCauHoi " +
                     "JOIN b.danhSachLop l " +
                     "JOIN HocSinh hs ON hs.lop.maLop = l.maLop " +
                     "WHERE hs.maHocSinh = :maHocSinh";
@@ -85,7 +83,6 @@ public class BaiThiDAO extends GenericDAO<BaiThi, Integer>{
                     .setParameter("maHocSinh", maHocSinh)
                     .getResultList();
 
-            // Force initialize các collection cần thiết
             for (BaiThi baiThi : dsBaiThi) {
                 baiThi.getDanhSachCauHoi().size();
                 baiThi.getMonHoc().getTenMon();
@@ -96,6 +93,21 @@ public class BaiThiDAO extends GenericDAO<BaiThi, Integer>{
         } catch (Exception e) {
             e.printStackTrace();
             return List.of();
+        }
+    }
+    public List<Lop> timLopTheoBaiThi(int maBaiThi) {
+        try {
+            String jpql = "SELECT l FROM BaiThi bt " +
+                    "JOIN bt.danhSachLop l " +
+                    "WHERE bt.maBaiThi = :maBaiThi";
+            List<Lop> danhSachLop = em.createQuery(jpql, Lop.class)
+                    .setParameter("maBaiThi", maBaiThi)
+                    .getResultList();
+
+            return danhSachLop;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
         }
     }
 
@@ -109,9 +121,14 @@ public class BaiThiDAO extends GenericDAO<BaiThi, Integer>{
             BaiThiDAO baiThiDAO = new BaiThiDAO(em, BaiThi.class);
 
             // Gọi DAO lấy bài thi theo mã
-            int maBaiThi = 9; // <== sửa mã bài thi tùy database bạn đang có
+            int maBaiThi = 10; // <== sửa mã bài thi tùy database bạn đang có
             BaiThi baiThi = baiThiDAO.layThongTinBaiThiVaCauHoi(maBaiThi);
-
+            List<Lop> danhSachLop = baiThiDAO.timLopTheoBaiThi(maBaiThi);
+            System.out.println("Số lớp liên quan tới bài thi " + maBaiThi + ": " + danhSachLop.size());
+            for (Lop lop : danhSachLop) {
+                System.out.println("Lớp: " + lop.getTenLop()); // In tên lớp (giả sử Lop có phương thức getTenLop)
+            }
+            baiThi.setDanhSachLop(danhSachLop);
             if (baiThi != null) {
                 System.out.println("=== Thông tin bài thi ===");
                 System.out.println("Tên bài thi: " + baiThi.getTenBaiThi());
@@ -119,6 +136,12 @@ public class BaiThiDAO extends GenericDAO<BaiThi, Integer>{
                 System.out.println("Thời lượng: " + baiThi.getThoiLuong() + " phút");
                 System.out.println("Số câu hỏi: " + baiThi.getDanhSachCauHoi().size());
                 System.out.println("Số lần được phép làm: " + baiThi.getSoLanDuocPhepLamBai());
+                System.out.println("Số lớp: " + baiThi.getDanhSachLop().size());
+                int sttLop = 1;
+                for (Lop lop : baiThi.getDanhSachLop()) {
+                    System.out.println("Lớp " + sttLop++ + ": " + lop.getTenLop()); // Giả sử Lop có phương thức getTenLop()
+                }
+
                 System.out.println("\n=== Danh sách câu hỏi ===");
                 List<CauHoi> dsCauHoi = baiThi.getDanhSachCauHoi();
                 int stt = 1;

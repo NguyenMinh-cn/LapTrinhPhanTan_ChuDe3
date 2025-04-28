@@ -82,7 +82,15 @@ public class GiaoDienMenuHocSinh extends JPanel {
                 if (confirm == JOptionPane.YES_OPTION) {
                     SwingUtilities.getWindowAncestor(panel1).dispose();
                     JFrame frame = new JFrame("Đăng Nhập");
-                    frame.setContentPane(new GiaoDienDangNhap().$$$getRootComponent$$$());
+                    try {
+                        frame.setContentPane(new GiaoDienDangNhap().$$$getRootComponent$$$());
+                    } catch (MalformedURLException ex) {
+                        throw new RuntimeException(ex);
+                    } catch (NotBoundException ex) {
+                        throw new RuntimeException(ex);
+                    } catch (RemoteException ex) {
+                        throw new RuntimeException(ex);
+                    }
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     frame.pack();
                     frame.setLocationRelativeTo(null);

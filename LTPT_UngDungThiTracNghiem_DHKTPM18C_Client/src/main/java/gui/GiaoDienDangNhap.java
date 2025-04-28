@@ -12,7 +12,10 @@ import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.MalformedURLException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.Locale;
 
 public class GiaoDienDangNhap {
@@ -21,12 +24,11 @@ public class GiaoDienDangNhap {
     private JPasswordField txtMatKhau;
     private JButton btnDangNhap;
 
-    private TaiKhoanService taiKhoanService;
+    private TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://localhost:8081/taiKhoanService");;
 
-    public GiaoDienDangNhap() {
-        $$$setupUI$$$();
+    public GiaoDienDangNhap() throws MalformedURLException, NotBoundException, RemoteException {
         try {
-            taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://localhost:8081/taiKhoanService");
+            $$$setupUI$$$();
             btnDangNhap.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -36,9 +38,10 @@ public class GiaoDienDangNhap {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Không thể kết nối tới server RMI", "Lỗi", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
+            return;  // Dừng ngay khi không thể kết nối tới server
         }
-
     }
+
 
     private void xuLyDangNhap() {
         String tenDangNhap = txtTenDangNhap.getText().trim();
@@ -70,13 +73,20 @@ public class GiaoDienDangNhap {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException {
+        try {
         JFrame frame = new JFrame("Đăng Nhập");
+
         frame.setContentPane(new GiaoDienDangNhap().$$$getRootComponent$$$());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(null); // căn giữa màn hình
         frame.setVisible(true);
+        }catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Không thể kết nối tới server RMI", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+            return;  // Dừng ngay khi không thể kết nối tới server
+        }
     }
 
     /**

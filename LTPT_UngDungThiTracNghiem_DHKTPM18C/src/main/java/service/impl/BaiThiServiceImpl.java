@@ -3,6 +3,7 @@ package service.impl;
 import daos.BaiThiDAO;
 import daos.GiaoVienDAO;
 import entities.BaiThi;
+import entities.Lop;
 import service.BaiThiService;
 
 import java.rmi.RemoteException;
@@ -39,6 +40,11 @@ public class BaiThiServiceImpl extends GenericServiceImpl<BaiThi, Integer> imple
     @Override
     public BaiThi layThongTinBaiThiVaCauHoi(int maBaiThi) throws RemoteException {
         return baiThiDAO.layThongTinBaiThiVaCauHoi(maBaiThi);
+    }
+
+    @Override
+    public List<Lop> timLopTheoBaiThi(int maBaiThi) throws RemoteException {
+        return baiThiDAO.timLopTheoBaiThi(maBaiThi);
     }
 
 }

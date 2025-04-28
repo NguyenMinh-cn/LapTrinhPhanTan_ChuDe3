@@ -37,7 +37,7 @@ public class BaiThi implements Serializable {
     @Column(nullable = false)
     private int thoiLuong;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "BaiThi_Lop",
             joinColumns = @JoinColumn(name = "maBaiThi"),

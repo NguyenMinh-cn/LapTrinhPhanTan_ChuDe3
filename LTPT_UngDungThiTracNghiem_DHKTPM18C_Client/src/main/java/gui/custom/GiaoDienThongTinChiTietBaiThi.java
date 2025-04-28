@@ -28,14 +28,67 @@ public class GiaoDienThongTinChiTietBaiThi extends JPanel {
     private BaiThi baiThi;
     private CauHoiService cauHoiService;
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm, dd/MM/yyyy");
+    private BaiThiService baiThiService = (BaiThiService) Naming.lookup("rmi://localhost:8081/baiThiService");
 
     public GiaoDienThongTinChiTietBaiThi(BaiThi baiThi) throws MalformedURLException, NotBoundException, RemoteException {
-        this.baiThi = baiThi;
-        this.cauHoiService = (CauHoiService) Naming.lookup("rmi://localhost:8081/cauHoiService");
-        initUI();
+        // Kiểm tra nếu baiThi là null
+        if (baiThi == null) {
+            JOptionPane.showMessageDialog(this,
+                "Không thể hiển thị thông tin chi tiết bài thi vì bài thi không tồn tại.",
+                "Lỗi", JOptionPane.ERROR_MESSAGE);
+            this.baiThi = null;
+            this.cauHoiService = null;
+            return;
+        }
+
+        try {
+            BaiThi baiThi1 = baiThiService.layThongTinBaiThiVaCauHoi(baiThi.getMaBaiThi());
+            List<Lop> danhSachLop = baiThiService.timLopTheoBaiThi(baiThi.getMaBaiThi());
+
+            System.out.println("Số lớp liên quan tới bài thi " + baiThi.getMaBaiThi() + ": " + danhSachLop.size());
+            for (Lop lop : danhSachLop) {
+                System.out.println("Lớp: " + lop.getTenLop()); // In tên lớp (giả sử Lop có phương thức getTenLop)
+            }
+            baiThi1.setDanhSachLop(danhSachLop);
+            this.baiThi = baiThi1;
+            if (this.baiThi == null) {
+                JOptionPane.showMessageDialog(this,
+                    "Không thể lấy thông tin chi tiết bài thi từ server. Sử dụng thông tin cơ bản.",
+                    "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                this.baiThi = baiThi;
+            }
+        } catch (Exception e) {
+            // Nếu không lấy được thông tin đầy đủ, sử dụng bài thi được truyền vào
+            this.baiThi = baiThi;
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this,
+                "Lỗi khi lấy thông tin chi tiết bài thi: " + e.getMessage() +
+                "\nSử dụng thông tin cơ bản.",
+                "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+        }
+
+        try {
+            this.cauHoiService = (CauHoiService) Naming.lookup("rmi://localhost:8081/cauHoiService");
+            initUI();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this,
+                "Lỗi khi kết nối đến dịch vụ câu hỏi: " + e.getMessage(),
+                "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void initUI() throws MalformedURLException, NotBoundException, RemoteException {
+        // Kiểm tra nếu baiThi hoặc cauHoiService là null
+        if (baiThi == null || cauHoiService == null) {
+            setLayout(new BorderLayout());
+            JLabel lblError = new JLabel("Không thể hiển thị thông tin chi tiết bài thi.", JLabel.CENTER);
+            lblError.setFont(new Font("Arial", Font.BOLD, 16));
+            lblError.setForeground(Color.RED);
+            add(lblError, BorderLayout.CENTER);
+            return;
+        }
+
         setLayout(new BorderLayout());
         setBorder(new EmptyBorder(10, 10, 10, 10));
         setBackground(Color.WHITE);
@@ -43,15 +96,23 @@ public class GiaoDienThongTinChiTietBaiThi extends JPanel {
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setFont(new Font("Arial", Font.PLAIN, 22));
 
-        // Tab 1: Thông tin bài thi + Danh sách câu hỏi
-        JPanel thongTinPanel = createThongTinVaCauHoiPanel();
-        tabbedPane.addTab("Thông Tin & Câu Hỏi", new JScrollPane(thongTinPanel));
+        try {
+            // Tab 1: Thông tin bài thi + Danh sách câu hỏi
+            JPanel thongTinPanel = createThongTinVaCauHoiPanel();
+            tabbedPane.addTab("Thông Tin & Câu Hỏi", new JScrollPane(thongTinPanel));
 
-        // Tab 2: Lượt làm bài thi
-        JPanel luotLamBaiPanel = createLuotLamBaiPanel();
-        tabbedPane.addTab("Lượt Làm Bài Thi", new JScrollPane(luotLamBaiPanel));
+            // Tab 2: Lượt làm bài thi
+            JPanel luotLamBaiPanel = createLuotLamBaiPanel();
+            tabbedPane.addTab("Lượt Làm Bài Thi", new JScrollPane(luotLamBaiPanel));
 
-        add(tabbedPane, BorderLayout.CENTER);
+            add(tabbedPane, BorderLayout.CENTER);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JLabel lblError = new JLabel("Lỗi khi tạo giao diện: " + e.getMessage(), JLabel.CENTER);
+            lblError.setFont(new Font("Arial", Font.BOLD, 16));
+            lblError.setForeground(Color.RED);
+            add(lblError, BorderLayout.CENTER);
+        }
     }
 
     private JPanel createThongTinVaCauHoiPanel() throws RemoteException {
@@ -59,6 +120,15 @@ public class GiaoDienThongTinChiTietBaiThi extends JPanel {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(new EmptyBorder(20, 20, 20, 20));
         panel.setBackground(Color.WHITE);
+
+        // Kiểm tra nếu baiThi là null
+        if (baiThi == null) {
+            JLabel lblError = new JLabel("Không thể hiển thị thông tin chi tiết bài thi.", JLabel.CENTER);
+            lblError.setFont(new Font("Arial", Font.BOLD, 16));
+            lblError.setForeground(Color.RED);
+            panel.add(lblError);
+            return panel;
+        }
 
         // Thông tin bài thi
         JPanel thongTinPanel = new JPanel();
@@ -73,14 +143,20 @@ public class GiaoDienThongTinChiTietBaiThi extends JPanel {
         ));
         thongTinPanel.setBackground(Color.WHITE);
 
-        addLabel(thongTinPanel, "Tên bài thi: " + baiThi.getTenBaiThi());
-        addLabel(thongTinPanel, "Môn học: " + (baiThi.getMonHoc() != null ? baiThi.getMonHoc().getTenMon() : "Không có"));
-        addLabel(thongTinPanel, "Thời gian bắt đầu: " + baiThi.getThoiGianBatDau().format(formatter));
-        addLabel(thongTinPanel, "Thời gian kết thúc: " + baiThi.getThoiGianKetThuc().format(formatter));
-        addLabel(thongTinPanel, "Thời lượng: " + baiThi.getThoiLuong() + " phút");
-        addLabel(thongTinPanel, "Giáo viên: " + (baiThi.getGiaoVien() != null ? baiThi.getGiaoVien().getHoTen() : "Không có"));
-        addLabel(thongTinPanel, "Mật khẩu bài thi: " + (baiThi.getMatKhau() != null ? baiThi.getMatKhau() : "Không có"));
+        try {
+            addLabel(thongTinPanel, "Tên bài thi: " + baiThi.getTenBaiThi());
+            addLabel(thongTinPanel, "Môn học: " + (baiThi.getMonHoc() != null ? baiThi.getMonHoc().getTenMon() : "Không có"));
+            addLabel(thongTinPanel, "Thời gian bắt đầu: " + (baiThi.getThoiGianBatDau() != null ? baiThi.getThoiGianBatDau().format(formatter) : "Không có"));
+            addLabel(thongTinPanel, "Thời gian kết thúc: " + (baiThi.getThoiGianKetThuc() != null ? baiThi.getThoiGianKetThuc().format(formatter) : "Không có"));
+            addLabel(thongTinPanel, "Thời lượng: " + baiThi.getThoiLuong() + " phút");
+            addLabel(thongTinPanel, "Giáo viên: " + (baiThi.getGiaoVien() != null ? baiThi.getGiaoVien().getHoTen() : "Không có"));
+            addLabel(thongTinPanel, "Mật khẩu bài thi: " + (baiThi.getMatKhau() != null ? baiThi.getMatKhau() : "Không có"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            addLabel(thongTinPanel, "Lỗi khi hiển thị thông tin bài thi: " + e.getMessage());
+        }
         StringBuilder lopApDungBuilder = new StringBuilder();
+
         try {
             if (baiThi != null && baiThi.getDanhSachLop() != null) {
                 List<Lop> danhSachLop = baiThi.getDanhSachLop();
@@ -93,6 +169,11 @@ public class GiaoDienThongTinChiTietBaiThi extends JPanel {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            lopApDungBuilder.append("Không thể hiển thị danh sách lớp");
+            JOptionPane.showMessageDialog(this,
+                "Lỗi khi tải danh sách lớp: " + e.getMessage() +
+                "\nVui lòng đảm bảo rằng bạn đã sử dụng phương thức layThongTinChiTietBaiThi để lấy bài thi.",
+                "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
         String lopApDung = lopApDungBuilder.length() > 0 ? lopApDungBuilder.toString() : "Không có";
         addLabel(thongTinPanel, "Lớp áp dụng kiểm tra: " + lopApDung);
@@ -200,33 +281,78 @@ public class GiaoDienThongTinChiTietBaiThi extends JPanel {
 
     private JPanel createLuotLamBaiPanel() {
         JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(new EmptyBorder(20, 20, 20, 20));
         panel.setBackground(Color.WHITE);
+
+        // Kiểm tra nếu baiThi là null
+        if (baiThi == null) {
+            JLabel lblError = new JLabel("Không thể hiển thị thông tin lượt làm bài.", JLabel.CENTER);
+            lblError.setFont(new Font("Arial", Font.BOLD, 16));
+            lblError.setForeground(Color.RED);
+            panel.add(lblError);
+            return panel;
+        }
+
+        try {
+            // Hiển thị thông tin lượt làm bài (có thể thêm code ở đây sau này)
+            JLabel lblInfo = new JLabel("Chức năng này đang được phát triển.", JLabel.CENTER);
+            lblInfo.setFont(new Font("Arial", Font.ITALIC, 16));
+            lblInfo.setAlignmentX(Component.CENTER_ALIGNMENT);
+            panel.add(lblInfo);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JLabel lblError = new JLabel("Lỗi khi hiển thị thông tin lượt làm bài: " + e.getMessage(), JLabel.CENTER);
+            lblError.setFont(new Font("Arial", Font.BOLD, 16));
+            lblError.setForeground(Color.RED);
+            panel.add(lblError);
+        }
+
         return panel;
     }
 
-    public static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException {
+    public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        BaiThiService baiThiService = (BaiThiService) Naming.lookup("rmi://localhost:8081/baiThiService");
-        BaiThi baiThi1 = baiThiService.layThongTinChiTietBaiThi(9);
+        try {
+            BaiThiService baiThiService = (BaiThiService) Naming.lookup("rmi://localhost:8081/baiThiService");
+            BaiThi baiThi1 = baiThiService.layThongTinChiTietBaiThi(10);
 
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("Chi tiết bài thi");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(500, 700);
-            frame.setLocationRelativeTo(null);
-
-            try {
-                frame.setContentPane(new GiaoDienThongTinChiTietBaiThi(baiThi1));
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (baiThi1 == null) {
+                JOptionPane.showMessageDialog(null,
+                    "Không tìm thấy bài thi với mã 9.",
+                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
             }
 
-            frame.setVisible(true);
-        });
+            final BaiThi finalBaiThi = baiThi1; // Create final copy for lambda
+
+            SwingUtilities.invokeLater(() -> {
+                JFrame frame = new JFrame("Chi tiết bài thi");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setSize(800, 700);
+                frame.setLocationRelativeTo(null);
+
+                try {
+                    frame.setContentPane(new GiaoDienThongTinChiTietBaiThi(finalBaiThi));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(frame,
+                        "Lỗi khi tạo giao diện: " + e.getMessage(),
+                        "Lỗi", JOptionPane.ERROR_MESSAGE);
+                }
+
+                frame.setVisible(true);
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                "Lỗi khi kết nối đến server hoặc lấy thông tin bài thi: " + e.getMessage(),
+                "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
