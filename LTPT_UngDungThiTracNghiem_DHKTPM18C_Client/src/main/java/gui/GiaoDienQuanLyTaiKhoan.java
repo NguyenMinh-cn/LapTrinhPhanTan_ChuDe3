@@ -29,11 +29,15 @@ public class GiaoDienQuanLyTaiKhoan extends JPanel {
     private DefaultTableModel tableModel;
     private JTextField txtSuaHoTen, txtSuaEmail, txtSuaSDT, txtSuaMatKhau;
     private JButton btnCapNhatTaiKhoan;
-    private TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://" + ipAddress + ":8081/taiKhoanService");
-    private GiaoVienService giaoVienService = (GiaoVienService) Naming.lookup("rmi://" + ipAddress + ":8081/giaoVienService");
-    private HocSinhService hocSinhService = (HocSinhService) Naming.lookup("rmi://" + ipAddress + ":8081/hocSinhService");
+    private TaiKhoanService taiKhoanService;
+    private GiaoVienService giaoVienService;
+    private HocSinhService hocSinhService;
 
     public GiaoDienQuanLyTaiKhoan() throws MalformedURLException, NotBoundException, RemoteException {
+        taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://" + ipAddress + ":8081/taiKhoanService");
+        giaoVienService = (GiaoVienService) Naming.lookup("rmi://" + ipAddress + ":8081/giaoVienService");
+        hocSinhService = (HocSinhService) Naming.lookup("rmi://" + ipAddress + ":8081/hocSinhService");
+        setLayout(new BorderLayout());
         initComponents();
     }
 
@@ -685,8 +689,6 @@ public class GiaoDienQuanLyTaiKhoan extends JPanel {
 
     }
 
-
-
     private void loadDanhSachTaiKhoan() {
         String loaiTK = (String) cmbLoaiTaiKhoanSua.getSelectedItem();
         if ("Giáo Viên".equals(loaiTK)) {
@@ -702,20 +704,27 @@ public class GiaoDienQuanLyTaiKhoan extends JPanel {
         txtSuaEmail.setText("");
         txtSuaSDT.setText("");
         txtSuaMatKhau.setText("");
-        // Bỏ chọn dòng trong bảng
         tableTaiKhoan.clearSelection();
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
-                new GiaoDienQuanLyTaiKhoan().setVisible(true);
-            } catch (MalformedURLException e) {
-                throw new RuntimeException(e);
-            } catch (NotBoundException e) {
-                throw new RuntimeException(e);
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
+                // Tạo JFrame để chứa JPanel
+                JFrame frame = new JFrame("Quản Lý Tài Khoản");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setSize(1000, 600);
+                frame.setLocationRelativeTo(null);
+
+                // Tạo GiaoDienQuanLyTaiKhoan và thêm vào JFrame
+                GiaoDienQuanLyTaiKhoan panel = new GiaoDienQuanLyTaiKhoan();
+                frame.add(panel);
+
+                // Hiển thị JFrame
+                frame.setVisible(true);
+            } catch (MalformedURLException | NotBoundException | RemoteException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Lỗi khi khởi động ứng dụng: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         });
     }

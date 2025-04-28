@@ -15,7 +15,8 @@ import java.util.*;
 public class Runner {
     public static void main(String[] args) {
         Runner runner = new Runner();
-        runner.taoDSGVNgauNhien();
+        runner.taoTKAdmin();
+//        runner.taoDSGVNgauNhien();
 //        runner.taoDSLopVaHSNgauNhien();
 //        runner.taoDSMonHocVaChuDe();
 //        runner.themDSCauHoi();
@@ -35,6 +36,13 @@ public class Runner {
         String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
         String withoutDiacritics = normalized.replaceAll("\\p{M}", "");
         return withoutDiacritics.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+    }
+    public void taoTKAdmin() {
+        EntityManager em = JPAUtil.getEntityManager();
+        TaiKhoanDAO taiKhoanDAO = new TaiKhoanDAO(em, TaiKhoan.class);
+        taiKhoanDAO.save(new TaiKhoan("admin@gmail.com", "Admin", "111"));
+
+        em.close();
     }
     public void taoDSGVNgauNhien() {
         EntityManager em = JPAUtil.getEntityManager(); // cần có JpaUtil để lấy EntityManager

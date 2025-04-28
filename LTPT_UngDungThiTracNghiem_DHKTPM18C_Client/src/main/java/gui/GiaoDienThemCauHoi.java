@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class GiaoDienThemCauHoi extends JPanel {
-    private String ipAddress= "localhost";
+    private String ipAddress = "localhost";
     private JTextArea txtNoiDungCauHoi;
     private JTextField txtDapAnDung, txtDapAnSai1, txtDapAnSai2, txtDapAnSai3;
     private JButton btnLuu, btnHuy;
@@ -77,6 +77,7 @@ public class GiaoDienThemCauHoi extends JPanel {
         panelNoiDung.setBorder(BorderFactory.createTitledBorder("Nội dung câu hỏi"));
         TitledBorder border = (TitledBorder) panelNoiDung.getBorder();
         border.setTitleFont(new Font("Arial", Font.BOLD, 16));
+        border.setTitleColor(new Color(4, 117, 196)); // Đổi màu chữ
         txtNoiDungCauHoi = new JTextArea(15, 50); // tăng số dòng và độ rộng
         JScrollPane scroll = new JScrollPane(txtNoiDungCauHoi);
         panelNoiDung.add(scroll, BorderLayout.CENTER);
@@ -87,6 +88,7 @@ public class GiaoDienThemCauHoi extends JPanel {
         panelTraLoi.setBorder(BorderFactory.createTitledBorder("Các câu trả lời"));
         TitledBorder borderTraLoi = (TitledBorder) panelTraLoi.getBorder();
         borderTraLoi.setTitleFont(new Font("Arial", Font.BOLD, 16));
+        borderTraLoi.setTitleColor(new Color(4, 117, 196)); // Đổi màu chữ
         GridBagConstraints gbcLabel = new GridBagConstraints();
         gbcLabel.anchor = GridBagConstraints.WEST;
         gbcLabel.insets = new Insets(8, 8, 8, 4);
@@ -100,6 +102,12 @@ public class GiaoDienThemCauHoi extends JPanel {
         txtDapAnSai1 = new JTextField(40);
         txtDapAnSai2 = new JTextField(40);
         txtDapAnSai3 = new JTextField(40);
+
+        //set chiều cao của JTextField
+        txtDapAnDung.setPreferredSize(new Dimension(350, 30));
+        txtDapAnSai1.setPreferredSize(new Dimension(350, 30));
+        txtDapAnSai2.setPreferredSize(new Dimension(350, 30));
+        txtDapAnSai3.setPreferredSize(new Dimension(350, 30));
 
         if(cauHoi != null) {
             txtNoiDungCauHoi.setText(cauHoi.getNoiDung());
@@ -115,9 +123,9 @@ public class GiaoDienThemCauHoi extends JPanel {
             txtDapAnSai2.setText(dsDapAnSai.get(1));
             txtDapAnSai3.setText(dsDapAnSai.get(2));
 //            if(cauHoi.getChuDe() != null) {
-                cbMonHoc.setSelectedItem(cauHoi.getChuDe().getMonHoc().getTenMon());
-                loadChuDe();
-                cbChuDe.setSelectedItem(cauHoi.getChuDe().getTenChuDe());
+            cbMonHoc.setSelectedItem(cauHoi.getChuDe().getMonHoc().getTenMon());
+            loadChuDe();
+            cbChuDe.setSelectedItem(cauHoi.getChuDe().getTenChuDe());
 //            } else {
 //                cbMonHoc.setSelectedItem(null);
 //                cbChuDe.setSelectedItem(null);
@@ -127,10 +135,20 @@ public class GiaoDienThemCauHoi extends JPanel {
         String[] labels = {"Đáp án đúng", "Đáp án sai", "Đáp án sai", "Đáp án sai"};
         JTextField[] fields = {txtDapAnDung, txtDapAnSai1, txtDapAnSai2, txtDapAnSai3};
 
+
+        //Chỉnh lại để lable đáp án đúng màu xanh, còn lại màu ỏ
         for (int i = 0; i < labels.length; i++) {
             gbcLabel.gridx = 0;
             gbcLabel.gridy = i;
-            panelTraLoi.add(new JLabel(labels[i]), gbcLabel);
+            if (i == 0) {
+                JLabel label = new JLabel(labels[i]);
+                label.setForeground(new Color(3, 175, 98)); // Đổi màu chữ
+                panelTraLoi.add(label, gbcLabel);
+            } else {
+                JLabel label = new JLabel(labels[i]);
+                label.setForeground(Color.RED); // Đổi màu chữ
+                panelTraLoi.add(label, gbcLabel);
+            }
 
             gbcField.gridx = 1;
             gbcField.gridy = i;
@@ -166,8 +184,7 @@ public class GiaoDienThemCauHoi extends JPanel {
         panelButtons.setBackground(new Color(210, 234, 255));
         setBackground(new Color(210, 234, 255));
 
-        setPreferredSize(new Dimension(1200, 750)); // tăng kích thước tổng thể
-
+//        setPreferredSize(new Dimension(1200, 750)); // tăng kích thước tổng thể
         // --- Thêm ActionListener cho các nút ---
         btnLuu.addActionListener(e -> {
             try {

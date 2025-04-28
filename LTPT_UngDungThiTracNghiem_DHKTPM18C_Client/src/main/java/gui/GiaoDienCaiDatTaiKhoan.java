@@ -40,7 +40,6 @@ public class GiaoDienCaiDatTaiKhoan extends JPanel {
     private JTextField txtSDT;
     private JTextField txtHoTen;
     private JTextField txtEmail;
-    private JButton lưuButton;
     private JTextField txtVaiTro;
     private JLabel lbLop;
     private JTextField txtLop;
@@ -58,6 +57,7 @@ public class GiaoDienCaiDatTaiKhoan extends JPanel {
     private GiaoVienService giaoVienService = (GiaoVienService) Naming.lookup("rmi://" + ipAddress + ":8081/giaoVienService");
     private HocSinhService hocSinhService = (HocSinhService) Naming.lookup("rmi://" + ipAddress + ":8081/hocSinhService");
     private TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://" + ipAddress + ":8081/taiKhoanService");
+
     public GiaoDienCaiDatTaiKhoan(TaiKhoan taiKhoan) throws MalformedURLException, NotBoundException, RemoteException {
 
         $$$setupUI$$$();
@@ -160,80 +160,80 @@ public class GiaoDienCaiDatTaiKhoan extends JPanel {
         });
         btnThayDoiMatKhau.addActionListener(new ActionListener() {
             @Override
-                public void actionPerformed(ActionEvent e) {
-                    try {
-                        // Lấy mật khẩu từ các trường nhập
-                        String matKhauHienTai = new String(txtMKHT.getPassword());
-                        String matKhauMoi = new String(txtMKM.getPassword());
-                        String xacNhanMatKhau = new String(txtXNMK.getPassword());
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    // Lấy mật khẩu từ các trường nhập
+                    String matKhauHienTai = new String(txtMKHT.getPassword());
+                    String matKhauMoi = new String(txtMKM.getPassword());
+                    String xacNhanMatKhau = new String(txtXNMK.getPassword());
 
-                        // Kiểm tra các trường mật khẩu
-                        if (matKhauHienTai.isEmpty()) {
-                            JOptionPane.showMessageDialog(null, "Vui lòng nhập mật khẩu hiện tại", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                            txtMKHT.requestFocus();
-                            return;
-                        }
-
-                        if (matKhauMoi.isEmpty()) {
-                            JOptionPane.showMessageDialog(null, "Vui lòng nhập mật khẩu mới", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                            txtMKM.requestFocus();
-                            return;
-                        }
-
-                        if (xacNhanMatKhau.isEmpty()) {
-                            JOptionPane.showMessageDialog(null, "Vui lòng xác nhận mật khẩu mới", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                            txtXNMK.requestFocus();
-                            return;
-                        }
-
-                        // Kiểm tra độ dài mật khẩu mới (ít nhất 6 ký tự)
-                        if (matKhauMoi.length() < 6) {
-                            JOptionPane.showMessageDialog(null, "Mật khẩu mới phải có ít nhất 6 ký tự", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                            txtMKM.requestFocus();
-                            return;
-                        }
-
-                        // Kiểm tra mật khẩu mới và xác nhận mật khẩu có khớp nhau không
-                        if (!matKhauMoi.equals(xacNhanMatKhau)) {
-                            JOptionPane.showMessageDialog(null, "Mật khẩu mới và xác nhận mật khẩu không khớp", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                            txtXNMK.requestFocus();
-                            return;
-                        }
-
-                        // Kiểm tra mật khẩu hiện tại có đúng không
-                        if (taiKhoan == null) {
-                            JOptionPane.showMessageDialog(null, "Không tìm thấy thông tin tài khoản", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                            return;
-                        }
-
-                        if (!taiKhoan.getMatKhau().equals(matKhauHienTai)) {
-                            JOptionPane.showMessageDialog(null, "Mật khẩu hiện tại không đúng", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                            txtMKHT.requestFocus();
-                            return;
-                        }
-
-                        // Cập nhật mật khẩu mới
-                        taiKhoan.setMatKhau(matKhauMoi);
-                        boolean updated = taiKhoanService.update(taiKhoan);
-
-                        if (updated) {
-                            JOptionPane.showMessageDialog(null, "Đổi mật khẩu thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                            // Xóa các trường mật khẩu
-                            txtMKHT.setText("");
-                            txtMKM.setText("");
-                            txtXNMK.setText("");
-                            // Quay lại tab thông tin tài khoản
-                            cardLayout.show(panelNoiDungCaiDat, "Card1");
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Đổi mật khẩu thất bại. Vui lòng thử lại sau.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                        }
-
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        JOptionPane.showMessageDialog(null, "Lỗi: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    // Kiểm tra các trường mật khẩu
+                    if (matKhauHienTai.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Vui lòng nhập mật khẩu hiện tại", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        txtMKHT.requestFocus();
+                        return;
                     }
+
+                    if (matKhauMoi.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Vui lòng nhập mật khẩu mới", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        txtMKM.requestFocus();
+                        return;
+                    }
+
+                    if (xacNhanMatKhau.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Vui lòng xác nhận mật khẩu mới", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        txtXNMK.requestFocus();
+                        return;
+                    }
+
+                    // Kiểm tra độ dài mật khẩu mới (ít nhất 6 ký tự)
+                    if (matKhauMoi.length() < 6) {
+                        JOptionPane.showMessageDialog(null, "Mật khẩu mới phải có ít nhất 6 ký tự", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        txtMKM.requestFocus();
+                        return;
+                    }
+
+                    // Kiểm tra mật khẩu mới và xác nhận mật khẩu có khớp nhau không
+                    if (!matKhauMoi.equals(xacNhanMatKhau)) {
+                        JOptionPane.showMessageDialog(null, "Mật khẩu mới và xác nhận mật khẩu không khớp", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        txtXNMK.requestFocus();
+                        return;
+                    }
+
+                    // Kiểm tra mật khẩu hiện tại có đúng không
+                    if (taiKhoan == null) {
+                        JOptionPane.showMessageDialog(null, "Không tìm thấy thông tin tài khoản", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    if (!taiKhoan.getMatKhau().equals(matKhauHienTai)) {
+                        JOptionPane.showMessageDialog(null, "Mật khẩu hiện tại không đúng", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        txtMKHT.requestFocus();
+                        return;
+                    }
+
+                    // Cập nhật mật khẩu mới
+                    taiKhoan.setMatKhau(matKhauMoi);
+                    boolean updated = taiKhoanService.update(taiKhoan);
+
+                    if (updated) {
+                        JOptionPane.showMessageDialog(null, "Đổi mật khẩu thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                        // Xóa các trường mật khẩu
+                        txtMKHT.setText("");
+                        txtMKM.setText("");
+                        txtXNMK.setText("");
+                        // Quay lại tab thông tin tài khoản
+                        cardLayout.show(panelNoiDungCaiDat, "Card1");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Đổi mật khẩu thất bại. Vui lòng thử lại sau.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    }
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Lỗi: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
                 }
-            });
+            }
+        });
     }
 
     /**
@@ -299,7 +299,7 @@ public class GiaoDienCaiDatTaiKhoan extends JPanel {
         panelNoiDungCaiDat.setBackground(new Color(-1));
         panel1.add(panelNoiDungCaiDat, BorderLayout.CENTER);
         panelTTTK = new JPanel();
-        panelTTTK.setLayout(new GridLayoutManager(7, 3, new Insets(10, 30, 10, 10), 20, 10));
+        panelTTTK.setLayout(new GridLayoutManager(6, 3, new Insets(10, 30, 10, 10), 20, 10));
         panelTTTK.setBackground(new Color(-1));
         Font panelTTTKFont = this.$$$getFont$$$("Arial", Font.BOLD, 20, panelTTTK.getFont());
         if (panelTTTKFont != null) panelTTTK.setFont(panelTTTKFont);
@@ -352,16 +352,6 @@ public class GiaoDienCaiDatTaiKhoan extends JPanel {
         txtHoTen.setSelectionColor(new Color(-16777216));
         txtHoTen.setText("Nguyễn Văn A");
         panelTTTK.add(txtHoTen, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, 50), null, 0, false));
-        lưuButton = new JButton();
-        lưuButton.setBackground(new Color(-16611119));
-        lưuButton.setFocusPainted(false);
-        lưuButton.setFocusable(false);
-        Font lưuButtonFont = this.$$$getFont$$$("Arial", Font.BOLD, 20, lưuButton.getFont());
-        if (lưuButtonFont != null) lưuButton.setFont(lưuButtonFont);
-        lưuButton.setForeground(new Color(-1));
-        lưuButton.setMargin(new Insets(10, 0, 10, 0));
-        lưuButton.setText("Lưu");
-        panelTTTK.add(lưuButton, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label5 = new JLabel();
         label5.setBackground(new Color(-368076));
         Font label5Font = this.$$$getFont$$$("Arial", Font.BOLD, 20, label5.getFont());
@@ -512,7 +502,7 @@ public class GiaoDienCaiDatTaiKhoan extends JPanel {
         return panel1;
     }
 
-//    public static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException {
+    //    public static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException {
 //        // Khởi tạo giao diện
 //        JFrame frame = new JFrame("Giao diện cài đặt");
 //        TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://" + ipAddress + ":8081/taiKhoanService");

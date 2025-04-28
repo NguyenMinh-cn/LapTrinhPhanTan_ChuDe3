@@ -3,6 +3,7 @@ package gui;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import entities.TaiKhoan;
 import gui.custom.RoundBorder;
 import service.TaiKhoanService;
 
@@ -50,10 +51,13 @@ public class GiaoDienDangNhap {
 
         try {
             Object ketQua = taiKhoanService.dangNhap(tenDangNhap, matKhau);
-
+            TaiKhoan taiKhoanAdmin = taiKhoanService.finByID(tenDangNhap);
+            System.out.println(taiKhoanAdmin);
             if (ketQua == null) {
-                JOptionPane.showMessageDialog(null, "Sai tên đăng nhập hoặc mật khẩu", "Đăng nhập thất bại", JOptionPane.ERROR_MESSAGE);
-                return;
+                if(taiKhoanAdmin == null){
+                    JOptionPane.showMessageDialog(null, "Sai tên đăng nhập hoặc mật khẩu", "Đăng nhập thất bại", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
             }
 
             // Đóng cửa sổ đăng nhập
@@ -61,6 +65,9 @@ public class GiaoDienDangNhap {
 
             // Mở giao diện chính, truyền tài khoản vào
             JFrame frame = new JFrame("Giao diện chính");
+            if (ketQua == null) {
+               frame.setContentPane(new GiaoDienAdmin(taiKhoanAdmin).$$$getRootComponent$$$());
+            }
             frame.setContentPane(new GiaoDienChinh(ketQua).$$$getRootComponent$$$());
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.pack();

@@ -110,10 +110,6 @@ public class GiaoDienMenuGiaoVien {
                 label.setForeground(new Color(63, 55, 201));   // Màu chữ khi chọn
             }
         };
-//        lbNganHangCauHoi.addMouseListener(listener);
-//        lbDSDeThi.addMouseListener(listener);
-//        lbLopHocTap.addMouseListener(listener);
-//        lbCaiDatTaiKhoan.addMouseListener(listener);
         lbDangXuat.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -159,6 +155,41 @@ public class GiaoDienMenuGiaoVien {
                 panelNoiDung.repaint();
             }
         });
+        lbNganHangCauHoi.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                JTabbedPane tabbedPane = new JTabbedPane();
+
+                // Tab 1: Giao diện Ngân hàng câu hỏi
+                JPanel tab1 = new JPanel(new BorderLayout());
+                try {
+                    tab1.add(new GiaoDienNganHangCauHoi(tab1)); // Load giao diện Ngân hàng câu hỏi
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+                tabbedPane.addTab("Ngân hàng câu hỏi", tab1);
+
+                // Tab 2: Giao diện Quản lý Chủ đề
+                JPanel tab2 = new JPanel(new BorderLayout());
+                try {
+                    tab2.add(new GiaoDienQuanLyChuDe());
+                } catch (RemoteException ex) {
+                    throw new RuntimeException(ex);
+                } catch (MalformedURLException ex) {
+                    throw new RuntimeException(ex);
+                } catch (NotBoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+                tabbedPane.addTab("Quản lý chủ đề", tab2);
+
+                // Thêm JTabbedPane vào panelNoiDung
+                panelNoiDung.removeAll(); // Xóa các thành phần cũ trong panelNoiDung
+                panelNoiDung.add(tabbedPane, BorderLayout.CENTER); // Thêm JTabbedPane vào giữa panelNoiDung
+                panelNoiDung.revalidate(); // Cập nhật lại layout của panelNoiDung
+                panelNoiDung.repaint(); // Vẽ lại giao diện
+            }
+        });
+
     }
 
 //    {

@@ -1,6 +1,7 @@
 package gui;
 
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import entities.TaiKhoan;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -23,7 +24,7 @@ public class GiaoDienAdmin {
     private JLabel lbDangXuat;
     private JLabel selectedLabel;
 
-    public GiaoDienAdmin() {
+    public GiaoDienAdmin(TaiKhoan taiKhoan) {
         $$$setupUI$$$();
 
         MouseAdapter listener = new MouseAdapter() {
@@ -234,7 +235,7 @@ public class GiaoDienAdmin {
         try {
             JFrame frame = new JFrame("Đăng Nhập");
 
-            frame.setContentPane(new GiaoDienAdmin().$$$getRootComponent$$$());
+            frame.setContentPane(new GiaoDienAdmin(null).$$$getRootComponent$$$());
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.pack();
             frame.setLocationRelativeTo(null); // căn giữa màn hình

@@ -11,6 +11,7 @@ import java.awt.*;
 import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import entities.TaiKhoan;
 
 public class GiaoDienChinh extends JPanel {
     private JPanel panel1;
@@ -18,13 +19,13 @@ public class GiaoDienChinh extends JPanel {
         $$$setupUI$$$();
 
         panel1.setLayout(new BorderLayout());
-
+        System.out.println(taiKhoan);
         if (taiKhoan instanceof GiaoVien giaoVien) {
             panel1.add(new GiaoDienMenuGiaoVien(giaoVien).$$$getRootComponent$$$(), BorderLayout.CENTER);
         } else if (taiKhoan instanceof HocSinh hocSinh) {
             panel1.add(new GiaoDienMenuHocSinh(hocSinh).$$$getRootComponent$$$(), BorderLayout.CENTER);
         } else{
-            panel1.add(new JLabel("Không xác định vai trò"), BorderLayout.CENTER);
+            panel1.add(new GiaoDienAdmin((TaiKhoan) taiKhoan).$$$getRootComponent$$$(), BorderLayout.CENTER);
         }
     }
 

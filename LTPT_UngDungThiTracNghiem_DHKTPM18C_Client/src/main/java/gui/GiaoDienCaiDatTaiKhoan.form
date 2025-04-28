@@ -79,7 +79,7 @@
         </properties>
         <border type="none"/>
         <children>
-          <grid id="f1c35" binding="panelTTTK" layout-manager="GridLayoutManager" row-count="7" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="20" vgap="10">
+          <grid id="f1c35" binding="panelTTTK" layout-manager="GridLayoutManager" row-count="6" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="20" vgap="10">
             <margin top="10" left="30" bottom="10" right="10"/>
             <constraints>
               <card name="Card1"/>
@@ -171,20 +171,6 @@
                   <margin top="3" left="11" bottom="3" right="8"/>
                   <selectionColor color="-16777216"/>
                   <text value="Nguyễn Văn A"/>
-                </properties>
-              </component>
-              <component id="2d73c" class="javax.swing.JButton" binding="lưuButton" default-binding="true">
-                <constraints>
-                  <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                </constraints>
-                <properties>
-                  <background color="-16611119"/>
-                  <focusPainted value="false"/>
-                  <focusable value="false"/>
-                  <font name="Arial" size="20" style="1"/>
-                  <foreground color="-1"/>
-                  <margin top="10" left="0" bottom="10" right="0"/>
-                  <text value="Lưu"/>
                 </properties>
               </component>
               <component id="93912" class="javax.swing.JLabel">
