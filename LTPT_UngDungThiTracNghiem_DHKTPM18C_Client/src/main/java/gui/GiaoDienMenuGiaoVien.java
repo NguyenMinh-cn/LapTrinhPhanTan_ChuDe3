@@ -17,6 +17,7 @@ import java.rmi.RemoteException;
 import java.util.Locale;
 
 public class GiaoDienMenuGiaoVien {
+    private String ipAddress = "localhost";
     private GiaoVien giaoVienDangNhap;
     private JPanel panel1;
     private JPanel panelNoiDung;
@@ -27,7 +28,8 @@ public class GiaoDienMenuGiaoVien {
     private JLabel lbCaiDatTaiKhoan;
     private JLabel lbDangXuat;
     private JLabel selectedLabel = null;
-    TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://192.168.1.13:8081/taiKhoanService");
+    TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://" + ipAddress + ":8081/taiKhoanService");
+
     public GiaoDienMenuGiaoVien(GiaoVien giaoVien) throws MalformedURLException, NotBoundException, RemoteException {
 
         this.giaoVienDangNhap = giaoVien;
@@ -290,7 +292,7 @@ public class GiaoDienMenuGiaoVien {
         return panel1;
     }
 
-//    public static void main(String[] args) {
+    //    public static void main(String[] args) {
 //        JFrame frame = new JFrame();
 //        frame.setContentPane(new GiaoDienMenuGiaoVien(new GiaoVien(0, "Minh", "abc@gmail,com", "0971770425", null, null)).$$$getRootComponent$$$());
 //        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -17,6 +17,7 @@ import java.util.Locale;
 
 
 public class GiaoDienMenuHocSinh extends JPanel {
+    private String ipAddress = "localhost";
     private HocSinh hocSinh;
     private JPanel panel1;
     private JPanel panelCaiDatTaiKhoan;
@@ -28,7 +29,7 @@ public class GiaoDienMenuHocSinh extends JPanel {
     private JLabel lbDSBaiThi;
     private JLabel lbDanhSachBaiThi;
     private JPanel pnDangXuat;
-    private TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://192.168.1.13:8081/taiKhoanService");
+    private TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://"+ipAddress+":8081/taiKhoanService");
     private JLabel selectedLabel = null;
 
     public GiaoDienMenuHocSinh(HocSinh hocSinh) throws MalformedURLException, NotBoundException, RemoteException {

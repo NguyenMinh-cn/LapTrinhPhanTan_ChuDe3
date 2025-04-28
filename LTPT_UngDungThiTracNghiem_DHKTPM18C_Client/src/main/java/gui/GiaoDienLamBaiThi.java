@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class GiaoDienLamBaiThi extends JPanel {
+    private String ipAddress = "localhost";
     private final CardLayout cardLayout;
     private JPanel panel1;
     private JPanel pnNoiDung;
@@ -45,9 +46,9 @@ public class GiaoDienLamBaiThi extends JPanel {
     private JButton button1;
     private JLabel txtSoLanDuocPhepLamBai;
     private HocSinh hocSinh;
-    private BaiThiService baiThiService = (BaiThiService) Naming.lookup("rmi://192.168.1.13:8081/baiThiService");
+    private BaiThiService baiThiService = (BaiThiService) Naming.lookup("rmi://"+ipAddress+":8081/baiThiService");
     private BaiThi baiThiDangChon;
-    private PhienLamBaiService phienLamBaiService = (PhienLamBaiService) Naming.lookup("rmi://192.168.1.13:8081/phienLamBaiService");
+    private PhienLamBaiService phienLamBaiService = (PhienLamBaiService) Naming.lookup("rmi://"+ipAddress+":8081/phienLamBaiService");
     public static String chuyenDinhDangNgayGio(LocalDateTime localDateTime) {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm, dd/MM/yyyy");
@@ -88,8 +89,10 @@ public class GiaoDienLamBaiThi extends JPanel {
 
                 System.out.println(soLanLamBai);
                 System.out.println(baiThiDangChon.getSoLanDuocPhepLamBai());
-                if (soLanLamBai >= baiThiDangChon.getSoLanDuocPhepLamBai()) {
-                    JOptionPane.showMessageDialog(null, "Đã hết lượt làm bài thi.", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                if (baiThiDangChon.getSoLanDuocPhepLamBai() != 0
+                        && soLanLamBai >= baiThiDangChon.getSoLanDuocPhepLamBai()) {
+
+                    JOptionPane.showMessageDialog(null, "Bạn đã làm bài thi này rồi.", "Thông báo", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
 
@@ -482,7 +485,7 @@ public class GiaoDienLamBaiThi extends JPanel {
                 txtDong.setText("Thời gian đóng đề: " + chuyenDinhDangNgayGio(baiThi.getThoiGianKetThuc()));
                 txtThoiLuong.setText("Thời gian làm bài: " + baiThi.getThoiLuong() + " phút");
                 txtSoCH.setText("Số câu hỏi: " + soCauHoi + " câu");
-                txtSoLanDuocPhepLamBai.setText("Số lần được phép làm: " + baiThi.getSoLanDuocPhepLamBai() + " lần");
+                txtSoLanDuocPhepLamBai.setText("Số lần được phép làm: " + (baiThi.getSoLanDuocPhepLamBai() == 0 ? "Không giới hạn" : baiThi.getSoLanDuocPhepLamBai()) + " lần");
                 // Tải kết quả làm bài của học sinh
                 loadKetQuaLamBai(baiThi);
             }
@@ -496,34 +499,34 @@ public class GiaoDienLamBaiThi extends JPanel {
     }
 
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            try {
-                // Thiết lập look and feel
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-
-                // Tạo frame
-                JFrame frame = new JFrame("Làm Bài Thi");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setSize(1200, 800);
-                frame.setLocationRelativeTo(null);
-                HocSinhService hocSinhService = (HocSinhService) Naming.lookup("rmi://192.168.1.13:8081/hocSinhService");
-                // Tạo instance của GiaoDienLamBaiThi
-                GiaoDienLamBaiThi giaoDienLamBaiThi = new GiaoDienLamBaiThi(hocSinhService.finByID(84L));
-
-                // Thêm vào frame
-                frame.add(giaoDienLamBaiThi.$$$getRootComponent$$$());
-
-                // Hiển thị frame
-                frame.setVisible(true);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                JOptionPane.showMessageDialog(null,
-                        "Lỗi khởi tạo giao diện: " + e.getMessage(),
-                        "Lỗi",
-                        JOptionPane.ERROR_MESSAGE);
-            }
-        });
-    }
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(() -> {
+//            try {
+//                // Thiết lập look and feel
+//                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//
+//                // Tạo frame
+//                JFrame frame = new JFrame("Làm Bài Thi");
+//                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//                frame.setSize(1200, 800);
+//                frame.setLocationRelativeTo(null);
+//                HocSinhService hocSinhService = (HocSinhService) Naming.lookup("rmi://"+ipAddress+":8081/hocSinhService");
+//                // Tạo instance của GiaoDienLamBaiThi
+//                GiaoDienLamBaiThi giaoDienLamBaiThi = new GiaoDienLamBaiThi(hocSinhService.finByID(84L));
+//
+//                // Thêm vào frame
+//                frame.add(giaoDienLamBaiThi.$$$getRootComponent$$$());
+//
+//                // Hiển thị frame
+//                frame.setVisible(true);
+//
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                JOptionPane.showMessageDialog(null,
+//                        "Lỗi khởi tạo giao diện: " + e.getMessage(),
+//                        "Lỗi",
+//                        JOptionPane.ERROR_MESSAGE);
+//            }
+//        });
+//    }
 }

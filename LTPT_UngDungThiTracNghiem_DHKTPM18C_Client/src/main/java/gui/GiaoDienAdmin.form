@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="gui.GiaoDienAdmin">
+  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="500" height="400"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <grid id="faaad" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="West"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="163a8" class="javax.swing.JLabel">
+            <constraints border-constraint="North"/>
+            <properties>
+              <background color="-12020241"/>
+              <font name="Arial" size="20" style="0"/>
+              <foreground color="-1"/>
+              <horizontalAlignment value="0"/>
+              <opaque value="true"/>
+              <preferredSize width="96" height="70"/>
+              <text value="Tên giáo viên"/>
+            </properties>
+          </component>
+          <component id="de299" class="javax.swing.JLabel" binding="lbDangXuat">
+            <constraints border-constraint="South"/>
+            <properties>
+              <background color="-3543049"/>
+              <font name="Arial" size="20" style="0"/>
+              <horizontalAlignment value="0"/>
+              <opaque value="true"/>
+              <preferredSize width="71" height="50"/>
+              <text value="Đăng xuất"/>
+            </properties>
+          </component>
+          <grid id="140d0" layout-manager="FlowLayout" hgap="15" vgap="10" flow-align="1">
+            <constraints border-constraint="Center"/>
+            <properties>
+              <background color="-3543049"/>
+              <preferredSize width="200" height="29"/>
+            </properties>
+            <border type="empty">
+              <size top="10" left="10" bottom="10" right="10"/>
+            </border>
+            <children>
+              <component id="4931" class="javax.swing.JLabel" binding="chucNangTK">
+                <constraints/>
+                <properties>
+                  <font name="Arial" size="20" style="0"/>
+                  <preferredSize width="200" height="19"/>
+                  <text value="   Tài khoản"/>
+                </properties>
+              </component>
+              <component id="fb478" class="javax.swing.JLabel" binding="chucNangLopHoc">
+                <constraints/>
+                <properties>
+                  <font name="Arial" size="20" style="0"/>
+                  <preferredSize width="200" height="19"/>
+                  <text value="   Lớp học"/>
+                </properties>
+              </component>
+              <component id="92c0b" class="javax.swing.JLabel" binding="chucNangMonHoc">
+                <constraints/>
+                <properties>
+                  <font name="Arial" size="20" style="0"/>
+                  <preferredSize width="200" height="19"/>
+                  <text value="   Môn học"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+        </children>
+      </grid>
+      <grid id="b6e86" binding="pnNoiDung" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="Center"/>
+        <properties>
+          <background color="-1"/>
+        </properties>
+        <border type="none"/>
+        <children/>
+      </grid>
+    </children>
+  </grid>
+</form>

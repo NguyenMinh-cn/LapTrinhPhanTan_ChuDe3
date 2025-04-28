@@ -16,20 +16,20 @@ public class Runner {
     public static void main(String[] args) {
         Runner runner = new Runner();
         runner.taoDSGVNgauNhien();
-        runner.taoDSLopVaHSNgauNhien();
-        runner.taoDSMonHocVaChuDe();
-        runner.themDSCauHoi();
-        runner.themCauHoiToanHoc();
-        runner.themCauHoiVietHoc();
-        runner.themCauHoiVatLy();
-        runner.themCauHoiHoaHoc();
-        runner.themCauHoiSinhHoc();
-        runner.themCauHoiLichSu();
-        runner.themCauHoiDiaLy();
-        runner.themCauHoiNgoaiNgu();
-        runner.themCauHoiGDCN();
-        runner.themCauHoiGDTC();
-        runner.taoBaiThiToanVaNgoaiNgu();
+//        runner.taoDSLopVaHSNgauNhien();
+//        runner.taoDSMonHocVaChuDe();
+//        runner.themDSCauHoi();
+//        runner.themCauHoiToanHoc();
+//        runner.themCauHoiVietHoc();
+//        runner.themCauHoiVatLy();
+//        runner.themCauHoiHoaHoc();
+//        runner.themCauHoiSinhHoc();
+//        runner.themCauHoiLichSu();
+//        runner.themCauHoiDiaLy();
+//        runner.themCauHoiNgoaiNgu();
+//        runner.themCauHoiGDCN();
+//        runner.themCauHoiGDTC();
+//        runner.taoBaiThiToanVaNgoaiNgu();
     }
     private String toSlug(String input) {
         String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);

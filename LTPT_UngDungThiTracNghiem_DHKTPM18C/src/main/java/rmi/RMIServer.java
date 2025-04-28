@@ -16,7 +16,7 @@ public class RMIServer {
         LocateRegistry.createRegistry(8081);
 
         // Địa chỉ IP của máy chủ
-        String ipAddress = "192.168.1.13"; // Thay thế bằng địa chỉ IP của máy chủ
+        String ipAddress = "localhost";
 
         BaiThiDAO baiThiDAO = new BaiThiDAO(BaiThi.class);
         BaiThiService baiThiService = new BaiThiServiceImpl(baiThiDAO);

@@ -28,6 +28,7 @@ import java.rmi.RemoteException;
 import java.util.Locale;
 
 public class GiaoDienCaiDatTaiKhoan extends JPanel {
+    private String ipAddress = "localhost";
     private final CardLayout cardLayout;
     private JPanel panel1;
     private JButton btnTTTK;
@@ -54,9 +55,9 @@ public class GiaoDienCaiDatTaiKhoan extends JPanel {
     private JButton btnM3;
     private JButton btnM2;
     private JButton btnM1;
-    private GiaoVienService giaoVienService = (GiaoVienService) Naming.lookup("rmi://192.168.1.13:8081/giaoVienService");
-    private HocSinhService hocSinhService = (HocSinhService) Naming.lookup("rmi://192.168.1.13:8081/hocSinhService");
-    private TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://192.168.1.13:8081/taiKhoanService");
+    private GiaoVienService giaoVienService = (GiaoVienService) Naming.lookup("rmi://" + ipAddress + ":8081/giaoVienService");
+    private HocSinhService hocSinhService = (HocSinhService) Naming.lookup("rmi://" + ipAddress + ":8081/hocSinhService");
+    private TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://" + ipAddress + ":8081/taiKhoanService");
     public GiaoDienCaiDatTaiKhoan(TaiKhoan taiKhoan) throws MalformedURLException, NotBoundException, RemoteException {
 
         $$$setupUI$$$();
@@ -511,14 +512,14 @@ public class GiaoDienCaiDatTaiKhoan extends JPanel {
         return panel1;
     }
 
-    public static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException {
-        // Khởi tạo giao diện
-        JFrame frame = new JFrame("Giao diện cài đặt");
-        TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://192.168.1.13:8081/taiKhoanService");
-        frame.setContentPane(new GiaoDienCaiDatTaiKhoan(taiKhoanService.finByID("buidungmai@gmail.com")).$$$getRootComponent$$$());
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setSize(500, 300);
-        frame.setVisible(true);
-    }
+//    public static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException {
+//        // Khởi tạo giao diện
+//        JFrame frame = new JFrame("Giao diện cài đặt");
+//        TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://" + ipAddress + ":8081/taiKhoanService");
+//        frame.setContentPane(new GiaoDienCaiDatTaiKhoan(taiKhoanService.finByID("buidungmai@gmail.com")).$$$getRootComponent$$$());
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.pack();
+//        frame.setSize(500, 300);
+//        frame.setVisible(true);
+//    }
 }
