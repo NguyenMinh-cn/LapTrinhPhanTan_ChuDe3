@@ -22,12 +22,13 @@ import java.util.List;
 import java.util.Map;
 
 public class GiaoDienThi extends JFrame {
+    private String ipAddress = "localhost";
     private JLabel lblTime;
     private Timer timer;
     private int thoiGianConLai;
     private BaiThi baiThi;
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm, dd/MM/yyyy");
-    private PhienLamBaiService phienLamBaiService = (PhienLamBaiService) Naming.lookup("rmi://192.168.1.13:8081/phienLamBaiService");
+    private PhienLamBaiService phienLamBaiService = (PhienLamBaiService) Naming.lookup("rmi://" + ipAddress + ":8081/phienLamBaiService");
 
     private PhienLamBai phienLamBai;
     private HocSinh hocSinh;
@@ -387,36 +388,36 @@ public class GiaoDienThi extends JFrame {
 
 
 
-    public static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException {
-        try {
-            BaiThiService baiThiService = (BaiThiService) Naming.lookup("rmi://192.168.1.13:8081/baiThiService");
-            // Sử dụng layThongTinBaiThiVaCauHoi thay vì layThongTinChiTietBaiThi để đảm bảo các collection được load
-            BaiThi baiThi = baiThiService.layThongTinBaiThiVaCauHoi(9);
-            if (baiThi != null) {
-                System.out.println("Tên bài thi: " + baiThi.getTenBaiThi());
-                System.out.println("Số câu hỏi: " + (baiThi.getDanhSachCauHoi() != null ? baiThi.getDanhSachCauHoi().size() : 0));
-
-                // Tạo và hiển thị giao diện thi trong EDT
-                SwingUtilities.invokeLater(() -> {
-                    GiaoDienThi giaoDienThi = null;
-                    try {
-                        HocSinhService hocSinhService = (HocSinhService) Naming.lookup("rmi://localhost:8081/hocSinhService");
-                        giaoDienThi = new GiaoDienThi(baiThi, hocSinhService.finByID(89L));
-                    } catch (MalformedURLException e) {
-                        throw new RuntimeException(e);
-                    } catch (NotBoundException e) {
-                        throw new RuntimeException(e);
-                    } catch (RemoteException e) {
-                        throw new RuntimeException(e);
-                    }
-                    giaoDienThi.taoGiaoDienThi();
-                });
-            } else {
-                System.out.println("Không tìm thấy bài thi với mã 9");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Lỗi kết nối đến server: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+//    public static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException {
+//        try {
+//            BaiThiService baiThiService = (BaiThiService) Naming.lookup("rmi://192.168.1.13:8081/baiThiService");
+//            // Sử dụng layThongTinBaiThiVaCauHoi thay vì layThongTinChiTietBaiThi để đảm bảo các collection được load
+//            BaiThi baiThi = baiThiService.layThongTinBaiThiVaCauHoi(9);
+//            if (baiThi != null) {
+//                System.out.println("Tên bài thi: " + baiThi.getTenBaiThi());
+//                System.out.println("Số câu hỏi: " + (baiThi.getDanhSachCauHoi() != null ? baiThi.getDanhSachCauHoi().size() : 0));
+//
+//                // Tạo và hiển thị giao diện thi trong EDT
+//                SwingUtilities.invokeLater(() -> {
+//                    GiaoDienThi giaoDienThi = null;
+//                    try {
+//                        HocSinhService hocSinhService = (HocSinhService) Naming.lookup("rmi://localhost:8081/hocSinhService");
+//                        giaoDienThi = new GiaoDienThi(baiThi, hocSinhService.finByID(89L));
+//                    } catch (MalformedURLException e) {
+//                        throw new RuntimeException(e);
+//                    } catch (NotBoundException e) {
+//                        throw new RuntimeException(e);
+//                    } catch (RemoteException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                    giaoDienThi.taoGiaoDienThi();
+//                });
+//            } else {
+//                System.out.println("Không tìm thấy bài thi với mã 9");
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            JOptionPane.showMessageDialog(null, "Lỗi kết nối đến server: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+//        }
+//    }
 }

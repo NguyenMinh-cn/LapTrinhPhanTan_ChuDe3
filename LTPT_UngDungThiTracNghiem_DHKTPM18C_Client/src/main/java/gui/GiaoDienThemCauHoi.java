@@ -20,15 +20,15 @@ import java.util.List;
 import java.util.Objects;
 
 public class GiaoDienThemCauHoi extends JPanel {
-
+    private String ipAddress= "localhost";
     private JTextArea txtNoiDungCauHoi;
     private JTextField txtDapAnDung, txtDapAnSai1, txtDapAnSai2, txtDapAnSai3;
     private JButton btnLuu, btnHuy;
     private JComboBox<String> cbMonHoc, cbChuDe;
 
-    private ChuDeService chuDeService = (ChuDeService) Naming.lookup("rmi://192.168.1.13:8081/chuDeService");
-    private CauHoiService cauHoiService = (CauHoiService) Naming.lookup("rmi://192.168.1.13:8081/cauHoiService");
-    private MonHocService monHocService = (MonHocService) Naming.lookup("rmi://192.168.1.13:8081/monHocService");
+    private ChuDeService chuDeService = (ChuDeService) Naming.lookup("rmi://"+ipAddress+":8081/chuDeService");
+    private CauHoiService cauHoiService = (CauHoiService) Naming.lookup("rmi://"+ipAddress+":8081/cauHoiService");
+    private MonHocService monHocService = (MonHocService) Naming.lookup("rmi://"+ipAddress+":8081/monHocService");
     private JPanel mainPanel;
     private CauHoi cauHoi;
     public GiaoDienThemCauHoi(JPanel mainPanel, CauHoi cauHoi) throws MalformedURLException, NotBoundException, RemoteException {

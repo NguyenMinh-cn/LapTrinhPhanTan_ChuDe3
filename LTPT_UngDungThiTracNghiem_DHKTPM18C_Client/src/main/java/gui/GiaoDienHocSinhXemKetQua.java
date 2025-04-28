@@ -11,6 +11,7 @@ import java.rmi.Naming;
 import java.util.List;
 
 public class GiaoDienHocSinhXemKetQua extends JPanel {
+    private String ipAddress = "localhost";
     private JPanel panel1;
     private JTable tblChiTiet;
     private JScrollPane scrollPane;
@@ -20,6 +21,7 @@ public class GiaoDienHocSinhXemKetQua extends JPanel {
     private JButton btnQuayLai; // Nút Quay lại
     private String maPhienLamBai;
     private HocSinh hocSinh; // Thêm thông tin HocSinh
+
 
     public GiaoDienHocSinhXemKetQua(String maPhienLamBai, HocSinh hocSinh) {
         this.maPhienLamBai = maPhienLamBai;
@@ -94,7 +96,7 @@ public class GiaoDienHocSinhXemKetQua extends JPanel {
 
     private void loadKetQua() {
         try {
-            PhienLamBaiService phienLamBaiService = (PhienLamBaiService) Naming.lookup("rmi://192.168.1.13:8081/phienLamBaiService");
+            PhienLamBaiService phienLamBaiService = (PhienLamBaiService) Naming.lookup("rmi://"+ipAddress+":8081/phienLamBaiService");
 
             // Lấy chi tiết kết quả
             List<Object[]> chiTietKetQua = phienLamBaiService.layKetQuaChiTietPhienLamBai(maPhienLamBai);

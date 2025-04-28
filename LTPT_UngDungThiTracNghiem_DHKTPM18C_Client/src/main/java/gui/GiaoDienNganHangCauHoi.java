@@ -21,9 +21,10 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 public class GiaoDienNganHangCauHoi extends JPanel {
+    private String ipAddress = "localhost";
     private JPanel mainPanel; // Panel cha chứa các màn hình con
-    private CauHoiService cauHoiService = (CauHoiService) Naming.lookup("rmi://192.168.1.13:8081/cauHoiService");
-    private MonHocService monHocService = (MonHocService) Naming.lookup("rmi://192.168.1.13:8081/monHocService");
+    private CauHoiService cauHoiService = (CauHoiService) Naming.lookup("rmi://" + ipAddress + ":8081/cauHoiService");
+    private MonHocService monHocService = (MonHocService) Naming.lookup("rmi://" + ipAddress + ":8081/monHocService");
     private JTable table;
     private DefaultTableModel model;
     private List<CauHoi> listCauHoi;

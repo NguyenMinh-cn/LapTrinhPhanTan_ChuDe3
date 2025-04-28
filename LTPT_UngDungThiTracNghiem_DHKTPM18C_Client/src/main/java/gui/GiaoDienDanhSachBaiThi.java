@@ -36,7 +36,8 @@ import java.util.List;
 
 
 public class GiaoDienDanhSachBaiThi extends JPanel {
-    private BaiThiService baiThiService = (BaiThiService) Naming.lookup("rmi://192.168.1.13:8081/baiThiService");
+    private String ipAddress = "localhost";
+    private BaiThiService baiThiService = (BaiThiService) Naming.lookup("rmi://"+ipAddress+":8081/baiThiService");
     private PanelThoiGianThi panelThoiGianThi;
     private JPanel panel1;
     private JButton btnTaoDeThi;
@@ -76,11 +77,12 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
     private JButton btnXoaCauHoi;
     private JComboBox cbBoxSoLanLamKiemTra;
     private final CardLayout cardLayout;
-    private CauHoiService cauHoiService = (CauHoiService) Naming.lookup("rmi://192.168.1.13:8081/cauHoiService");
+    private CauHoiService cauHoiService = (CauHoiService) Naming.lookup("rmi://"+ipAddress+":8081/cauHoiService");
     private final List<Lop> lopDaChon = new ArrayList<>();
     private final GiaoVien giaoVienDangNhap;
     private List<MonHoc> monHocList;
     private JButton btnCauHoiDangChon = null;
+
 
     //    private List<BaiThi> dsBaiThi;
     public static String chuyenDinhDangNgayGio(LocalDateTime localDateTime) {
@@ -1353,7 +1355,7 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
     }
 
     public void taoJComboBoxMonHoc() throws MalformedURLException, NotBoundException, RemoteException {
-        MonHocService monHocService = (MonHocService) Naming.lookup("rmi://192.168.1.13:8081/monHocService");
+        MonHocService monHocService = (MonHocService) Naming.lookup("rmi://" + ipAddress + ":8081/monHocService");
         monHocList = monHocService.getAll();
         cbBoxMonHoc.removeAllItems();
         cbBoxMonHoc.addItem("");
@@ -1363,7 +1365,7 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
     }
 
     public void taoJCheckBoxLop() throws MalformedURLException, NotBoundException, RemoteException {
-        LopService lopService = (LopService) Naming.lookup("rmi://192.168.1.13:8081/lopService");
+        LopService lopService = (LopService) Naming.lookup("rmi://"+ipAddress+":8081/lopService");
         List<Lop> dsLop = lopService.getAll();
         pnDSLop.removeAll();
         pnDSLop.setLayout(new WrapLayout(FlowLayout.LEFT, 10, 10));
@@ -1480,20 +1482,20 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
         dialog.setVisible(true);
     }
 
-    public static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException {
-        // Tạo một JFrame để chứa giao diện
-
-        JFrame frame = new JFrame("Danh Sách Bài Thi");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000, 600);
-        GiaoVienService giaoVienService = (GiaoVienService) Naming.lookup("rmi://192.168.1.13:8081/giaoVienService");
-        GiaoVien giaoVien = giaoVienService.finByID(8);
-
-        frame.setContentPane(new GiaoDienDanhSachBaiThi(giaoVien).$$$getRootComponent$$$());
-        frame.setLocationRelativeTo(null); // căn giữa
-        frame.setVisible(true);
-
-    }
+//    public static void main(String[] args) throws MalformedURLException, NotBoundException, RemoteException {
+//        // Tạo một JFrame để chứa giao diện
+//
+//        JFrame frame = new JFrame("Danh Sách Bài Thi");
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.setSize(1000, 600);
+//        GiaoVienService giaoVienService = (GiaoVienService) Naming.lookup("rmi://"+ipAddress+":8081/giaoVienService");
+//        GiaoVien giaoVien = giaoVienService.finByID(8);
+//
+//        frame.setContentPane(new GiaoDienDanhSachBaiThi(giaoVien).$$$getRootComponent$$$());
+//        frame.setLocationRelativeTo(null); // căn giữa
+//        frame.setVisible(true);
+//
+//    }
 
     private void createUIComponents() {
         btnTaoDeThi.setBackground(new Color(205, 180, 219));

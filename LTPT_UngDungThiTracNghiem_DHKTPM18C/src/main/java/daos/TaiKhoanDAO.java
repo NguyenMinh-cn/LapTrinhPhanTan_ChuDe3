@@ -4,6 +4,8 @@ import entities.GiaoVien;
 import entities.HocSinh;
 import entities.TaiKhoan;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import jakarta.persistence.TypedQuery;
 
 public class TaiKhoanDAO extends GenericDAO<TaiKhoan, String> {
@@ -43,4 +45,6 @@ public class TaiKhoanDAO extends GenericDAO<TaiKhoan, String> {
         }
         return null; // Trả về null nếu đăng nhập không thành công
     }
+
+
 }

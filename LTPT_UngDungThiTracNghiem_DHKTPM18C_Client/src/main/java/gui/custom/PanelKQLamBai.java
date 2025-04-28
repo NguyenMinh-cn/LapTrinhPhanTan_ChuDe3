@@ -125,28 +125,28 @@ public class PanelKQLamBai extends JPanel {
     }
 
     // Chạy thử
-    public static void main(String[] args) {
-        try {
-            JFrame frame = new JFrame("Kết quả làm bài");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(900, 300);
-
-            PhienLamBaiService phienLamBaiService = (PhienLamBaiService) Naming.lookup("rmi://192.168.1.13:8081/phienLamBaiService");
-
-            String maPhien = "2025042801031689";
-            PhienLamBai phienLamBai1 = phienLamBaiService.layThongTinPhienLamBaiVaCauTraLoi(maPhien);
-
-            if (phienLamBai1 != null) {
-                PanelKQLamBai panel = new PanelKQLamBai(phienLamBai1);
-                frame.add(panel);
-                frame.setLocationRelativeTo(null);
-                frame.setVisible(true);
-            } else {
-                JOptionPane.showMessageDialog(null, "Không tìm thấy phiên làm bài.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Lỗi: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+//    public static void main(String[] args) {
+//        try {
+//            JFrame frame = new JFrame("Kết quả làm bài");
+//            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//            frame.setSize(900, 300);
+//
+//            PhienLamBaiService phienLamBaiService = (PhienLamBaiService) Naming.lookup("rmi://192.168.1.13:8081/phienLamBaiService");
+//
+//            String maPhien = "2025042801031689";
+//            PhienLamBai phienLamBai1 = phienLamBaiService.layThongTinPhienLamBaiVaCauTraLoi(maPhien);
+//
+//            if (phienLamBai1 != null) {
+//                PanelKQLamBai panel = new PanelKQLamBai(phienLamBai1);
+//                frame.add(panel);
+//                frame.setLocationRelativeTo(null);
+//                frame.setVisible(true);
+//            } else {
+//                JOptionPane.showMessageDialog(null, "Không tìm thấy phiên làm bài.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            JOptionPane.showMessageDialog(null, "Lỗi: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+//        }
+//    }
 }

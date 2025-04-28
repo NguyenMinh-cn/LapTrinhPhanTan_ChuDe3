@@ -220,26 +220,26 @@ public class GiaoDienQuanLyMonHoc extends JPanel {
         return panel1;
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            MonHocService monHocService = null;
-            try {
-                monHocService = (MonHocService) Naming.lookup("rmi://192.168.1.13:8081/monHocService");
-            } catch (NotBoundException e) {
-                throw new RuntimeException(e);
-            } catch (MalformedURLException e) {
-                throw new RuntimeException(e);
-            } catch (RemoteException e) {
-                throw new RuntimeException(e);
-            }
-
-
-            JFrame frame = new JFrame("Quản lý môn học");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(800, 600);
-            frame.setLocationRelativeTo(null);
-            frame.add(new GiaoDienQuanLyMonHoc(monHocService));
-            frame.setVisible(true);
-        });
-    }
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(() -> {
+//            MonHocService monHocService = null;
+//            try {
+//                monHocService = (MonHocService) Naming.lookup("rmi://192.168.1.13:8081/monHocService");
+//            } catch (NotBoundException e) {
+//                throw new RuntimeException(e);
+//            } catch (MalformedURLException e) {
+//                throw new RuntimeException(e);
+//            } catch (RemoteException e) {
+//                throw new RuntimeException(e);
+//            }
+//
+//
+//            JFrame frame = new JFrame("Quản lý môn học");
+//            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//            frame.setSize(800, 600);
+//            frame.setLocationRelativeTo(null);
+//            frame.add(new GiaoDienQuanLyMonHoc(monHocService));
+//            frame.setVisible(true);
+//        });
+//    }
 }

@@ -19,12 +19,13 @@ import java.rmi.RemoteException;
 import java.util.Locale;
 
 public class GiaoDienDangNhap {
+    public static String ipAddress = "localhost";
     private JPanel panel1;
     private JTextField txtTenDangNhap;
     private JPasswordField txtMatKhau;
     private JButton btnDangNhap;
 
-    private TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://192.168.1.13:8081/taiKhoanService");;
+    private TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://" + ipAddress + ":8081/taiKhoanService");;
 
     public GiaoDienDangNhap() throws MalformedURLException, NotBoundException, RemoteException {
         try {
@@ -38,7 +39,7 @@ public class GiaoDienDangNhap {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Không thể kết nối tới server RMI", "Lỗi", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
-            return;  // Dừng ngay khi không thể kết nối tới server
+            return;
         }
     }
 

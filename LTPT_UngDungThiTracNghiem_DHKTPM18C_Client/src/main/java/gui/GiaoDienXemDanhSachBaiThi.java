@@ -13,6 +13,7 @@ import java.rmi.Naming;
 import java.util.List;
 
 public class GiaoDienXemDanhSachBaiThi extends JPanel {
+    private String ipAddress = "localhost";
     private JPanel panel1;
     private JTable tblBaiThi;
     private JScrollPane scrollPane;
@@ -23,8 +24,8 @@ public class GiaoDienXemDanhSachBaiThi extends JPanel {
     public GiaoDienXemDanhSachBaiThi(HocSinh hocSinh) {
         this.hocSinh = hocSinh;
         try {
-            this.baiThiService = (BaiThiService) Naming.lookup("rmi://192.168.1.13:8081/baiThiService");
-            this.phienLamBaiService = (PhienLamBaiService) Naming.lookup("rmi://192.168.1.13:8081/phienLamBaiService");
+            this.baiThiService = (BaiThiService) Naming.lookup("rmi://" + ipAddress + ":8081/baiThiService");
+            this.phienLamBaiService = (PhienLamBaiService) Naming.lookup("rmi://" + ipAddress + ":8081/phienLamBaiService");
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Lỗi kết nối server: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);

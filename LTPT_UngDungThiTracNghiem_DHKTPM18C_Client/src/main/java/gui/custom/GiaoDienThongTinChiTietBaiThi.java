@@ -25,10 +25,11 @@ import java.util.List;
  * Giao diện hiển thị thông tin chi tiết của một bài thi
  */
 public class GiaoDienThongTinChiTietBaiThi extends JPanel {
+    private String ipAddress = "localhost";
     private BaiThi baiThi;
-    private CauHoiService cauHoiService;
+    private CauHoiService cauHoiService = (CauHoiService) Naming.lookup("rmi://" + ipAddress + ":8081/cauHoiService");
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm, dd/MM/yyyy");
-    private BaiThiService baiThiService = (BaiThiService) Naming.lookup("rmi://192.168.1.13:8081/baiThiService");
+    private BaiThiService baiThiService = (BaiThiService) Naming.lookup("rmi://" + ipAddress + ":8081/baiThiService");
 
     public GiaoDienThongTinChiTietBaiThi(BaiThi baiThi) throws MalformedURLException, NotBoundException, RemoteException {
         // Kiểm tra nếu baiThi là null
@@ -68,7 +69,6 @@ public class GiaoDienThongTinChiTietBaiThi extends JPanel {
         }
 
         try {
-            this.cauHoiService = (CauHoiService) Naming.lookup("rmi://192.168.1.13:8081/cauHoiService");
             initUI();
         } catch (Exception e) {
             e.printStackTrace();
@@ -311,48 +311,48 @@ public class GiaoDienThongTinChiTietBaiThi extends JPanel {
         return panel;
     }
 
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            BaiThiService baiThiService = (BaiThiService) Naming.lookup("rmi://192.168.1.13:8081/baiThiService");
-            BaiThi baiThi1 = baiThiService.layThongTinChiTietBaiThi(10);
-
-            if (baiThi1 == null) {
-                JOptionPane.showMessageDialog(null,
-                    "Không tìm thấy bài thi với mã 9.",
-                    "Lỗi", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            final BaiThi finalBaiThi = baiThi1; // Create final copy for lambda
-
-            SwingUtilities.invokeLater(() -> {
-                JFrame frame = new JFrame("Chi tiết bài thi");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setSize(800, 700);
-                frame.setLocationRelativeTo(null);
-
-                try {
-                    frame.setContentPane(new GiaoDienThongTinChiTietBaiThi(finalBaiThi));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    JOptionPane.showMessageDialog(frame,
-                        "Lỗi khi tạo giao diện: " + e.getMessage(),
-                        "Lỗi", JOptionPane.ERROR_MESSAGE);
-                }
-
-                frame.setVisible(true);
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null,
-                "Lỗi khi kết nối đến server hoặc lấy thông tin bài thi: " + e.getMessage(),
-                "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+//    public static void main(String[] args) {
+//        try {
+//            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        try {
+//            BaiThiService baiThiService = (BaiThiService) Naming.lookup("rmi://192.168.1.13:8081/baiThiService");
+//            BaiThi baiThi1 = baiThiService.layThongTinChiTietBaiThi(10);
+//
+//            if (baiThi1 == null) {
+//                JOptionPane.showMessageDialog(null,
+//                    "Không tìm thấy bài thi với mã 9.",
+//                    "Lỗi", JOptionPane.ERROR_MESSAGE);
+//                return;
+//            }
+//
+//            final BaiThi finalBaiThi = baiThi1; // Create final copy for lambda
+//
+//            SwingUtilities.invokeLater(() -> {
+//                JFrame frame = new JFrame("Chi tiết bài thi");
+//                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//                frame.setSize(800, 700);
+//                frame.setLocationRelativeTo(null);
+//
+//                try {
+//                    frame.setContentPane(new GiaoDienThongTinChiTietBaiThi(finalBaiThi));
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    JOptionPane.showMessageDialog(frame,
+//                        "Lỗi khi tạo giao diện: " + e.getMessage(),
+//                        "Lỗi", JOptionPane.ERROR_MESSAGE);
+//                }
+//
+//                frame.setVisible(true);
+//            });
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            JOptionPane.showMessageDialog(null,
+//                "Lỗi khi kết nối đến server hoặc lấy thông tin bài thi: " + e.getMessage(),
+//                "Lỗi", JOptionPane.ERROR_MESSAGE);
+//        }
+//    }
 }
