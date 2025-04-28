@@ -25,7 +25,7 @@ public class GiaoDienMenuGiaoVien {
     private JLabel lbLopHocTap;
     private JLabel lbCaiDatTaiKhoan;
     private JLabel lbDangXuat;
-    JLabel selectedLabel = null;
+    private JLabel selectedLabel = null;
     TaiKhoanService taiKhoanService = (TaiKhoanService) Naming.lookup("rmi://localhost:8081/taiKhoanService");
     public GiaoDienMenuGiaoVien(GiaoVien giaoVien) throws MalformedURLException, NotBoundException, RemoteException {
 

@@ -74,6 +74,7 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
     private JButton btnQuayLai3;
     private JPanel pnTTCT;
     private JButton btnXoaCauHoi;
+    private JComboBox cbBoxSoLanLamKiemTra;
     private final CardLayout cardLayout;
     private CauHoiService cauHoiService;
     private final List<Lop> lopDaChon = new ArrayList<>();
@@ -305,7 +306,12 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
                     baiThi.setDanhSachCauHoi(cauHoiDaLuuThanhCong);
                     baiThi.setDanhSachLop(lopDaChon);
                     baiThi.setGiaoVien(giaoVienDangNhap);
-
+                    Object selectedItem = cbBoxSoLanLamKiemTra.getSelectedItem();
+                    if (selectedItem != null && selectedItem.toString().equalsIgnoreCase("Không giới hạn")) {
+                        baiThi.setSoLanDuocPhepLamBai(0);
+                    } else {
+                        baiThi.setSoLanDuocPhepLamBai(Integer.parseInt(selectedItem.toString()));
+                    }
                     // Bước 4: Lưu bài thi
                     boolean baiThiDaLuu = baiThiService.save(baiThi);
 
@@ -464,10 +470,10 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
             );
 
             if (confirm == JOptionPane.YES_OPTION) {
-                    pnNoiDungCauHoiVaDapAn.removeAll();
-                    pnNoiDungCauHoiVaDapAn.repaint();
-                    pnNoiDungCauHoiVaDapAn.revalidate();
-                    btnThemCauHoi.setEnabled(true);
+                pnNoiDungCauHoiVaDapAn.removeAll();
+                pnNoiDungCauHoiVaDapAn.repaint();
+                pnNoiDungCauHoiVaDapAn.revalidate();
+                btnThemCauHoi.setEnabled(true);
 
             }
         });
@@ -701,7 +707,7 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
         panel2.setBackground(new Color(-1));
         pnTaoDeThi.add(panel2, BorderLayout.CENTER);
         final JPanel panel3 = new JPanel();
-        panel3.setLayout(new GridLayoutManager(7, 1, new Insets(10, 20, 10, 20), 10, 10));
+        panel3.setLayout(new GridLayoutManager(10, 1, new Insets(10, 20, 10, 20), 10, 10));
         panel3.setBackground(new Color(-1));
         panel2.add(panel3, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label2 = new JLabel();
@@ -748,7 +754,27 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
         pnThoiGian = new JPanel();
         pnThoiGian.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
         pnThoiGian.setBackground(new Color(-1));
-        panel3.add(pnThoiGian, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panel3.add(pnThoiGian, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, 1, null, null, null, 0, false));
+        final JLabel label5 = new JLabel();
+        Font label5Font = this.$$$getFont$$$("Arial", Font.PLAIN, 20, label5.getFont());
+        if (label5Font != null) label5.setFont(label5Font);
+        label5.setText("Chọn số lần được phép làm bài kiểm tra");
+        panel3.add(label5, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        cbBoxSoLanLamKiemTra = new JComboBox();
+        Font cbBoxSoLanLamKiemTraFont = this.$$$getFont$$$("Arial", Font.PLAIN, 20, cbBoxSoLanLamKiemTra.getFont());
+        if (cbBoxSoLanLamKiemTraFont != null) cbBoxSoLanLamKiemTra.setFont(cbBoxSoLanLamKiemTraFont);
+        final DefaultComboBoxModel defaultComboBoxModel2 = new DefaultComboBoxModel();
+        defaultComboBoxModel2.addElement("không giới hạn");
+        defaultComboBoxModel2.addElement("1");
+        defaultComboBoxModel2.addElement("2");
+        defaultComboBoxModel2.addElement("3");
+        defaultComboBoxModel2.addElement("4");
+        defaultComboBoxModel2.addElement("5");
+        cbBoxSoLanLamKiemTra.setModel(defaultComboBoxModel2);
+        cbBoxSoLanLamKiemTra.setOpaque(false);
+        panel3.add(cbBoxSoLanLamKiemTra, new GridConstraints(8, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer3 = new Spacer();
+        panel3.add(spacer3, new GridConstraints(9, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final JPanel panel4 = new JPanel();
         panel4.setLayout(new GridLayoutManager(2, 2, new Insets(10, 20, 10, 20), -1, -1));
         panel4.setBackground(new Color(-1));
@@ -770,17 +796,17 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
         pnChucNangMK.setLayout(new GridLayoutManager(3, 1, new Insets(10, 0, 0, 0), -1, -1));
         pnChucNangMK.setBackground(new Color(-1));
         pnMatKhau.add(pnChucNangMK, BorderLayout.CENTER);
-        final JLabel label5 = new JLabel();
-        Font label5Font = this.$$$getFont$$$("Arial", Font.PLAIN, 20, label5.getFont());
-        if (label5Font != null) label5.setFont(label5Font);
-        label5.setText("Mật khẩu");
-        pnChucNangMK.add(label5, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label6 = new JLabel();
+        Font label6Font = this.$$$getFont$$$("Arial", Font.PLAIN, 20, label6.getFont());
+        if (label6Font != null) label6.setFont(label6Font);
+        label6.setText("Mật khẩu");
+        pnChucNangMK.add(label6, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         txtNhapMatKhau = new JTextField();
         Font txtNhapMatKhauFont = this.$$$getFont$$$("Arial", Font.PLAIN, 20, txtNhapMatKhau.getFont());
         if (txtNhapMatKhauFont != null) txtNhapMatKhau.setFont(txtNhapMatKhauFont);
         pnChucNangMK.add(txtNhapMatKhau, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        final Spacer spacer3 = new Spacer();
-        pnChucNangMK.add(spacer3, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        final Spacer spacer4 = new Spacer();
+        pnChucNangMK.add(spacer4, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final JPanel panel5 = new JPanel();
         panel5.setLayout(new BorderLayout(10, 10));
         panel5.setBackground(new Color(-1));
@@ -792,11 +818,11 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
         if (pnDSLopFont != null) pnDSLop.setFont(pnDSLopFont);
         panel5.add(pnDSLop, BorderLayout.CENTER);
         pnDSLop.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(-12156236)), "Lớp", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, this.$$$getFont$$$("Arial", Font.PLAIN, 20, pnDSLop.getFont()), new Color(-16777216)));
-        final JLabel label6 = new JLabel();
-        Font label6Font = this.$$$getFont$$$("Arial", Font.PLAIN, 25, label6.getFont());
-        if (label6Font != null) label6.setFont(label6Font);
-        label6.setText("Thông tin cơ bản");
-        panel2.add(label6, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label7 = new JLabel();
+        Font label7Font = this.$$$getFont$$$("Arial", Font.PLAIN, 25, label7.getFont());
+        if (label7Font != null) label7.setFont(label7Font);
+        label7.setText("Thông tin cơ bản");
+        panel2.add(label7, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         pnSoanCauHoi = new JPanel();
         pnSoanCauHoi.setLayout(new BorderLayout(0, 0));
         pnCard.add(pnSoanCauHoi, "Card3");
@@ -826,8 +852,8 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
         btnLuuBaiThi.setMargin(new Insets(10, 10, 10, 10));
         btnLuuBaiThi.setText("Lưu");
         panel6.add(btnLuuBaiThi, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final Spacer spacer4 = new Spacer();
-        panel6.add(spacer4, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final Spacer spacer5 = new Spacer();
+        panel6.add(spacer5, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final JPanel panel7 = new JPanel();
         panel7.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
         panel7.setBackground(new Color(-1));
@@ -836,11 +862,11 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
         panel8.setLayout(new GridLayoutManager(3, 1, new Insets(20, 20, 20, 10), -1, -1));
         panel8.setBackground(new Color(-1));
         panel7.add(panel8, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        final JLabel label7 = new JLabel();
-        Font label7Font = this.$$$getFont$$$("Arial", Font.PLAIN, 18, label7.getFont());
-        if (label7Font != null) label7.setFont(label7Font);
-        label7.setText("Danh mục câu hỏi");
-        panel8.add(label7, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label8 = new JLabel();
+        Font label8Font = this.$$$getFont$$$("Arial", Font.PLAIN, 18, label8.getFont());
+        if (label8Font != null) label8.setFont(label8Font);
+        label8.setText("Danh mục câu hỏi");
+        panel8.add(label8, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel9 = new JPanel();
         panel9.setLayout(new BorderLayout(0, 0));
         panel8.add(panel9, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(20, -1), null, 0, false));
@@ -864,8 +890,8 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
         btnThemCauHoi.setMargin(new Insets(5, 5, 5, 5));
         btnThemCauHoi.setText("+ Thêm câu hỏi");
         panel10.add(btnThemCauHoi);
-        final Spacer spacer5 = new Spacer();
-        panel10.add(spacer5);
+        final Spacer spacer6 = new Spacer();
+        panel10.add(spacer6);
         btnThemCHTuNganHangCH = new JButton();
         btnThemCHTuNganHangCH.setBackground(new Color(-16611119));
         btnThemCHTuNganHangCH.setFocusPainted(false);
@@ -876,8 +902,8 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
         btnThemCHTuNganHangCH.setMargin(new Insets(5, 5, 5, 5));
         btnThemCHTuNganHangCH.setText("Thêm câu hỏi từ ngân hàng đề thi");
         panel10.add(btnThemCHTuNganHangCH);
-        final Spacer spacer6 = new Spacer();
-        panel10.add(spacer6);
+        final Spacer spacer7 = new Spacer();
+        panel10.add(spacer7);
         btnXoaCauHoi = new JButton();
         btnXoaCauHoi.setBackground(new Color(-727322));
         Font btnXoaCauHoiFont = this.$$$getFont$$$("Arial", Font.PLAIN, 18, btnXoaCauHoi.getFont());
@@ -894,11 +920,11 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
         panel11.setLayout(new GridLayoutManager(2, 3, new Insets(20, 10, 20, 20), -1, -1));
         panel11.setBackground(new Color(-1));
         panel7.add(panel11, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, 1, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, new Dimension(500, -1), null, 0, false));
-        final JLabel label8 = new JLabel();
-        Font label8Font = this.$$$getFont$$$("Arial", Font.PLAIN, 18, label8.getFont());
-        if (label8Font != null) label8.setFont(label8Font);
-        label8.setText("Thêm câu hỏi mới");
-        panel11.add(label8, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label9 = new JLabel();
+        Font label9Font = this.$$$getFont$$$("Arial", Font.PLAIN, 18, label9.getFont());
+        if (label9Font != null) label9.setFont(label9Font);
+        label9.setText("Thêm câu hỏi mới");
+        panel11.add(label9, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         pnNoiDungCauHoiVaDapAn = new JPanel();
         pnNoiDungCauHoiVaDapAn.setLayout(new BorderLayout(0, 0));
         pnNoiDungCauHoiVaDapAn.setBackground(new Color(-1));
@@ -912,8 +938,8 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
         btnHuongDan.setMargin(new Insets(5, 5, 5, 5));
         btnHuongDan.setText("Hướng dẫn");
         panel11.add(btnHuongDan, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final Spacer spacer7 = new Spacer();
-        panel11.add(spacer7, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final Spacer spacer8 = new Spacer();
+        panel11.add(spacer8, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         pnThongTinBaiThi = new JPanel();
         pnThongTinBaiThi.setLayout(new BorderLayout(0, 0));
         pnCard.add(pnThongTinBaiThi, "Card4");
@@ -930,8 +956,8 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
         btnQuayLai3.setMargin(new Insets(10, 10, 10, 10));
         btnQuayLai3.setText("Quay lại");
         panel12.add(btnQuayLai3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final Spacer spacer8 = new Spacer();
-        panel12.add(spacer8, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final Spacer spacer9 = new Spacer();
+        panel12.add(spacer9, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         pnTTCT = new JPanel();
         pnTTCT.setLayout(new BorderLayout(0, 0));
         pnThongTinBaiThi.add(pnTTCT, BorderLayout.CENTER);
@@ -1061,6 +1087,9 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
         lblGiaoVien.setFont(labelFont);
         lblGiaoVien.setForeground(new Color(66, 66, 66));
 
+        JLabel lblSoLanLamBai = new JLabel("<html><b>Số lần cho phép làm bài:</b> " + baiThi.getSoLanDuocPhepLamBai() + "</html>");
+        lblSoLanLamBai.setFont(labelFont);
+        lblSoLanLamBai.setForeground(new Color(66, 66, 66));
         // Thêm nhãn vào panel thông tin
         info.add(lblTenBaiThi);
         info.add(lblMonHoc);
@@ -1069,6 +1098,7 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
         info.add(lblThoiGian);
         info.add(lblSoCauHoi);
         info.add(lblGiaoVien);
+        info.add(lblSoLanLamBai);
 
         // Nút "Xem trước" với hiệu ứng hover
         JButton btnXemTruocBaiThi = new JButton("Xem trước");
@@ -1129,6 +1159,7 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
             public void mouseExited(MouseEvent evt) {
                 btnChinhSua.setBackground(new Color(76, 175, 80)); // Màu gốc
             }
+
             @SneakyThrows
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -1229,7 +1260,7 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
                         boolean kq = baiThiService.delete(baiThi.getMaBaiThi());
                         System.out.println("Bài thi đã bị xóa!" + baiThi.getTenBaiThi());
 
-                        if(kq){
+                        if (kq) {
                             List<BaiThi> dsBaiThi = baiThiService.timDSBaiTHiTheoMaGiaoVien(giaoVienDangNhap.getMaGiaoVien());
                             // Xóa tất cả các thành phần hiện tại trong panel
                             pnHienThiCacBaiThi.removeAll();
@@ -1248,7 +1279,7 @@ public class GiaoDienDanhSachBaiThi extends JPanel {
                             // Cập nhật giao diện sau khi thay đổi
                             pnHienThiCacBaiThi.revalidate();
                             pnHienThiCacBaiThi.repaint();
-                        }else{
+                        } else {
                             JOptionPane.showMessageDialog(null, "Xóa bài thi thất bại!");
                         }
                     } catch (RemoteException ex) {

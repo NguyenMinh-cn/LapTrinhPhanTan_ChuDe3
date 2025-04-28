@@ -8,7 +8,7 @@ import org.hibernate.SessionBuilder;
 import org.hibernate.query.Query;
 
 
-public class HocSinhDAO extends GenericDAO<HocSinh, Integer> {
+public class HocSinhDAO extends GenericDAO<HocSinh, Long> {
 
     public HocSinhDAO(Class<HocSinh> clazz) {
         super(clazz);

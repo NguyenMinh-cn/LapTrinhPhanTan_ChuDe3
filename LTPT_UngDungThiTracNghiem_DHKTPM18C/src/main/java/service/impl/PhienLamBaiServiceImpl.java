@@ -29,4 +29,19 @@ public class PhienLamBaiServiceImpl extends GenericServiceImpl<PhienLamBai, Stri
     public List<PhienLamBai> findByMaHocSinh(long maHocSinh) throws RemoteException {
         return phienLamBaiDAO.findByMaHocSinh(maHocSinh);
     }
+
+    @Override
+    public PhienLamBai layThongTinChiTietPhienLamBai(String maPhienLamBai) throws RemoteException {
+        return phienLamBaiDAO.layThongTinChiTietPhienLamBai(maPhienLamBai);
+    }
+
+    @Override
+    public PhienLamBai layThongTinPhienLamBaiVaCauTraLoi(String maPhienLamBai) throws RemoteException {
+        return phienLamBaiDAO.layThongTinPhienLamBaiVaCauTraLoi(maPhienLamBai);
+    }
+
+    @Override
+    public List<PhienLamBai> layDanhSachPhienLamBaiVaCauTraLoiTheoBaiThi(int maBaiThi) throws RemoteException {
+        return phienLamBaiDAO.layDanhSachPhienLamBaiVaCauTraLoiTheoBaiThi(maBaiThi);
+    }
 }

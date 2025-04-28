@@ -18,46 +18,58 @@
           <component id="e71af" class="javax.swing.JLabel" binding="lbTenHocSinh">
             <constraints border-constraint="North"/>
             <properties>
-              <background color="-6106369"/>
+              <background color="-12020241"/>
+              <font name="Arial" size="20" style="0"/>
+              <foreground color="-1"/>
               <horizontalAlignment value="0"/>
               <horizontalTextPosition value="0"/>
-              <preferredSize width="200" height="50"/>
+              <opaque value="true"/>
+              <preferredSize width="200" height="70"/>
               <text value="Label"/>
             </properties>
           </component>
           <component id="f1081" class="javax.swing.JLabel" binding="lbDangXuat">
             <constraints border-constraint="South"/>
             <properties>
+              <background color="-3543049"/>
+              <font name="Arial" size="20" style="0"/>
               <horizontalAlignment value="0"/>
-              <preferredSize width="71" height="30"/>
+              <opaque value="true"/>
+              <preferredSize width="71" height="50"/>
               <text value="Đăng xuất"/>
             </properties>
           </component>
-          <grid id="79b53" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+          <grid id="79b53" layout-manager="FlowLayout" hgap="10" vgap="10" flow-align="1">
             <constraints border-constraint="Center"/>
             <properties>
-              <background color="-6106369"/>
+              <alignmentX value="0.2"/>
+              <background color="-3543049"/>
+              <preferredSize width="850" height="50"/>
             </properties>
             <border type="none"/>
             <children>
-              <component id="a2b86" class="javax.swing.JLabel">
+              <component id="a2b86" class="javax.swing.JLabel" binding="lbDSBaiThi">
                 <constraints/>
                 <properties>
+                  <alignmentX value="0.2"/>
                   <background color="-4333314"/>
-                  <horizontalAlignment value="0"/>
-                  <opaque value="true"/>
+                  <font name="Arial" size="20" style="0"/>
+                  <horizontalAlignment value="10"/>
+                  <opaque value="false"/>
                   <preferredSize width="200" height="30"/>
-                  <text value="Danh sách bài thi"/>
+                  <text value="    Danh sách bài thi"/>
                 </properties>
               </component>
               <component id="b42ff" class="javax.swing.JLabel" binding="lbTaiKhoan">
                 <constraints/>
                 <properties>
+                  <alignmentX value="0.2"/>
                   <background color="-4333314"/>
-                  <horizontalAlignment value="0"/>
-                  <opaque value="true"/>
+                  <font name="Arial" size="20" style="0"/>
+                  <horizontalAlignment value="10"/>
+                  <opaque value="false"/>
                   <preferredSize width="200" height="30"/>
-                  <text value="Tài khoản"/>
+                  <text value="    Tài khoản"/>
                 </properties>
               </component>
             </children>

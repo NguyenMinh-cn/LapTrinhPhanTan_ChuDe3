@@ -63,6 +63,8 @@ public class BaiThi implements Serializable {
     @JoinColumn(name = "maGiaoVien")
     private GiaoVien giaoVien;
 
+    @Column(nullable = false)
+    private int soLanDuocPhepLamBai = 0;
 
 }
 

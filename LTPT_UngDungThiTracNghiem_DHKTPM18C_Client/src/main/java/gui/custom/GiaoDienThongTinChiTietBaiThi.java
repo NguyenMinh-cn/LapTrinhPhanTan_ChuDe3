@@ -2,6 +2,7 @@ package gui.custom;
 
 import entities.BaiThi;
 import entities.CauHoi;
+import entities.Lop;
 import entities.PhienLamBai;
 import org.kordamp.ikonli.materialdesign.MaterialDesign;
 import org.kordamp.ikonli.swing.FontIcon;
@@ -79,7 +80,23 @@ public class GiaoDienThongTinChiTietBaiThi extends JPanel {
         addLabel(thongTinPanel, "Thời lượng: " + baiThi.getThoiLuong() + " phút");
         addLabel(thongTinPanel, "Giáo viên: " + (baiThi.getGiaoVien() != null ? baiThi.getGiaoVien().getHoTen() : "Không có"));
         addLabel(thongTinPanel, "Mật khẩu bài thi: " + (baiThi.getMatKhau() != null ? baiThi.getMatKhau() : "Không có"));
-
+        StringBuilder lopApDungBuilder = new StringBuilder();
+        try {
+            if (baiThi != null && baiThi.getDanhSachLop() != null) {
+                List<Lop> danhSachLop = baiThi.getDanhSachLop();
+                for (int i = 0; i < danhSachLop.size(); i++) {
+                    if (i > 0) {
+                        lopApDungBuilder.append(", ");
+                    }
+                    lopApDungBuilder.append(danhSachLop.get(i).getTenLop());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String lopApDung = lopApDungBuilder.length() > 0 ? lopApDungBuilder.toString() : "Không có";
+        addLabel(thongTinPanel, "Lớp áp dụng kiểm tra: " + lopApDung);
+        addLabel(thongTinPanel, "Số lần làm bài kiểm tra: " + (baiThi.getSoLanDuocPhepLamBai() > 0 ? baiThi.getSoLanDuocPhepLamBai() : "Không giới hạn"));
         panel.add(thongTinPanel);
         panel.add(Box.createRigidArea(new Dimension(0, 20)));
 

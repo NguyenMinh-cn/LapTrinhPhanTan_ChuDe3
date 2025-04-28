@@ -1,7 +1,7 @@
     package service;
 
     import entities.BaiThi;
-
+    import java.rmi.Remote;
     import java.rmi.RemoteException;
     import java.util.List;
 
@@ -10,4 +10,5 @@ public interface BaiThiService extends GenericService<BaiThi, Integer>{
     BaiThi layThongTinChiTietBaiThi(int maBaiThi) throws RemoteException;
     boolean delete(int maBaiThi) throws RemoteException;
     List<BaiThi> getAllBaiThiForHocSinh(Long maHocSinh) throws RemoteException;
+    BaiThi layThongTinBaiThiVaCauHoi(int maBaiThi) throws RemoteException;
 }
