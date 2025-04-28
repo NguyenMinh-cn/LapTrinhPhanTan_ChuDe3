@@ -179,11 +179,15 @@ public class GiaoDienNganHangCauHoi extends JPanel {
     private void suaCauHoi(int row) throws RemoteException, MalformedURLException, NotBoundException {
         long maCauHoi = (long) model.getValueAt(row, 1); // lấy từ cột 1: Mã Câu Hỏi
         int maCauHoiInt = (int) maCauHoi;
-        CauHoi cauHoi = cauHoiService.finByID(maCauHoiInt);
-        mainPanel.removeAll();
-        mainPanel.add(new GiaoDienThemCauHoi(mainPanel, cauHoi));
-        mainPanel.revalidate();
-        mainPanel.repaint();
+        if(cauHoiService.inBaiThiDaDienRa(maCauHoiInt)){
+            JOptionPane.showMessageDialog(this, "Câu hỏi này đã được sử dụng trong bài thi, không thể sửa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+        }else {
+            CauHoi cauHoi = cauHoiService.finByID(maCauHoiInt);
+            mainPanel.removeAll();
+            mainPanel.add(new GiaoDienThemCauHoi(mainPanel, cauHoi));
+            mainPanel.revalidate();
+            mainPanel.repaint();
+        }
     }
 
     private void xoaCauHoi(int row) throws RemoteException {
