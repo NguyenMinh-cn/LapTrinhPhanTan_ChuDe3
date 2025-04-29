@@ -1,45 +1,105 @@
 package entities;
+
 import jakarta.persistence.*;
-import lombok.*;
-
-import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "PhienLamBai")
-public class PhienLamBai implements Serializable {
-    private static final long serialVersionUID = 1L;
-
+public class PhienLamBai {
     @Id
-    @Column(name = "MaPhien", nullable = false, unique = true)
+    @Column(name = "MaPhien")
     private String maPhien;
 
-    @Column(nullable = false)
+    @Column(name = "ThoiGianBatDau")
     private LocalDateTime thoiGianBatDau;
 
-    @Column(nullable = false)
+    @Column(name = "ThoiGianKetThuc")
     private LocalDateTime thoiGianKetThuc;
 
-    private double diem;
+    @Column(name = "Diem")
+    private Double diem;
 
     @ManyToOne
-    @JoinColumn(name = "maHocSinh") // Tham chiếu tới khóa chính của bảng HocSinh
+    @JoinColumn(name = "MaHocSinh")
     private HocSinh hocSinh;
 
     @ManyToOne
-    @JoinColumn(name = "maBaiThi") // Tham chiếu tới khóa chính của bảng BaiThi
+    @JoinColumn(name = "MaBaiThi")
     private BaiThi baiThi;
 
-    @OneToMany(mappedBy="phienLamBai", cascade = CascadeType.ALL)//tên thuộc tính, không phải tên bảng
-    private List<CauTraLoi> danhSachCauTraLoi = new ArrayList<>();
+    @OneToMany(mappedBy = "phienLamBai", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<CauTraLoi> danhSachCauTraLoi;
+
+    // Constructors
+    public PhienLamBai() {}
+
+    public PhienLamBai(String maPhien, LocalDateTime thoiGianBatDau, LocalDateTime thoiGianKetThuc, Double diem, HocSinh hocSinh, BaiThi baiThi, List<CauTraLoi> danhSachCauTraLoi) {
+        this.maPhien = maPhien;
+        this.thoiGianBatDau = thoiGianBatDau;
+        this.thoiGianKetThuc = thoiGianKetThuc;
+        this.diem = diem;
+        this.hocSinh = hocSinh;
+        this.baiThi = baiThi;
+        this.danhSachCauTraLoi = danhSachCauTraLoi;
+    }
+
+    // Getters and Setters
+    public String getMaPhien() {
+        return maPhien;
+    }
+
+    public void setMaPhien(String maPhien) {
+        this.maPhien = maPhien;
+    }
+
+    public LocalDateTime getThoiGianBatDau() {
+        return thoiGianBatDau;
+    }
+
+    public void setThoiGianBatDau(LocalDateTime thoiGianBatDau) {
+        this.thoiGianBatDau = thoiGianBatDau;
+    }
+
+    public LocalDateTime getThoiGianKetThuc() {
+        return thoiGianKetThuc;
+    }
+
+    public void setThoiGianKetThuc(LocalDateTime thoiGianKetThuc) {
+        this.thoiGianKetThuc = thoiGianKetThuc;
+    }
+
+    public Double getDiem() {
+        return diem;
+    }
+
+    public void setDiem(Double diem) {
+        this.diem = diem;
+    }
+
+    public HocSinh getHocSinh() {
+        return hocSinh;
+    }
+
+    public void setHocSinh(HocSinh hocSinh) {
+        this.hocSinh = hocSinh;
+    }
+
+    public BaiThi getBaiThi() {
+        return baiThi;
+    }
+
+    public void setBaiThi(BaiThi baiThi) {
+        this.baiThi = baiThi;
+    }
+
+    public List<CauTraLoi> getDanhSachCauTraLoi() {
+        return danhSachCauTraLoi;
+    }
+
+    public void setDanhSachCauTraLoi(List<CauTraLoi> danhSachCauTraLoi) {
+        this.danhSachCauTraLoi = danhSachCauTraLoi;
+    }
 
     @Override
     public String toString() {
@@ -48,9 +108,8 @@ public class PhienLamBai implements Serializable {
                 ", thoiGianBatDau=" + thoiGianBatDau +
                 ", thoiGianKetThuc=" + thoiGianKetThuc +
                 ", diem=" + diem +
-                ", hocSinhId=" + (hocSinh != null ? hocSinh.getMaHocSinh() : "null") +
-                ", baiThiId=" + (baiThi != null ? baiThi.getMaBaiThi() : "null") +
-                ", soCauTraLoi=" + (danhSachCauTraLoi != null ? danhSachCauTraLoi.size() : 0) +
+                ", hocSinh=" + (hocSinh != null ? hocSinh.getMaHocSinh() : null) +
+                ", baiThi=" + (baiThi != null ? baiThi.getMaBaiThi() : null) +
                 '}';
     }
 }
