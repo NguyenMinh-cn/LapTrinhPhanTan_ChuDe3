@@ -5,8 +5,8 @@ import jakarta.persistence.EntityTransaction;
 import util.JPAUtil;
 
 import java.util.List;
-//GenericDAO là lớp cha trừu tượng được thiết kế để tái sử dụng các thao tác cơ bản với database cho bất kỳ thực thể (entity) nào.
-public abstract class GenericDAO <T, ID>{
+
+public abstract class GenericDAO<T, ID> {
 
     protected EntityManager em;
     protected Class<T> clazz;
@@ -21,58 +21,82 @@ public abstract class GenericDAO <T, ID>{
         this.clazz = clazz;
     }
 
-    public T findByID(ID id){
+    public T findByID(ID id) {
         return em.find(clazz, id);
     }
 
-    public List<T> getAll(){
+    public List<T> getAll() {
         return em.createQuery("from " + clazz.getSimpleName(), clazz)
                 .getResultList();
     }
 
-    public boolean save(T t){
+    public boolean save(T t) {
         EntityTransaction tr = em.getTransaction();
-        try{
-            tr.begin();
+        boolean beganTransaction = false;
+        try {
+            
+            if (!tr.isActive()) {
+                tr.begin();
+                beganTransaction = true;
+            }
             em.persist(t);
-            tr.commit();
-            return true;
-        }catch (Exception ex){
-            if(tr.isActive())
-                tr.rollback();
-            throw new RuntimeException(ex.getMessage(), ex);
-        }
-    }
-    public boolean update(T t){
-        EntityTransaction tr = em.getTransaction();
-        try{
-            tr.begin();
-            em.merge(t);
-            tr.commit();
-            return true;
-        }catch (Exception ex){
-            if(tr.isActive())
-                tr.rollback();
-            throw new RuntimeException(ex.getMessage(), ex);
-        }
-    }
-    public boolean delete(ID id){
-        EntityTransaction tr = em.getTransaction();
-        try{
-            tr.begin();
-            T t = em.find(clazz, id);
-            if(t != null){
-                em.remove(t);
+          
+            if (beganTransaction && tr.isActive() && !tr.getRollbackOnly()) {
                 tr.commit();
+            }
+            return true;
+        } catch (Exception ex) {
+            if (beganTransaction && tr.isActive()) {
+                tr.rollback();
+            }
+            throw new RuntimeException(ex.getMessage(), ex);
+        }
+    }
+
+    public boolean update(T t) {
+        EntityTransaction tr = em.getTransaction();
+        boolean beganTransaction = false;
+        try {
+            if (!tr.isActive()) {
+                tr.begin();
+                beganTransaction = true;
+            }
+            em.merge(t);
+            if (beganTransaction && tr.isActive() && !tr.getRollbackOnly()) {
+                tr.commit();
+            }
+            return true;
+        } catch (Exception ex) {
+            if (beganTransaction && tr.isActive()) {
+                tr.rollback();
+            }
+            throw new RuntimeException(ex.getMessage(), ex);
+        }
+    }
+
+    public boolean delete(ID id) {
+        EntityTransaction tr = em.getTransaction();
+        boolean beganTransaction = false;
+        try {
+            if (!tr.isActive()) {
+                tr.begin();
+                beganTransaction = true;
+            }
+            T t = em.find(clazz, id);
+            if (t != null) {
+                em.remove(t);
+                if (beganTransaction && tr.isActive() && !tr.getRollbackOnly()) {
+                    tr.commit();
+                }
                 return true;
             }
-        }catch (Exception ex){
-            if(tr.isActive())
+            // Nếu không tìm thấy entity, không commit mà vẫn trả về false
+            return false;
+        } catch (Exception ex) {
+            if (beganTransaction && tr.isActive()) {
                 tr.rollback();
+            }
             throw new RuntimeException(ex.getMessage(), ex);
         }
-
-        return false;
     }
 }
-
